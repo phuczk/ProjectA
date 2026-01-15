@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      PS4_Dpad_Up_0: 1739329324102530491
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
