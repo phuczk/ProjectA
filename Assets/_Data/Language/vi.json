@@ -1,0 +1,51 @@
+{
+    "menu" : {
+        "start" : "Bắt đầu chơi",
+        "options" : {
+            "title" : "Tùy chọn",
+            "language" : "Ngôn ngữ",
+            "audio" : "Âm thanh",
+            "graphic" : "Hình ảnh",
+            "keyboard" : "Bàn phím",
+            "controls" : {
+                "title" : "Phím điều khiển",
+                "jump" : "Nhảy",
+                "left" : "Trái",
+                "right" : "Phải",
+                "up" : "Lên",
+                "down" : "Xuống",
+                "heal" : "Hồi máu",
+                "move" : "Di chuyển",
+                "gravity" : "Lực hút",
+                "scale" : "Kích thước",
+                "dash" : "Lướt",
+                "attack" : "Tấn công",
+                "skill" : "Kỹ năng",
+                "map" : "Map"
+            }
+        },
+        "achievement" : {
+            "title" : "Thành tựu",
+            "desc" : "Hiển thị các thành tựu của bạn"
+        },
+        "exit" : "Thoát Game"
+    },
+    "cursed":{
+        "cunning_eyes":{
+            "name":"Con mắt xảo trá",
+            "desc":"Nhìn thấy điểm yếu của kẻ địch, khi tấn công vào điểm yếu sẽ gây thêm damage."
+        },
+        "blood_cloak":{
+            "name":"Áo Chàng Máu",
+            "desc":"Khi còn một hp tăng sát thương, bất tử 1 giây sau mỗi 10 giây."
+        },
+        "poison_apple": {
+            "name": "Táo Bốc Mùi",
+            "desc": "Khi ăn táo này, bạn sẽ bị mùi táo kéo dài 10 giây."
+        },
+        "brag_bracelet": {
+            "name": "Vòng tay khoác lác",
+            "desc": "Khi sử dụng chuông này, bạn sẽ nói về damage của mình trong 10 giây."
+        }
+    }
+}

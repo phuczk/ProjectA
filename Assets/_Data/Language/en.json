@@ -1,0 +1,51 @@
+{
+    "menu" : {
+        "start" : "Start Game",
+        "options" : {
+            "title" : "Options",
+            "language" : "Language",
+            "audio" : "Audio",
+            "graphic" : "Graphic",
+            "keyboard" : "Keyboard",
+            "controls" : {
+                "title" : "Controls",
+                "jump" : "Jump",
+                "left" : "Left",
+                "right" : "Right",
+                "up" : "Up",
+                "down" : "Down",
+                "heal" : "Heal",
+                "move" : "Move",
+                "gravity" : "Gravity",
+                "scale" : "Scale",
+                "dash" : "Dash",
+                "attack" : "Attack",
+                "skill" : "Skill",
+                "map" : "Map"
+            }
+        },
+        "achievement" : {
+            "title" : "Achievement",
+            "desc" : "Show your achievements"
+        },
+        "exit" : "Exit Game"
+    },
+    "cursed": {
+        "cunning_eyes": {
+            "name": "Cunning Eyes",
+            "desc": "When you see a weak point of the enemy, increase damage when attacking that weak point."
+        },
+        "blood_cloak": {
+            "name": "Blood Cloak",
+            "desc": "When you have one hp left, increase damage and become invincible for 1 second every 10 seconds."
+        },
+        "poison_apple": {
+            "name": "Poison Apple",
+            "desc": "When you eat this apple, you will be poisoned for 10 seconds."
+        },
+        "brag_bracelet": {
+            "name": "Brag Bracelet",
+            "desc": "When you use this bracelet, you will brag about your damage for 10 seconds."
+        }
+    }
+}
