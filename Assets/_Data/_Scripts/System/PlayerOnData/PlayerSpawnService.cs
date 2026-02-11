@@ -12,12 +12,15 @@ public static class PlayerSpawnService
 
     public static GameObject GetOrCreate(Vector3 pos, bool dontDestroy)
     {
-        if (_player != null) return _player;
+        if (_player != null && _player.gameObject != null)
+            return _player;
 
         _player = Object.Instantiate(_prefab, pos, Quaternion.identity).gameObject;
 
         if (dontDestroy)
             Object.DontDestroyOnLoad(_player);
+        
+        Debug.Log($"PlayerSpawnService: Created player at {pos}");
 
         return _player;
     }
@@ -32,4 +35,9 @@ public static class PlayerSpawnService
     }
 
     public static bool Exists() => _player != null;
+
+    public static void Clear()
+    {
+        _player = null;
+    }
 }

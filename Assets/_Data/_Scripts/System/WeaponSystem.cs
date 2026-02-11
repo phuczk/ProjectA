@@ -1,6 +1,7 @@
 using UnityEngine;
 using GlobalEnums;
 using DG.Tweening;
+using Unity.Cinemachine;
 
 public class WeaponSystem : MonoBehaviour, ISoundEmitter
 {
@@ -22,6 +23,9 @@ public class WeaponSystem : MonoBehaviour, ISoundEmitter
     private Quaternion _armDefaultRotation;
     private bool _isPlayerWeapon;
 
+    [Header("Impulse Settings")]
+    [SerializeField] private CinemachineImpulseSource _impulseSource;
+
     // Events
     public event System.Action<PlayerController, Vector2> OnFireTriggered;
     public event System.Action<PlayerSoundType, AudioClip> OnRequestSound;
@@ -31,6 +35,8 @@ public class WeaponSystem : MonoBehaviour, ISoundEmitter
         if (_arm != null) _armDefaultRotation = _arm.localRotation;
         
         _cachedMainCam = Camera.main;
+
+        if (_impulseSource == null) _impulseSource = GetComponent<CinemachineImpulseSource>();
         
         _cachedPlayerController = GetComponent<PlayerController>();
     }
@@ -79,17 +85,10 @@ public class WeaponSystem : MonoBehaviour, ISoundEmitter
             SpawnBullet(finalDir, ownerVel, config);
         }
 
-        if (config.shakeCameraAmount > 0)
+        if (config.shakeCameraAmount > 0 && _impulseSource != null)
         {
-            Camera targetCam = (_manager != null && _manager.cameraController != null && _manager.cameraController.cam != null) 
-                ? _manager.cameraController.cam 
-                : _cachedMainCam;
-
-            if (targetCam != null)
-            {
-                targetCam.transform.DOKill(true);
-                targetCam.transform.DOShakeRotation(0.1f, config.shakeCameraAmount, 14, 90f);
-            }
+            Vector3 recoilDir = -dir.normalized * config.shakeCameraAmount;
+            _impulseSource.GenerateImpulseWithVelocity(recoilDir);
         }
 
         OnRequestSound?.Invoke(PlayerSoundType.None, config.shootSound);
@@ -117,7 +116,7 @@ public class WeaponSystem : MonoBehaviour, ISoundEmitter
         if (_arm == null || _visuals == null) return;
 
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        _arm.DOKill(); // Ngắt Tween idle khi đang bắn/xoay tay
+        _arm.DOKill();
 
         bool isFacingRight = _visuals.transform.localScale.x > 0;
         float finalAngle = isFacingRight ? (angle + _armAngleOffset) : (angle + 180f - _armAngleOffset);

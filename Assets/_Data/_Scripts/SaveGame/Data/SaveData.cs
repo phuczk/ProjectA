@@ -5,4 +5,5 @@ public class SaveData
 
     public PlayerData player;
     public WorldSaveData world;
+    public ItemData items;
 }

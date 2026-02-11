@@ -3,7 +3,6 @@ using UnityEngine;
 public class FallDamage : MonoBehaviour
 {
     private PlayerHealth playerHealth;
-    // private SafeGroundSave safeGroundSave;
 
     private SafeGroundCheckpointSaver safeGroundCheckpointSaver;
 

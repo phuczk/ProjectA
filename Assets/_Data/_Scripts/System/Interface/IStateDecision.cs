@@ -92,6 +92,31 @@ public class DecisionLostPlayerTimeout : IStateDecision
     }
 }
 
+
+/// <summary>
+///     Kiểm tra xem quái vật có chết hay không.
+/// </summary>
+[Serializable]
+public class DecisionDeath : IStateDecision
+{
+    public bool Decide(EnemyUniversalMachine machine) => machine.IsDeath;
+}
+
+/// <summary>
+///     Kiểm tra xem quái vật có máu dưới ngưỡng nào đó hay không.
+/// </summary>
+[Serializable]
+public class DecisionHealthBelowPercentage : IStateDecision
+{
+    [Range(0f, 1f)] public float Threshold = 0.5f;
+
+    public bool Decide(EnemyUniversalMachine machine)
+    {
+        float healthPercent = (float)machine.CurrentHealth / machine.MaxHealth;
+        return healthPercent <= Threshold;
+    }
+}
+
 [Serializable]
 public class DecisionCanSeePlayer : IStateDecision
 {
@@ -100,14 +125,20 @@ public class DecisionCanSeePlayer : IStateDecision
 
     public bool Decide(EnemyUniversalMachine machine)
     {
-        if (!machine.IsPlayerInChaseRange()) return false;
+        if (machine.Target == null) return false;
+        
+        // Dùng sqrMagnitude để check range trước (rẻ nhất)
+        Vector2 diff = (Vector2)machine.Target.position - (Vector2)machine.transform.position;
+        if (diff.sqrMagnitude > machine.ChaseRange * machine.ChaseRange) return false;
 
-        Vector2 dirToPlayer = (machine.Target.position - machine.transform.position).normalized;
+        // Tính khoảng cách và hướng (1 lần sqrt)
+        float dist = diff.magnitude;
+        Vector2 dirToPlayer = diff / dist;
+
         float dot = Vector2.Dot(machine.transform.localScale.x > 0 ? Vector2.right : Vector2.left, dirToPlayer);
 
         if (dot < Mathf.Cos(ViewAngle * 0.5f * Mathf.Deg2Rad)) return false;
 
-        float dist = Vector2.Distance(machine.transform.position, machine.Target.position);
         RaycastHit2D hit = Physics2D.Raycast(machine.transform.position, dirToPlayer, dist, ObstacleLayer);
 
         return hit.collider == null; 

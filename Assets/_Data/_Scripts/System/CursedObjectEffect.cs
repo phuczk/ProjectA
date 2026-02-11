@@ -1,8 +1,10 @@
 using UnityEngine;
+using GlobalEnums;
 
 [System.Serializable]
 public abstract class Effect
 {
+    public virtual CursedObjectType EffectType => CursedObjectType.Passive;
     // Các hook cơ bản
     public virtual void OnApply(PlayerController player) { }
     public virtual void OnRemove(PlayerController player) { }

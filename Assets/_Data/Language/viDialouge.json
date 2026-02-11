@@ -1,0 +1,12 @@
+{
+    "Joker":{
+        "Hello": "Xin chào, tôi là Joker. Liệu bạn có thể giúp tôi không? Tôi là một người có trách nhiệm. Tôi sẽ giúp bạn với bất kỳ điều gì bạn cần.",
+        "Help": "Tôi có thể giúp bạn với những gì?",
+        "Goodbye": "Tạm biệt"
+    },
+    "Player":{
+        "Hello": "Xin chào, tôi là Player. Tôi là một người có trách nhiệm. Tôi sẽ giúp bạn với bất kỳ điều gì bạn cần.",
+        "Help": "Tôi có thể giúp bạn với những gì?",
+        "Goodbye": "Tạm biệt"
+    }
+}

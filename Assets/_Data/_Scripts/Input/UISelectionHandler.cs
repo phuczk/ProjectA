@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.EventSystems;
-using UnityEngine.UI; // Thêm để dùng Button
+using UnityEngine.UI;
 
 public class UISelectionHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler
 {

@@ -28,11 +28,11 @@ public class BulletController : MonoBehaviour
         
         _rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         _rb.interpolation = RigidbodyInterpolation2D.None;
+        playerHealth = FindFirstObjectByType<PlayerHealth>();
     }
 
     public void Init(Vector2 velocity, GunConfig config, bool isPlayerBullet, Vector2 playerVelocity)
     {
-        // 1. Gán thông số
         _life = config.bulletLifetime;
         _damage = config.damage;
         _manaGain = config.manaGain;
@@ -47,8 +47,6 @@ public class BulletController : MonoBehaviour
 
         float ang = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, ang);
-
-        playerHealth = FindFirstObjectByType<PlayerHealth>();
     }
 
     private void Update()
@@ -77,10 +75,10 @@ public class BulletController : MonoBehaviour
             {
                 if (playerHealth == null) return;
                 var beh = other.GetComponent<EntityBehaviour>();
-                if (beh == null) beh = other.GetComponentInParent<EntityBehaviour>();
+                beh ??= other.GetComponentInParent<EntityBehaviour>();
                 if (beh != null)
                 {
-                    if (_hitEffectPrefab != null) // Bạn nên kéo Prefab hiệu ứng riêng vào đây
+                    if (_hitEffectPrefab != null)
                     {
                         BulletPool.Instance.Get(_hitEffectPrefab.gameObject, transform.position, Quaternion.identity);
                     }   

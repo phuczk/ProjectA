@@ -11,8 +11,6 @@ public class EffectAutoRelease : MonoBehaviour
 
     private void OnEnable()
     {
-        // Kiểm tra định kỳ hoặc dùng invoke để trả về pool
-        // main.duration là thời gian chạy của Particle
         float duration = _ps.main.duration + _ps.main.startLifetime.constantMax;
         Invoke(nameof(ReturnToPool), duration);
     }

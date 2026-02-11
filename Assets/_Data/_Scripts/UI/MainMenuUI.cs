@@ -70,6 +70,7 @@ public class MainMenuUI : MonoBehaviour, IBackHandler
         BackSettingButton.onClick.AddListener(() => OnBack());
         BackAchievementButton.onClick.AddListener(() => OnBack());
 
+        GameBootstrap.OnLanguageChanged += ApplyLocalization;
         ShowStartUI();
         ApplyLocalization();
     }
@@ -171,5 +172,10 @@ public class MainMenuUI : MonoBehaviour, IBackHandler
         if (_graphicsText) _graphicsText.text = Localization.Get("menu.options.graphic");
         if (_keyboardText) _keyboardText.text = Localization.Get("menu.options.keyboard");
         if (_audioText) _audioText.text = Localization.Get("menu.options.audio");
+    }
+
+    private void OnDestroy()
+    {
+        GameBootstrap.OnLanguageChanged -= ApplyLocalization;
     }
 }

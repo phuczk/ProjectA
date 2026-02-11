@@ -1,15 +1,20 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using GlobalEnums;
+using DG.Tweening;
 
 public class UIInGameManager : Singleton<UIInGameManager>
 {
     [SerializeField] private GameStateChannel _stateChannel;
     private IBackHandler _pauseBackHandler;
 
+    [SerializeField] private BookUI _bookUI;
+
+    [Header("Page Indices")]
+    [SerializeField] private int _inventoryPageIndex = 0;
+
     [Header("UI Panels")]
     [SerializeField] private GameObject _pausePanel;
-    [SerializeField] private GameObject _inventoryPanel;
     [SerializeField] private GameObject _mapPanel;
 
     private PlayerInput _playerInput;
@@ -35,30 +40,51 @@ public class UIInGameManager : Singleton<UIInGameManager>
         _closeMenuUIAction = uiMap.FindAction("Cancel", true);
 
         _pauseBackHandler = _pausePanel.GetComponent<IBackHandler>();
+    }
 
-        _playerInput.SwitchCurrentActionMap("UI");
-        // Debug.Log($"current action map: {_playerInput.currentActionMap.name}");
-
+    private void Start()
+    {
+        if (_playerInput != null && _playerInput.enabled)
+        {
+            _playerInput.SwitchCurrentActionMap("UI");
+        }
     }
 
     private void OnEnable()
     {
-        _pauseAction.performed += OnPausePerformed;
-        _mapAction.performed += OnMapPerformed;
-        _inventoryAction.performed += OnInventoryPerformed;
-        _closeMenuUIAction.performed += OnCloseMenuUIPerformed;
+        _playerInput?.ActivateInput();
 
-        _stateChannel.OnStateRequested += HandleStateChange;
+        _playerInput?.SwitchCurrentActionMap("UI");
+
+        if (_pauseAction != null)
+            _pauseAction.performed += OnPausePerformed;
+        if (_mapAction != null)
+            _mapAction.performed += OnMapPerformed;
+        if (_inventoryAction != null)
+            _inventoryAction.performed += OnInventoryPerformed;
+        if (_closeMenuUIAction != null)
+            _closeMenuUIAction.performed += OnCloseMenuUIPerformed;
+
+        if (_stateChannel != null)
+            _stateChannel.OnStateRequested += HandleStateChange;
     }
 
     private void OnDisable()
     {
-        _pauseAction.performed -= OnPausePerformed;
-        _mapAction.performed -= OnMapPerformed;
-        _inventoryAction.performed -= OnInventoryPerformed;
-        _closeMenuUIAction.performed -= OnCloseMenuUIPerformed;
+        if (_pauseAction != null)
+            _pauseAction.performed -= OnPausePerformed;
 
-        _stateChannel.OnStateRequested -= HandleStateChange;
+        if (_mapAction != null)
+            _mapAction.performed -= OnMapPerformed;
+
+        if (_inventoryAction != null)
+            _inventoryAction.performed -= OnInventoryPerformed;
+
+        if (_closeMenuUIAction != null)
+            _closeMenuUIAction.performed -= OnCloseMenuUIPerformed;
+
+        if (_stateChannel != null)
+            _stateChannel.OnStateRequested -= HandleStateChange;
     }
 
     private bool IsInputAllowed()
@@ -73,18 +99,6 @@ public class UIInGameManager : Singleton<UIInGameManager>
     {
         if (!IsInputAllowed()) return;
         TogglePanel(_pausePanel);
-    }
-
-    private void OnMapPerformed(InputAction.CallbackContext context) 
-    {
-        if (!IsInputAllowed()) return;
-        TogglePanel(_mapPanel);
-    }
-
-    private void OnInventoryPerformed(InputAction.CallbackContext context) 
-    {
-        if (!IsInputAllowed()) return;
-        TogglePanel(_inventoryPanel);
     }
 
     private void OnCloseMenuUIPerformed(InputAction.CallbackContext context)
@@ -103,16 +117,52 @@ public class UIInGameManager : Singleton<UIInGameManager>
         _stateChannel.RaiseRequest(GameState.Playing);
     }
 
+    private void OnMapPerformed(InputAction.CallbackContext context) 
+    {
+        if (!IsInputAllowed()) return;
+        TogglePanel(_mapPanel);
+    }
+
+    private void OnInventoryPerformed(InputAction.CallbackContext context) 
+    {
+        if (!IsInputAllowed()) return;
+        ToggleBookPage(_inventoryPageIndex);
+    }
+
+    private void OnDestroy() {
+        DOTween.KillAll();
+    }
+
+    private void ToggleBookPage(int pageIndex)
+    {
+        if (_bookUI.gameObject.activeSelf)
+        {
+            _stateChannel.RaiseRequest(GameState.Playing);
+        }
+        else
+        {
+            _bookUI.OpenToPage(pageIndex);
+            _stateChannel.RaiseRequest(GameState.Pause);
+        }
+    }
+
     private void HandleStateChange(GameState newState)
     {
         if (newState == GameState.Playing)
         {
-            InternalCloseAll();
+            _pausePanel.SetActive(false);
+            _mapPanel.SetActive(false);
+            _bookUI.gameObject.SetActive(false);
             _playerInput.SwitchCurrentActionMap("InGame");
         }
         else if (newState == GameState.Pause || newState == GameState.MainMenu)
         {
             _playerInput.SwitchCurrentActionMap("UI");
+            if (newState == GameState.MainMenu)
+            {
+                _pausePanel.SetActive(false);
+                _mapPanel.SetActive(false);
+            }
         }
     }
 
@@ -126,18 +176,9 @@ public class UIInGameManager : Singleton<UIInGameManager>
         }
         else
         {
-            InternalCloseAll(); 
+            _bookUI.gameObject.SetActive(false); 
             panel.SetActive(true);
             _stateChannel.RaiseRequest(GameState.Pause);
         }
     }
-
-    private void InternalCloseAll()
-    {
-        if (_pausePanel) _pausePanel.SetActive(false);
-        if (_inventoryPanel) _inventoryPanel.SetActive(false);
-        if (_mapPanel) _mapPanel.SetActive(false);
-    }
-
-    public void CloseAllPanels() => _stateChannel.RaiseRequest(GameState.Playing);
 }

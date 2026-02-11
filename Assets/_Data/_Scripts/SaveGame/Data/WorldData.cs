@@ -3,7 +3,7 @@ using UnityEngine;
 using GlobalEnums;
 
 [System.Serializable]
-public class WorldSaveData
+public class WorldSaveData : ISerializationCallbackReceiver
 {
     public string currentSceneName = "";
     public string currentBench = "";
@@ -11,6 +11,29 @@ public class WorldSaveData
     public List<string> openedDoors = new();
     public List<Enemy> enemies = new();
     public Language language = Language.Vietnamese;
+
+    [System.NonSerialized] public HashSet<string> visitedRooms = new();
+    
+    [SerializeField] 
+    [UnityEngine.Serialization.FormerlySerializedAs("visitedRooms")]
+    private List<string> _visitedRoomsList = new();
+
+    public List<AreaType> unlockedMaps = new();
+
+    public void OnBeforeSerialize()
+    {
+        _visitedRoomsList.Clear();
+        _visitedRoomsList.AddRange(visitedRooms);
+    }
+
+    public void OnAfterDeserialize()
+    {
+        visitedRooms.Clear();
+        foreach (var room in _visitedRoomsList)
+        {
+            visitedRooms.Add(room);
+        }
+    }
 }
 
 [System.Serializable]

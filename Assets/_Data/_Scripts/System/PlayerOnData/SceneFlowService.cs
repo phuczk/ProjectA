@@ -27,6 +27,18 @@ public static class SceneFlowService
 
     private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (scene.name == "SlotScene" || scene.name == "New Scene" || scene.name == "MainMenu")
+        {
+            PlayerSpawnService.Clear();
+            return;
+        }
+
+        if (SaveManager.Instance == null || SaveManager.Instance.CurrentData == null)
+        {
+            Debug.Log($"No save data loaded yet, skip spawn. savemanager: {SaveManager.Instance} SaveData: {SaveManager.Instance.CurrentData}");
+            return;
+        }
+
         if (!string.IsNullOrEmpty(_pendingSpawnKey))
         {
             var target = GameObject.Find(_pendingSpawnKey);

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using GlobalEnums;
+using UnityEngine.SceneManagement;
 
 public class PauseUI : MonoBehaviour, IBackHandler
 {
@@ -17,9 +18,10 @@ public class PauseUI : MonoBehaviour, IBackHandler
 
     public Button KeyboardCloseButton;
 
+    [SerializeField] private string _slotSceneName = "SlotScene";
+
     private void Awake()
     {
-        // Gán sự kiện cho các nút
         ResumeButton.onClick.AddListener(OnResumeClick);
         KeyBoardButton.onClick.AddListener(ToggleKeyboard);
         AudioButton.onClick.AddListener(ToggleAudio);
@@ -80,6 +82,7 @@ public class PauseUI : MonoBehaviour, IBackHandler
 
     private void OnExitClick()
     {
+        SceneTransitionManager.Instance.TransitionToScene(_slotSceneName);
         _stateChannel.RaiseRequest(GameState.MainMenu);
     }
 

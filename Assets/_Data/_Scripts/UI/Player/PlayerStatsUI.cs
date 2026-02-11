@@ -1,8 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using GlobalEnums;
+using UnityEngine.SceneManagement;
 
 public class PlayerStatsUI : Singleton<PlayerStatsUI>
 {
@@ -28,6 +30,7 @@ public class PlayerStatsUI : Singleton<PlayerStatsUI>
     {
         UIEventSystem.OnHealthChanged += HandleHealthChanged;
         UIEventSystem.OnManaChanged += HandleManaChanged;
+        SceneManager.sceneLoaded += OnSceneLoaded;
         
         if (_stateChannel != null)
             _stateChannel.OnStateRequested += HandleStateChange;
@@ -37,6 +40,7 @@ public class PlayerStatsUI : Singleton<PlayerStatsUI>
     {
         UIEventSystem.OnHealthChanged -= HandleHealthChanged;
         UIEventSystem.OnManaChanged -= HandleManaChanged;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
         
         if (_stateChannel != null)
             _stateChannel.OnStateRequested -= HandleStateChange;
@@ -46,12 +50,18 @@ public class PlayerStatsUI : Singleton<PlayerStatsUI>
     {
         if (newState == GameState.Playing)
         {
-            ShowStats();
+            StartCoroutine(ShowStatsDelayed(0.5f));
         }
         else
         {
             HideStats();
         }
+    }
+
+    private IEnumerator ShowStatsDelayed(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        ShowStats();
     }
 
     private void ShowStats()
@@ -66,6 +76,14 @@ public class PlayerStatsUI : Singleton<PlayerStatsUI>
         avatar.gameObject.SetActive(false);
         HealthBarRoot.SetActive(false);
         ManaBarRoot.SetActive(false);
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "SlotScene" || scene.name == "New Scene" || scene.name == "MainMenu")
+        {
+            HideStats();
+        }
     }
 
     private void HandleHealthChanged(float currentHealth, float maxHealth)

@@ -6,7 +6,6 @@ public class GunConfigSet : ScriptableObject
     public GunConfig Normal;
     public GunConfig Shotgun;
     public GunConfig Rapid;
-    public GunConfig Sniper;
 }
 
 [System.Serializable]

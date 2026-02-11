@@ -4,26 +4,18 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
 
-public class SaveManager : MonoBehaviour
+public class SaveManager : Singleton<SaveManager>
 {
-    public static SaveManager Instance { get; private set; }
-
     [SerializeField] private int _defaultSlot = 1;
 
     public SaveData CurrentData { get; private set; }
 
     public GameObject _playerPrefab;
+    public static System.Action OnDataLoaded;
 
-    private void Awake()
+    protected override void Awake()
     {
-        if (Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
+        base.Awake();
 
         SaveSystemz.SetActiveSlot(_defaultSlot);
         PlayerSpawnService.Init(_playerPrefab.GetComponent<PlayerController>());
@@ -31,7 +23,11 @@ public class SaveManager : MonoBehaviour
 
     public void LoadSlot(int slot)
     {
+        if (slot <= 0) slot = _defaultSlot;
         CurrentData = SaveSystemz.LoadFromSlot(slot);
+
+        OnDataLoaded?.Invoke(); 
+
         SceneFlowService.LoadScene(CurrentData);
     }
 

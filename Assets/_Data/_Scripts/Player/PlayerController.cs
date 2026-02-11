@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using DG.Tweening;
 using GlobalEnums;
 using System.Collections;
@@ -18,7 +19,6 @@ public class PlayerController : MonoBehaviour, IPlayerController
     [SerializeField] private GunConfigSet _gunSet;
     private Rigidbody2D _rb;
     private Collider2D _col;
-    private FrameInput _frameInput;
     private Vector2 _frameVelocity;
     private bool _cachedQueryStartInColliders;
     private bool _waitingForCamera;
@@ -50,17 +50,37 @@ public class PlayerController : MonoBehaviour, IPlayerController
     [SerializeField] private PlayerInputHandler _inputHandler;
     [SerializeField] private PlayerGravityFlip _gravityFlip;
     [SerializeField] private PlayerSkill _playerSkill;
+    [SerializeField] private PlayerEffectRunner _effectRunner;
     [SerializeField] private PlayerUI _playerUI;
     private bool _dashPressedFrame;
+    private bool _canFlipGravity = true;
 
     [Header("Cursed System")]
     [SerializeField] private CursedList cursedList;
-    private readonly List<Effect> activeEffects = new();
-
-    private Effect currentSkillEffect;
-    private Effect currentUltimateEffect;
+    private HashSet<string> _unlockedSet = new();
+    private HashSet<string> _equippedSet = new();
 
     private bool _isHealing;
+    private WaitForSeconds _healWait;
+
+    private FrameInput _frameInput; 
+    private ScaleType _currentScale = ScaleType.Normal;
+
+    public int Money { get; private set; } = 0;
+
+    private float fallingSpeed;
+
+    [SerializeField] private List<GunEntry> _guns;
+
+    [System.Serializable]
+    public class GunEntry
+    {
+        public GunType type;
+        public GameObject obj;
+    }
+
+    private Dictionary<GunType, GameObject> _gunMap;
+
 
     private void Awake()
     {
@@ -76,17 +96,29 @@ public class PlayerController : MonoBehaviour, IPlayerController
         _motor.Configure(_rb, _col, _stats, _visuals, _ability);
 
         if (_manager == null) _manager = FindFirstObjectByType<GravityFlipManager>();
-
-        if (_manager != null && _manager.cameraController != null)
-        {
-            _manager.cameraController.OnCameraRotationComplete += OnCameraRotationComplete;
-        }
+        var camController = _manager != null && _manager.cameraController != null 
+            ? _manager.cameraController 
+            : FindFirstObjectByType<CameraController>();
+        if (camController != null)
+            camController.OnCameraRotationComplete += OnCameraRotationComplete;
         if (Arm != null)
             _armDefaultRotation = Arm.localRotation;
         EnsureGunDefaults();
         SetupSystems();
         
+        _healWait = new WaitForSeconds(3f);
+
+        fallingSpeed = CameraManager.Instance.fallSpeed;
+        SetupGunMap();
+        LoadCurrentGun();
         LoadActiveCursedObjects();
+    }
+
+    private void SetupGunMap()
+    {
+        _gunMap = new();
+        foreach(var g in _guns)
+            _gunMap[g.type] = g.obj;
     }
 
     private void CacheComponents()
@@ -100,7 +132,9 @@ public class PlayerController : MonoBehaviour, IPlayerController
         _inputHandler = GetOrAdd<PlayerInputHandler>();
         _gravityFlip = GetOrAdd<PlayerGravityFlip>();
         _playerSkill = GetOrAdd<PlayerSkill>();
+        _effectRunner = GetOrAdd<PlayerEffectRunner>();
         _playerUI = GetOrAdd<PlayerUI>();
+        _cursedObject = GetOrAdd<PlayerCursedObject>();
         _weaponSystem = GetComponent<WeaponSystem>();
     }
 
@@ -110,7 +144,7 @@ public class PlayerController : MonoBehaviour, IPlayerController
     {
         _gravityFlip.Configure(_manager, _rb, _ability);
         _motor.Configure(_rb, _col, _stats, _visuals, _ability);
-        _motor.OnGroundedChanged = (g, v) => GroundedChanged?.Invoke(g, v);
+        _motor.OnGroundedChanged = (g, v) => { GroundedChanged?.Invoke(g, v); if (g) _canFlipGravity = true; };
         _motor.OnJumped = () => Jumped?.Invoke();
 
         if (_weaponSystem != null)
@@ -121,37 +155,48 @@ public class PlayerController : MonoBehaviour, IPlayerController
         }
         
         _playerSkill.Configure(_ability, _health);
-        LoadActiveCursedObjects();
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "SlotScene" || scene.name == "New Scene" || scene.name == "MainMenu")
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void OnDestroy()
     {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        PlayerSpawnService.Clear();
         if (_weaponSystem != null)
         {
             _weaponSystem.OnFireTriggered -= HandleGunFireEffect;
         }
     }
 
-    private void HandleGunFireEffect(PlayerController player, Vector2 direction)
-    {
-        activeEffects.ForEach(effect => effect.OnGunFire(this, direction));
-    }
-
     private void GatherInput()
     {
-        _frameInput = new FrameInput
-        {
-            Move       = _inputHandler.MoveInput,
-            JumpDown   = _inputHandler.JumpDown,
-            JumpHeld   = _inputHandler.JumpHeld,
-            DashDown   = _inputHandler.DashDown,
-            FireHeld   = _inputHandler.FireHeld,
-            HealDown   = _inputHandler.HealDown,
-            ScaleBig   = _inputHandler.ScaleBig(),
-            ScaleSmall = _inputHandler.ScaleSmall(),
-            ScaleNormal= _inputHandler.ScaleNormal(),
-            SpecialDown= _inputHandler.SkillInput,
-        };
+        _frameInput.Move = _inputHandler.MoveInput;
+        _frameInput.JumpDown = _inputHandler.JumpDown;
+        _frameInput.JumpHeld = _inputHandler.JumpHeld;
+        _frameInput.DashDown = _inputHandler.DashDown;
+        _frameInput.FireHeld = _inputHandler.FireHeld;
+        _frameInput.HealDown = _inputHandler.HealDown;
+        _frameInput.ScaleBig = _inputHandler.ScaleBig();
+        _frameInput.ScaleSmall = _inputHandler.ScaleSmall();
+        _frameInput.ScaleNormal = _inputHandler.ScaleNormal();
+        _frameInput.SpecialDown = _inputHandler.SkillInput;
 
         if (_inputHandler.TryGetGunSwitch(out var gunType))
         {
@@ -164,29 +209,42 @@ public class PlayerController : MonoBehaviour, IPlayerController
         if (_isHealing) return;
         _time += Time.deltaTime;
 
-        _gravityFlip.HandleInput(_inputHandler, transform, ref _waitingForCamera, ref _pendingGravity);
+        _gravityFlip.HandleInput(_inputHandler, transform, ref _waitingForCamera, ref _pendingGravity, ref _canFlipGravity);
 
         GatherInput();
 
         _motor.SetJumpInput(_frameInput.JumpDown, _frameInput.JumpHeld, _time);
 
-        _dashPressedFrame |= _frameInput.DashDown;
-
         if (_frameInput.FireHeld) TryFire(_inputHandler.AimInput);
         if (_frameInput.SpecialDown) TrySpecialSkill(_frameInput.Move);
+        
         if (_frameInput.HealDown) HealPlayer();
 
-        if (_frameInput.ScaleBig) ScalePlayer(ScaleType.Big);
-        else if (_frameInput.ScaleSmall) ScalePlayer(ScaleType.Small);
-        else if (_frameInput.ScaleNormal) ScalePlayer(ScaleType.Normal);
+        HandleScaling();
         
-        if (_frameInput.DashDown) _motor.TryStartDash(_time, _dashSpeed, _dashDuration, _dashCooldownTime);
+        if (_frameInput.DashDown) 
+            _motor.TryStartDash(_time, _dashSpeed, _dashDuration, _dashCooldownTime);
 
-        HandleArmIdleReturn();
+        _weaponSystem?.HandleIdleArm();
+
+        if (_rb.linearVelocity.y < fallingSpeed 
+            && !CameraManager.Instance.IsLerpingYDamping 
+            && !CameraManager.Instance.LerpedFromPlayerFalling)
+        {
+            CameraManager.Instance.LerpYDamping(true);
+        }
+
+        if (_rb.linearVelocity.y >= 0f 
+            && !CameraManager.Instance.IsLerpingYDamping 
+            && CameraManager.Instance.LerpedFromPlayerFalling)
+        {
+            CameraManager.Instance.LerpedFromPlayerFalling = false;
+            CameraManager.Instance.LerpYDamping(false);
+        }
     }
 
     #if UNITY_EDITOR
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         Vector2 up = GetUpDir();
         Vector3 origin = transform.position;
@@ -202,13 +260,17 @@ public class PlayerController : MonoBehaviour, IPlayerController
     }
     #endif
 
+    private void HandleGunFireEffect(PlayerController player, Vector2 direction)
+    {
+        GameEventBus.Instance?.RaiseGunFire(player, direction);
+    }
+
     private void FixedUpdate()
     {
         if (_waitingForCamera || _isHealing) return;
+
         _motor.CheckCollisions(_time);
-        //_motor.HandleJump(_time);
-        //_motor.HandleDirection(_inputHandler.MoveInput);
-        //_motor.HandleGravity();
+        
         if (_motor.IsDashing)
         {
             _motor.HandleDashLogic(_time, _dashSpeed);
@@ -216,11 +278,25 @@ public class PlayerController : MonoBehaviour, IPlayerController
         else
         {
             _motor.HandleJump(_time);
-            _motor.HandleDirection(_inputHandler.MoveInput);
+            _motor.HandleDirection(_frameInput.Move);
             _motor.HandleGravity();
         }
-        //_dashPressedFrame = false;
+        
         _motor.ApplyMovement();
+    }
+
+    private void HandleScaling()
+    {
+        ScaleType targetScale = _currentScale;
+        if (_frameInput.ScaleBig) targetScale = ScaleType.Big;
+        else if (_frameInput.ScaleSmall) targetScale = ScaleType.Small;
+        else if (_frameInput.ScaleNormal) targetScale = ScaleType.Normal;
+
+        if (targetScale != _currentScale)
+        {
+            ScalePlayer(targetScale);
+            _currentScale = targetScale;
+        }
     }
 
     private Vector2 GetUpDir()
@@ -238,6 +314,7 @@ public class PlayerController : MonoBehaviour, IPlayerController
     private void OnCameraRotationComplete()
     {
         _gravityFlip.OnCameraRotationComplete(transform, ref _waitingForCamera, ref _frameVelocity, ref _pendingGravity);
+        _motor.ResetVelocity();
     }
 
     private void TryFire(Vector2 inputDir)
@@ -277,11 +354,10 @@ public class PlayerController : MonoBehaviour, IPlayerController
         _isHealing = true;
         
         _rb.linearVelocity = Vector2.zero;
-        
-        yield return new WaitForSeconds(3f);
+        yield return _healWait;
 
         _health?.Heal(3);
-        activeEffects.ForEach(effect => effect.OnHeal(this));
+        GameEventBus.Instance?.RaiseHeal(this);
 
         _isHealing = false;
     }
@@ -311,6 +387,12 @@ public class PlayerController : MonoBehaviour, IPlayerController
 
     public void SetGunType(GlobalEnums.GunType type)
     {
+        foreach (var g in _gunMap.Values)
+            g.SetActive(false);
+
+        if (_gunMap.TryGetValue(type, out var gun))
+            gun.SetActive(true);
+
         _currentGunType = type;
         _weaponSystem?.SetGunType(type);
     }
@@ -366,106 +448,217 @@ public class PlayerController : MonoBehaviour, IPlayerController
         }
     }
 
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Money"))
+        {
+            LootManager.Instance.AddMoney(1);
+            BulletPool.Instance.Release(other.gameObject);
+        }
+    }
+
+    private void CacheFromSave(SaveData data) { if (data == null) return; if (data.items != null) CollectionSync.Cache(_unlockedSet, data.items.unlockedCursedObjects); if (data.player != null) CollectionSync.Cache(_equippedSet, data.player.currentCursedObjects); }
+
+    public void UnlockCursedObject(string cursedId)
+    {
+        var data = cursedList.GetById(cursedId);
+        if (data == null) return;
+
+        var mgr = SaveManager.Instance;
+
+        if (mgr != null)
+        {
+            if (mgr.CurrentData.items == null)
+                mgr.CurrentData.items = new ItemData();
+
+            CacheFromSave(mgr.CurrentData);
+
+            if (_unlockedSet.Add(cursedId))
+            {
+                CollectionSync.SyncList(
+                    _unlockedSet,
+                    mgr.CurrentData.items.unlockedCursedObjects
+                );
+
+                mgr.SaveGame();
+                _cursedObject?.OnUnlocked(data);
+            }
+            return;
+        }
+
+        var save = SaveSystemz.Load();
+        if (save.items == null) save.items = new ItemData();
+
+        CacheFromSave(save);
+
+        if (_unlockedSet.Add(cursedId))
+        {
+            CollectionSync.SyncList(
+                _unlockedSet,
+                save.items.unlockedCursedObjects
+            );
+
+            SaveSystemz.Save(save);
+            _cursedObject?.OnUnlocked(data);
+        }
+    }
+
     private void LoadActiveCursedObjects()
     {
-        var saveData = SaveSystemz.Load();
-        if (saveData?.player?.currentCursedObjects == null || saveData.player.currentCursedObjects.Count == 0)
-            return;
+        var save = SaveSystemz.Load();
+        if (save == null) return;
 
-        ClearAllCursedEffects();
+        CacheFromSave(save);
 
-        foreach (var cursedId in saveData.player.currentCursedObjects)
-        {
-            var data = cursedList.GetById(cursedId);
-            if (data == null)
-            {
-                Debug.LogWarning($"Không tìm thấy CursedObject với id: {cursedId}");
-                continue;
-            }
-
-            ApplyCursedObject(data);
-        }
-    }
-
-    private void ClearAllCursedEffects()
-    {
-        // Xóa Passive/Ability
-        foreach (var effect in activeEffects)
-            effect.OnRemove(this);
-        activeEffects.Clear();
-
-        // Xóa Skill
-        currentSkillEffect?.OnRemove(this);
-        currentSkillEffect = null;
-
-        // Xóa Ultimate
-        if (currentUltimateEffect != null)
-        {
-            currentUltimateEffect.OnRemove(this);
-            currentUltimateEffect = null;
-        }
-    }
-
-    private void ApplyCursedObject(CursedObjectData data)
-    {
-        if (data == null || data.Effects == null || data.Effects.Count == 0)
-            return;
-
-        switch (data.type)
-        {
-            case CursedObjectType.Passive:
-            case CursedObjectType.Ability:
-                foreach (var effect in data.Effects)
-                {
-                    activeEffects.Add(effect);
-                    effect.OnApply(this);
-                }
-                break;
-
-            case CursedObjectType.Skill:
-                currentSkillEffect?.OnRemove(this);
-
-                currentSkillEffect = data.Effects[0];
-                currentSkillEffect.OnApply(this);
-                break;
-
-            case CursedObjectType.Ultimate:
-                currentUltimateEffect?.OnRemove(this);
-
-                currentUltimateEffect = data.Effects[0];
-                currentUltimateEffect.OnApply(this);
-                break;
-
-            default:
-                Debug.LogWarning($"Loại CursedObject {data.type} chưa được xử lý!");
-                break;
-        }
+        _effectRunner.RebuildEffects(_equippedSet);
     }
 
     public void EquipCursedObject(string cursedId)
     {
         var data = cursedList.GetById(cursedId);
-        if (data == null)
+        if (data == null) return;
+
+        var mgr = SaveManager.Instance;
+
+        if (mgr != null)
         {
-            Debug.LogWarning($"Không tồn tại cursed object id: {cursedId}");
+            if (mgr.CurrentData.items == null)
+                mgr.CurrentData.items = new ItemData();
+
+            if (mgr.CurrentData.player == null)
+                mgr.CurrentData.player = new PlayerData();
+
+            CacheFromSave(mgr.CurrentData);
+
+            if (!_unlockedSet.Contains(cursedId))
+                return;
+
+            if (_equippedSet.Add(cursedId))
+            {
+                CollectionSync.SyncList(
+                    _equippedSet,
+                    mgr.CurrentData.player.currentCursedObjects
+                );
+
+                mgr.SaveGame();
+                LoadActiveCursedObjects();
+            }
             return;
         }
 
-        // Optional: Kiểm tra đã equip chưa (tránh trùng)
         var save = SaveSystemz.Load();
-        if (save?.player?.currentCursedObjects?.Contains(cursedId) == true)
-            return; // hoặc xử lý replace tùy game
-
-        // Áp dụng ngay lập tức
-        ApplyCursedObject(data);
-
-        // Cập nhật save data
+        if (save.items == null) save.items = new ItemData();
         if (save.player == null) save.player = new PlayerData();
-        if (!save.player.currentCursedObjects.Contains(cursedId))
+
+        CacheFromSave(save);
+
+        if (!_unlockedSet.Contains(cursedId))
+            return;
+
+        if (_equippedSet.Add(cursedId))
         {
-            save.player.currentCursedObjects.Add(cursedId);
+            CollectionSync.SyncList(
+                _equippedSet,
+                save.player.currentCursedObjects
+            );
             SaveSystemz.Save(save);
         }
+    }
+
+    private void LoadCurrentGun()
+    {
+        GunType gun = GunType.Normal;
+
+        PlayerData playerData = null;
+
+        var mgr = SaveManager.Instance;
+
+        if (mgr != null)
+        {
+            playerData = mgr.CurrentData?.player;
+        }
+        else
+        {
+            var save = SaveSystemz.Load();
+            playerData = save?.player;
+        }
+
+        if (playerData == null)
+        {
+            SetGunType(GunType.Normal);
+            return;
+        }
+
+        if (!playerData.unlockedGuns.Contains(playerData.currentGun))
+        {
+            gun = GunType.Normal;
+        }
+        else
+        {
+            gun = playerData.currentGun;
+        }
+
+        SetGunType(gun);
+    }
+
+    public void UnlockGun(GunType gunType)
+    {
+        var mgr = SaveManager.Instance;
+
+        if (mgr != null)
+        {
+            mgr.CurrentData.player ??= new PlayerData();
+            mgr.CurrentData.player.unlockedGuns ??= new List<GunType>();
+
+            if (!mgr.CurrentData.player.unlockedGuns.Contains(gunType))
+            {
+                mgr.CurrentData.player.unlockedGuns.Add(gunType);
+                mgr.SaveGame();
+            }
+            return;
+        }
+
+        var save = SaveSystemz.Load();
+        save.player ??= new PlayerData();
+        save.player.unlockedGuns ??= new List<GunType>();
+
+        if (!save.player.unlockedGuns.Contains(gunType))
+        {
+            save.player.unlockedGuns.Add(gunType);
+            SaveSystemz.Save(save);
+        }
+    }
+
+    public void SetCurrentGun(GunType gunType)
+    {
+        var mgr = SaveManager.Instance;
+
+        if (mgr != null)
+        {
+            mgr.CurrentData.player ??= new PlayerData();
+            mgr.CurrentData.player.unlockedGuns ??= new List<GunType>();
+
+            if (!mgr.CurrentData.player.unlockedGuns.Contains(gunType))
+                return;
+
+            mgr.CurrentData.player.currentGun = gunType;
+            mgr.SaveGame();
+
+            SetGunType(gunType);
+            return;
+        }
+
+        var save = SaveSystemz.Load();
+        save.player ??= new PlayerData();
+        save.player.unlockedGuns ??= new List<GunType>();
+
+        if (!save.player.unlockedGuns.Contains(gunType))
+            return;
+
+        save.player.currentGun = gunType;
+        SaveSystemz.Save(save);
+
+        SetGunType(gunType);
     }
 }
 

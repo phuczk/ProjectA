@@ -31,7 +31,7 @@ public class InputRebindManager : MonoBehaviour
         {
             PlayerPrefs.SetString(REBINDS_KEY, json);
             PlayerPrefs.Save();
-            Debug.Log("[Rebind] Đã lưu input overrides");
+            //Debug.Log("[Rebind] Đã lưu input overrides");
         }
     }
 
@@ -45,7 +45,7 @@ public class InputRebindManager : MonoBehaviour
             try
             {
                 inputActions.LoadBindingOverridesFromJson(json);
-                Debug.Log("[Rebind] Đã load input overrides từ PlayerPrefs");
+                //Debug.Log("[Rebind] Đã load input overrides từ PlayerPrefs");
             }
             catch (System.Exception e)
             {
@@ -55,7 +55,7 @@ public class InputRebindManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("[Rebind] Không tìm thấy overrides lưu, dùng mặc định");
+            //Debug.Log("[Rebind] Không tìm thấy overrides lưu, dùng mặc định");
         }
     }
 
@@ -64,6 +64,6 @@ public class InputRebindManager : MonoBehaviour
         inputActions.RemoveAllBindingOverrides();
         PlayerPrefs.DeleteKey(REBINDS_KEY);
         PlayerPrefs.Save();
-        Debug.Log("[Rebind] Đã reset về input mặc định");
+        //Debug.Log("[Rebind] Đã reset về input mặc định");
     }
 }

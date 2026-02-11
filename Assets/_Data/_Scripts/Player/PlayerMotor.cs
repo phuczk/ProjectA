@@ -58,7 +58,10 @@ public class PlayerMotor : MonoBehaviour
         var up = GetUpDir();
         var right = GetRightDir(up);
 
+        bool prevQueriesStartInColliders = Physics2D.queriesStartInColliders;
+        bool prevQueriesHitTriggers = Physics2D.queriesHitTriggers;
         Physics2D.queriesStartInColliders = false;
+        Physics2D.queriesHitTriggers = false;
         var mask = ~_stats.PlayerLayer;
         bool groundHit = Physics2D.BoxCast(_col.bounds.center, _col.bounds.size, 0, -up, _stats.GrounderDistance, mask);
 
@@ -76,7 +79,8 @@ public class PlayerMotor : MonoBehaviour
             _endedJumpEarly = false;
             OnGroundedChanged?.Invoke(true, Mathf.Abs(_frameVelocity.y));
         }
-        Physics2D.queriesStartInColliders = true;
+        Physics2D.queriesStartInColliders = prevQueriesStartInColliders;
+        Physics2D.queriesHitTriggers = prevQueriesHitTriggers;
     }
 
     public void HandleJump(float time)
@@ -103,39 +107,6 @@ public class PlayerMotor : MonoBehaviour
         }
         _frameVelocity = up * vUp + right * vRight;
     }
-
-    // public void HandleDash(bool waitingForCamera, float time, bool dashDown, float dashSpeed, float dashDuration, float dashCooldownTime)
-    // {
-    //     if (!_ability.Has(AbilityType.Dash)) return;
-    //     if (waitingForCamera) return;
-    //     if (!_isDashing)
-    //     {
-    //         if (time >= _dashCooldownUntil && dashDown)
-    //         {
-    //             var up = GetUpDir();
-    //             var right = GetRightDir(up);
-    //             float sign = _visuals != null && _visuals.transform.localScale.x < 0 ? -1f : 1f;
-    //             var vRight = dashSpeed * sign;
-    //             _frameVelocity = up * 0f + right * vRight;
-    //             _isDashing = true;
-    //             _dashEndTime = time + dashDuration;
-    //             _dashCooldownUntil = time + dashCooldownTime;
-    //         }
-    //     }
-    //     else
-    //     {
-    //         if (time >= _dashEndTime)
-    //         {
-    //             _isDashing = false;
-    //             return;
-    //         }
-    //         var up = GetUpDir();
-    //         var right = GetRightDir(up);
-    //         float sign = _visuals != null && _visuals.transform.localScale.x < 0 ? -1f : 1f;
-    //         var vRight = dashSpeed * sign;
-    //         _frameVelocity = up * 0f + right * vRight;
-    //     }
-    // }
 
     public void HandleDashLogic(float time, float dashSpeed)
     {
@@ -180,6 +151,11 @@ public class PlayerMotor : MonoBehaviour
         return true;
     }
     
+    public void ResetVelocity()
+    {
+        _frameVelocity = Vector2.zero;
+    }
+
     public void HandleGravity()
     {
         var up = GetUpDir();

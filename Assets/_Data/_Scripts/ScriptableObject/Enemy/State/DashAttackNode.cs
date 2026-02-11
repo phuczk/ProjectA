@@ -7,9 +7,9 @@ public class DashAttackNode : EnemyStateNode
 {
     public override EnemyStateType StateType => EnemyStateType.Attack;
 
-    public float WindupTime = 0.15f;
-    public float DashTime = 0.25f;
-    public float DashSpeed = 8f;
+    public float WindupTime = 0.35f;
+    public float DashTime = 0.5f;
+    public float DashSpeed = 10f;
     public float RecoverTime = 0.2f;
 
     private enum Phase { Windup, Dash, Recover }
@@ -22,8 +22,8 @@ public class DashAttackNode : EnemyStateNode
         _currentPhase = Phase.Windup;
         _phaseTimer = WindupTime;
 
-        _dashDir = (machine.Target.position.x > machine.transform.position.x) ? Vector2.right : Vector2.left;
-        machine.transform.localScale = new Vector3(Mathf.Sign(_dashDir.x), 1, 1);
+        _dashDir = (machine.Target.position.x > machine.CachedTransform.position.x) ? Vector2.right : Vector2.left;
+        machine.CachedTransform.localScale = new Vector3(Mathf.Sign(_dashDir.x), 1, 1);
         machine.Rb.linearVelocity = Vector2.zero;
     }
 

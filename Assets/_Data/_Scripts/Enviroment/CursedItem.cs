@@ -10,7 +10,7 @@ public class CursedItem : Interactable
         var playerController = player?.GetComponent<PlayerController>();
         if (playerController != null)
         {
-            playerController.EquipCursedObject(cursedId);
+            playerController.UnlockCursedObject(cursedId);
             Destroy(gameObject);
         }
     }

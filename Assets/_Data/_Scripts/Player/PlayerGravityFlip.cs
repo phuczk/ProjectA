@@ -15,10 +15,10 @@ public class PlayerGravityFlip : MonoBehaviour
         _ability = ability;
     }
 
-    public void HandleInput(PlayerInputHandler input, Transform playerTransform, ref bool waitingForCamera, ref Vector2 pendingGravity)
+    public void HandleInput(PlayerInputHandler input, Transform playerTransform, ref bool waitingForCamera, ref Vector2 pendingGravity, ref bool canFlipGravity)
     {
         if (!_ability.Has(AbilityType.GravityFlip)) return;
-        if (_manager == null || waitingForCamera) return;
+        if (_manager == null || waitingForCamera || !canFlipGravity) return;
         var newDir = _manager.gravityDirection;
 
         if (input != null && input.FlipGravityUp())
@@ -47,6 +47,7 @@ public class PlayerGravityFlip : MonoBehaviour
         _rb.bodyType = RigidbodyType2D.Kinematic;
         _rb.linearVelocity = Vector2.zero;
         waitingForCamera = true;
+        canFlipGravity = false;
         pendingGravity = newDir switch
         {
             GravityDirection.North => new Vector2(0, -28f),

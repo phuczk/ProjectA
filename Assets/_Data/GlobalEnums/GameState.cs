@@ -5,6 +5,7 @@ namespace GlobalEnums
         MainMenu,
         Playing,
         Pause,
+        Dialogue,
         GameOver,
     }
 }

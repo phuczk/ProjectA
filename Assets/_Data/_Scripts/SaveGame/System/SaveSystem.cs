@@ -33,6 +33,8 @@ public static class SaveSystemz
                 data.player = new PlayerData { maxHealth = 5, maxMana = 3, position = Vector3.zero };
             if (data.world == null)
                 data.world = new WorldSaveData { currentSceneName = "TestScene" };
+            if (data.items == null)
+                data.items = new ItemData();
             return data;
         }
         catch (Exception ex)
@@ -125,6 +127,7 @@ public static class SaveSystemz
             {
                 currentSceneName = "TestScene"
             },
+            items = new ItemData()
         };
     }
 

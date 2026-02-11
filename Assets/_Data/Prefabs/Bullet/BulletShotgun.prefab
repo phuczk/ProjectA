@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1744284147033487427
 Transform:
   m_ObjectHideFlags: 0
@@ -160,7 +160,6 @@ GameObject:
   - component: {fileID: 447231252673613506}
   - component: {fileID: 5342055646380124495}
   - component: {fileID: 572511696442059002}
-  - component: {fileID: -805229839452351473}
   - component: {fileID: 4277723400959458247}
   m_Layer: 0
   m_Name: BulletShotgun
@@ -226,11 +225,10 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 2208703988740019828, guid: 252740abe08830d4ca2352cd0805cc86,
-    type: 3}
+  m_SortingLayerID: -451849085
+  m_SortingLayer: 3
+  m_SortingOrder: 2
+  m_Sprite: {fileID: 2208703988740019828, guid: 252740abe08830d4ca2352cd0805cc86, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -275,8 +273,8 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.3930969, y: 0}
-  m_Radius: 0.597685
+  m_Offset: {x: 0.48370078, y: 0}
+  m_Radius: 0.5714333
 --- !u!114 &572511696442059002
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -292,18 +290,6 @@ MonoBehaviour:
   _hitEffectPrefab: {fileID: 0}
   _destroyEffectPrefab: {fileID: 0}
   _direction: {x: 0, y: 0, z: 0}
---- !u!210 &-805229839452351473
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1195933723998712466}
-  m_Enabled: 1
-  m_SortingLayerID: 1036499237
-  m_SortingLayer: 3
-  m_SortingOrder: 2
-  m_SortAtRoot: 0
 --- !u!50 &4277723400959458247
 Rigidbody2D:
   serializedVersion: 5

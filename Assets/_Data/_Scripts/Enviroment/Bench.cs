@@ -5,11 +5,13 @@ public class Bench : Interactable
 {
     private void OnPlayerRest()
     {
+        MapManager.Instance?.OnSitAtBench();
         var mgr = SaveManager.Instance;
         var pos = transform.position;
         var rx = Mathf.Round(pos.x * 10f) / 10f;
         var ry = Mathf.Round(pos.y * 10f) / 10f;
         var scene = SceneManager.GetActiveScene().name;
+        var money = LootManager.Instance.GetCurrentMoney();
         var bench = gameObject.name;
         if (mgr != null)
         {
@@ -21,6 +23,7 @@ public class Bench : Interactable
             data.player.position = new Vector3(rx, ry, 0f);
             data.world.currentSceneName = scene;
             data.world.currentBench = bench;
+            data.player.currentMoney = money;
             SaveSystemz.Save(data);
         }
     }
@@ -29,6 +32,7 @@ public class Bench : Interactable
     {
         if (player != null)
             player.position = transform.position;
+        player.GetComponent<PlayerHealth>().ResetHealth();
         OnPlayerRest();
     }
 }

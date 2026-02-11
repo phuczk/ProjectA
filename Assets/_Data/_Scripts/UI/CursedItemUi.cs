@@ -1,19 +1,48 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
+using UnityEngine.EventSystems;
+using System;
 
-public class CursedItemUI : MonoBehaviour
+[RequireComponent(typeof(Button))]
+public class CursedItemUI : MonoBehaviour, ISelectHandler, IDeselectHandler
 {
-    public Image icon;
-    public TMP_Text nameText;
-    public TMP_Text descText;
+    [SerializeField] private Image icon;
 
-    public bool isSelected = false;
+    private CursedObjectData data;
+    private Button _button;
+    private RectTransform _rect;
+
+    public Action<CursedObjectData, RectTransform> OnItemSelected;
+    public Action<CursedObjectData> OnItemClicked;
+
+    private void Awake()
+    {
+        _button = GetComponent<Button>();
+        _rect = GetComponent<RectTransform>();
+
+        _button.onClick.AddListener(HandleClick);
+    }
 
     public void Bind(CursedObjectData data)
     {
+        this.data = data;
         icon.sprite = data.icon;
-        nameText.text = Localization.Get(data.NameKey);
-        descText.text = Localization.Get(data.DescKey);
+        icon.transform.localScale = Vector3.one;
+    }
+
+    public void OnSelect(BaseEventData eventData)
+    {
+        icon.transform.localScale = Vector3.one * 1.1f;
+        OnItemSelected?.Invoke(data, _rect);
+    }
+
+    public void OnDeselect(BaseEventData eventData)
+    {
+        icon.transform.localScale = Vector3.one;
+    }
+
+    private void HandleClick()
+    {
+        OnItemClicked?.Invoke(data);
     }
 }

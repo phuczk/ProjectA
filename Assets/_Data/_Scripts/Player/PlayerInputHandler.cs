@@ -22,6 +22,9 @@ public class PlayerInputHandler : MonoBehaviour
     private InputAction _gravityAction;
     private InputAction _scaleAction;
     private InputAction _skillAction;
+    private InputAction _gunNormalAction;
+    private InputAction _gunShotgunAction;
+    private InputAction _gunRapidAction;
 
     // Properties public
     public Vector2 MoveInput { get; private set; }
@@ -80,6 +83,9 @@ public class PlayerInputHandler : MonoBehaviour
         _gravityAction = _actionMap.FindAction("Gravity", true);
         _scaleAction = _actionMap.FindAction("Scale", true);
         _skillAction = _actionMap.FindAction("Skill", true);
+        // _gunNormalAction = _playerInput.actions.FindAction("GunNormal");
+        // _gunShotgunAction = _playerInput.actions.FindAction("GunShotgun");
+        // _gunRapidAction = _playerInput.actions.FindAction("GunRapid");
     }
 
     private void OnEnable()
@@ -133,9 +139,9 @@ public class PlayerInputHandler : MonoBehaviour
     public bool TryGetGunSwitch(out GunType type)
     {
         type = GunType.Normal;
-        if (_playerInput.actions.FindAction("GunNormal")?.WasPressedThisFrame() ?? false) { type = GunType.Normal; return true; }
-        if (_playerInput.actions.FindAction("GunShotgun")?.WasPressedThisFrame() ?? false) { type = GunType.Shotgun; return true; }
-        if (_playerInput.actions.FindAction("GunRapid")?.WasPressedThisFrame() ?? false) { type = GunType.Rapid; return true; }
+        if (_gunNormalAction?.WasPressedThisFrame() ?? false) { type = GunType.Normal; return true; }
+        if (_gunShotgunAction?.WasPressedThisFrame() ?? false) { type = GunType.Shotgun; return true; }
+        if (_gunRapidAction?.WasPressedThisFrame() ?? false) { type = GunType.Rapid; return true; }
         return false;
     }
 

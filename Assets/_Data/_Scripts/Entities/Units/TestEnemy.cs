@@ -125,7 +125,7 @@ public class TestEnemyBehaviour : EntityStateMachine<TestEnemyBehaviour>
     public override void TakeDamage(int damage)
     {
         CurrentHealth -= damage;
-        Debug.Log($"Enemy take damage {damage}, current health {CurrentHealth}");
+        //Debug.Log($"Enemy take damage {damage}, current health {CurrentHealth}");
         if (CurrentHealth <= 0)
         {
             CurrentHealth = 0;
@@ -224,7 +224,7 @@ public class TestEnemyBehaviour : EntityStateMachine<TestEnemyBehaviour>
 
     public void DebugLog()
     {
-        Debug.Log($"Current state: {currentStateType}");
+        //Debug.Log($"Current state: {currentStateType}");
     }
 
     public abstract class StateBase : EntityBehaviourState<TestEnemyBehaviour>

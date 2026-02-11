@@ -7,6 +7,8 @@ TagManager:
   - EnvObstacle
   - Enemy
   - Ground
+  - CameraFollow
+  - Money
   layers:
   - Default
   - TransparentFX
@@ -43,6 +45,24 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 2943036723
+    locked: 0
+  - name: ForeBackground
+    uniqueID: 1822809597
+    locked: 0
+  - name: Midground
+    uniqueID: 3843118211
+    locked: 0
+  - name: ForeMidGround
+    uniqueID: 2996418557
+    locked: 0
+  - name: Foreground
+    uniqueID: 1510819273
+    locked: 0
+  - name: FrontForeground
+    uniqueID: 3733922881
     locked: 0
   m_RenderingLayers:
   - Default

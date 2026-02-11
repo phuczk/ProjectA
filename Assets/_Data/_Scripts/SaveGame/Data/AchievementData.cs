@@ -2,8 +2,8 @@ using UnityEngine;
 using System.Collections.Generic;
 using GlobalEnums;
 
-[System.Serializable]
-public class AchievementListData
+[CreateAssetMenu(menuName = "Achievement/New Achievement")]
+public class AchievementListData : ScriptableObject
 {
     public List<AchievementData> achievements = new();
 }
@@ -11,8 +11,9 @@ public class AchievementListData
 [System.Serializable]
 public class AchievementData
 {
-    public int id;
-    public string name;
-    public string description;
-    public bool isUnlocked = false;
+    public string id;
+    public string titleKey;
+    public string descKey;
+    public Sprite icon;
+    public int goalValue;
 }

@@ -14,7 +14,7 @@ public static class CheckpointService
 
         data.world.currentSceneName = scene;
         data.world.currentBench = bench;
-
+        data.player.currentMoney = LootManager.Instance.GetCurrentMoney();
         SaveSystemz.Save(data);
     }
 }

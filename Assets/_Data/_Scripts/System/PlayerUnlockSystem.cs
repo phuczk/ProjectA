@@ -27,8 +27,6 @@ public abstract class PlayerUnlockSystem<TEnum> : MonoBehaviour, ISaveable where
     }
 
     protected virtual void OnUnlocked(TEnum type) { }
-
-    // === ISaveable ===
     public abstract void SaveData(SaveData data);
     public abstract void LoadData(SaveData data);
 }

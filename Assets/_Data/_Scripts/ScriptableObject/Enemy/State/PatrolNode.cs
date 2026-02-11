@@ -17,7 +17,7 @@ public class PatrolNode : EnemyStateNode
     {
         IsFinished = false;
         _timer = PatrolTimeRange.RandomRange();
-        _dir = machine.transform.localScale.x > 0 ? 1f : -1f;
+        _dir = machine.CachedTransform.localScale.x > 0 ? 1f : -1f;
         _turnCooldown = 0.2f;
     }
 
@@ -37,10 +37,10 @@ public class PatrolNode : EnemyStateNode
             _dir *= -1f;
             _turnCooldown = 0.5f;
 
-            machine.transform.localScale = new Vector3(_dir, 1, 1);
+            machine.CachedTransform.localScale = new Vector3(_dir, 1, 1);
         }
 
-        machine.Movement.SetMoveDirection(Vector2.right * _dir);
+        machine.Movement.SetMoveDirection(Vector2.right * _dir, true);
         machine.Movement.TickMovement(MoveSpeed);
     }
     

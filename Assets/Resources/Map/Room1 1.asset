@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f0339d07d0e6104682cf5434c6f25f7, type: 3}
+  m_Name: Room1 1
+  m_EditorClassIdentifier: 
+  roomName: TestScene1
+  area: 0
+  mapPosition: {x: 20, y: 0}
+  roomSprite: {fileID: -7187660158222144899, guid: 2da2d15ce082e12448ac493c55a33f0f, type: 3}
+  worldSize: {x: 40, y: 20}
+  worldCenter: {x: 0, y: 0}
+  areaData: {fileID: 11400000, guid: d80f0c88caaf2fe4e8c102ed37f06570, type: 2}
+  connectedRooms:
+  - {fileID: 11400000, guid: c560f17b5a2bb444dba779e4a3642c0e, type: 2}
+  - {fileID: 11400000, guid: c2e7ea744e8b0a146b1f2bf3a60c42c0, type: 2}

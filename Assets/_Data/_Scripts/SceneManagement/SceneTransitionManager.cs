@@ -56,6 +56,10 @@ public class SceneTransitionManager : MonoBehaviour
 
     private IEnumerator LoadSceneRoutine(string sceneName)
     {
+        // 1. Ẩn màn hình
+        _leftPanel.gameObject.SetActive(true);
+        _rightPanel.gameObject.SetActive(true);
+
         // 1. Đóng màn lại (Về Vector2.zero)
         Sequence closeSequence = DOTween.Sequence();
         closeSequence.Join(_leftPanel.DOAnchorPos(Vector2.zero, _transitionTime).SetEase(_easeType));
@@ -76,5 +80,7 @@ public class SceneTransitionManager : MonoBehaviour
         openSequence.Join(_rightPanel.DOAnchorPos(_rightPanelOpenPos, _transitionTime).SetEase(_easeType));
 
         yield return openSequence.WaitForCompletion();
+        _leftPanel.gameObject.SetActive(false);
+        _rightPanel.gameObject.SetActive(false);
     }
 }

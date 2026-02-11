@@ -10,6 +10,8 @@ public class GameStateManager : Singleton<GameStateManager>
     protected override void Awake() {
         base.Awake();
         _currentState = GameState.MainMenu;
+        Application.targetFrameRate = -1; // Mở khóa FPS tối đa
+        QualitySettings.vSyncCount = 0; // Tắt VSync    
     }
 
     private void OnEnable()
@@ -31,6 +33,6 @@ public class GameStateManager : Singleton<GameStateManager>
     {
         Time.timeScale = (newState == GameState.Pause) ? 0f : 1f;
         _currentState = newState;
-        Debug.Log($"State changed to: {newState}");
+        //Debug.Log($"State changed to: {newState}");
     }
 }

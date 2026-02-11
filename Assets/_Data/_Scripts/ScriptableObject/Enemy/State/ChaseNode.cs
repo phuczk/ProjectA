@@ -17,14 +17,14 @@ public class ChaseNode : EnemyStateNode
         if (machine.IsPlayerInChaseRange())
         {
             _lostTimer = LostTargetTimeout;
-            machine.LastSeenDir = (machine.Target.position.x > machine.transform.position.x) ? 1 : -1;
+            machine.LastSeenDir = (machine.Target.position.x > machine.CachedTransform.position.x) ? 1 : -1;
         }
         else
         {
             _lostTimer -= Time.deltaTime;
         }
 
-        machine.Movement.SetMoveDirection(Vector2.right * machine.LastSeenDir);
+        machine.Movement.SetMoveDirection(Vector2.right * machine.LastSeenDir, true);
         machine.Movement.TickMovement(ChaseSpeed);
         if (_lostTimer <= 0)
         {

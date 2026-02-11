@@ -4,13 +4,22 @@ using TMPro;
 public abstract class Interactable : MonoBehaviour
 {
     public TextMeshPro interactText;
+    [SerializeField] private string _interactKey;
+    protected virtual string InteractKey => _interactKey;
+
     private PlayerInputHandler _input;
     private Transform _player;
     private bool _inRange;
 
     private void Start()
     {
-        interactText?.gameObject.SetActive(false);
+        if (interactText != null)
+        {
+            var key = InteractKey;
+            if (!string.IsNullOrEmpty(key))
+                interactText.text = Localization.Get(key);
+            interactText.gameObject.SetActive(false);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
