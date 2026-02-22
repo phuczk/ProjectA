@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour, IPlayerController
     [SerializeField] private readonly float _dashCooldownTime = 0.6f;
     [SerializeField] private GlobalEnums.GunType _currentGunType = GlobalEnums.GunType.Normal;
     [SerializeField] private GunConfigSet _gunSet;
+    public GunConfigSet GunConfigSet => _gunSet;
     private Rigidbody2D _rb;
     private Collider2D _col;
     private Vector2 _frameVelocity;
@@ -57,6 +58,11 @@ public class PlayerController : MonoBehaviour, IPlayerController
 
     [Header("Cursed System")]
     [SerializeField] private CursedList cursedList;
+    [SerializeField] private CursedNotchManager cursedNotchManager;
+    
+    [Header("Gun Selection System")]
+    [SerializeField] private GunSelectionUI gunSelectionUI;
+    
     private HashSet<string> _unlockedSet = new();
     private HashSet<string> _equippedSet = new();
 
@@ -160,11 +166,15 @@ public class PlayerController : MonoBehaviour, IPlayerController
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
+        
+        GunSelectionUI.OnGunChanged += HandleGunChangedFromUI;
     }
 
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
+        
+        GunSelectionUI.OnGunChanged -= HandleGunChangedFromUI;
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -511,161 +521,135 @@ public class PlayerController : MonoBehaviour, IPlayerController
         CacheFromSave(save);
 
         _effectRunner.RebuildEffects(_equippedSet);
+        
+        if (cursedNotchManager == null)
+        {
+            cursedNotchManager = FindObjectOfType<CursedNotchManager>();
+        }
+        
+        if (gunSelectionUI == null)
+        {
+            gunSelectionUI = FindObjectOfType<GunSelectionUI>();
+        }
     }
 
     public void EquipCursedObject(string cursedId)
     {
-        var data = cursedList.GetById(cursedId);
-        if (data == null) return;
-
         var mgr = SaveManager.Instance;
+        var data = mgr != null ? mgr.CurrentData : SaveSystemz.Load();
+        
+        if (data.player == null || data.items == null) return;
 
-        if (mgr != null)
+        if (!data.items.unlockedCursedObjects.Contains(cursedId))
         {
-            if (mgr.CurrentData.items == null)
-                mgr.CurrentData.items = new ItemData();
-
-            if (mgr.CurrentData.player == null)
-                mgr.CurrentData.player = new PlayerData();
-
-            CacheFromSave(mgr.CurrentData);
-
-            if (!_unlockedSet.Contains(cursedId))
-                return;
-
-            if (_equippedSet.Add(cursedId))
-            {
-                CollectionSync.SyncList(
-                    _equippedSet,
-                    mgr.CurrentData.player.currentCursedObjects
-                );
-
-                mgr.SaveGame();
-                LoadActiveCursedObjects();
-            }
             return;
         }
 
-        var save = SaveSystemz.Load();
-        if (save.items == null) save.items = new ItemData();
-        if (save.player == null) save.player = new PlayerData();
-
-        CacheFromSave(save);
-
-        if (!_unlockedSet.Contains(cursedId))
-            return;
-
-        if (_equippedSet.Add(cursedId))
+        if (data.player.currentCursedObjects.Contains(cursedId))
         {
-            CollectionSync.SyncList(
-                _equippedSet,
-                save.player.currentCursedObjects
-            );
-            SaveSystemz.Save(save);
+            data.player.currentCursedObjects.Remove(cursedId);
+        }
+        else
+        {
+            if (data.player.currentCursedObjects.Count < data.player.currentNotch)
+            {
+                data.player.currentCursedObjects.Add(cursedId);
+            }
+            else
+            {
+                return;
+            }
+        }
+
+        if (mgr != null) mgr.SaveGame();
+        else SaveSystemz.Save(data);
+
+        cursedNotchManager?.RefreshNotchDisplay();
+        LoadActiveCursedObjects();
+        
+        if (gunSelectionUI == null)
+        {
+            gunSelectionUI = FindObjectOfType<GunSelectionUI>();
         }
     }
 
     private void LoadCurrentGun()
     {
-        GunType gun = GunType.Normal;
-
-        PlayerData playerData = null;
-
         var mgr = SaveManager.Instance;
-
-        if (mgr != null)
-        {
-            playerData = mgr.CurrentData?.player;
-        }
-        else
-        {
-            var save = SaveSystemz.Load();
-            playerData = save?.player;
-        }
-
-        if (playerData == null)
+        if (mgr?.CurrentData?.player == null)
         {
             SetGunType(GunType.Normal);
             return;
         }
 
-        if (!playerData.unlockedGuns.Contains(playerData.currentGun))
+        var currentGun = mgr.CurrentData.player.currentGun;
+        var unlockedGuns = mgr.CurrentData.player.unlockedGuns ?? new List<GunType>();
+        
+        if (!unlockedGuns.Contains(currentGun))
         {
-            gun = GunType.Normal;
+            currentGun = GunType.Normal;
         }
-        else
-        {
-            gun = playerData.currentGun;
-        }
-
-        SetGunType(gun);
-    }
-
-    public void UnlockGun(GunType gunType)
-    {
-        var mgr = SaveManager.Instance;
-
-        if (mgr != null)
-        {
-            mgr.CurrentData.player ??= new PlayerData();
-            mgr.CurrentData.player.unlockedGuns ??= new List<GunType>();
-
-            if (!mgr.CurrentData.player.unlockedGuns.Contains(gunType))
-            {
-                mgr.CurrentData.player.unlockedGuns.Add(gunType);
-                mgr.SaveGame();
-            }
-            return;
-        }
-
-        var save = SaveSystemz.Load();
-        save.player ??= new PlayerData();
-        save.player.unlockedGuns ??= new List<GunType>();
-
-        if (!save.player.unlockedGuns.Contains(gunType))
-        {
-            save.player.unlockedGuns.Add(gunType);
-            SaveSystemz.Save(save);
-        }
+        
+        SetGunType(currentGun);
     }
 
     public void SetCurrentGun(GunType gunType)
     {
         var mgr = SaveManager.Instance;
+        if (mgr == null || mgr.CurrentData?.player == null) return;
 
-        if (mgr != null)
+        if (!mgr.CurrentData.player.unlockedGuns.Contains(gunType))
         {
-            mgr.CurrentData.player ??= new PlayerData();
-            mgr.CurrentData.player.unlockedGuns ??= new List<GunType>();
-
-            if (!mgr.CurrentData.player.unlockedGuns.Contains(gunType))
-                return;
-
-            mgr.CurrentData.player.currentGun = gunType;
-            mgr.SaveGame();
-
-            SetGunType(gunType);
             return;
         }
 
-        var save = SaveSystemz.Load();
-        save.player ??= new PlayerData();
-        save.player.unlockedGuns ??= new List<GunType>();
-
-        if (!save.player.unlockedGuns.Contains(gunType))
-            return;
-
-        save.player.currentGun = gunType;
-        SaveSystemz.Save(save);
-
+        mgr.CurrentData.player.currentGun = gunType;
+        mgr.SaveGame();
+        
         SetGunType(gunType);
+        
+        gunSelectionUI?.RefreshUI();
+        
+        _weaponSystem?.SetGunType(gunType);
+    }
+
+    private void DebugGunObjectsStatus()
+    {
+        foreach (var kvp in _gunMap)
+        {
+            var gun = kvp.Value;
+            var isActive = gun != null && gun.activeInHierarchy;
+        }
+    }
+
+    public void UnlockGun(GunType gunType)
+    {
+        var mgr = SaveManager.Instance;
+        if (mgr == null) return;
+
+        mgr.CurrentData.player ??= new PlayerData();
+        mgr.CurrentData.player.unlockedGuns ??= new List<GunType>();
+
+        if (!mgr.CurrentData.player.unlockedGuns.Contains(gunType))
+        {
+            mgr.CurrentData.player.unlockedGuns.Add(gunType);
+            mgr.SaveGame();
+        }
+    }
+    
+    private void HandleGunChangedFromUI(GunType newGun)
+    {
+        var mgr = SaveManager.Instance;
+        if (mgr?.CurrentData?.player != null && mgr.CurrentData.player.unlockedGuns.Contains(newGun))
+        {
+            SetGunType(newGun);
+        }
     }
 }
 
 public interface IPlayerController
 {
     public event Action<bool, float> GroundedChanged;
-
     public event Action Jumped;
     public Vector2 FrameInput { get; }
 }

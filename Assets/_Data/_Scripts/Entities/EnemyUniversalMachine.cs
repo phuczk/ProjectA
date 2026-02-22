@@ -33,7 +33,6 @@ public class EnemyUniversalMachine : EntityStateMachine<EnemyUniversalMachine>
     public Transform Target { get; private set; }
     public Transform CachedTransform { get; private set; }
 
-    // Các biến để lưu trữ kết quả Raycast
     private bool _isGroundAhead = false;
     private bool _isWallAhead = false;
     private int _cachedRaycastDir = 0;
@@ -47,7 +46,6 @@ public class EnemyUniversalMachine : EntityStateMachine<EnemyUniversalMachine>
 
     [Header("State Decisions")]
     public bool IsDeath => CurrentHealth <= 0;
-    // Thêm field
     public bool JustTakenDamageThisFrame = false;
 
     private Dictionary<EnemyStateType, List<EnemyStateNode>> _typeToNodes = new Dictionary<EnemyStateType, List<EnemyStateNode>>();
@@ -141,37 +139,36 @@ public class EnemyUniversalMachine : EntityStateMachine<EnemyUniversalMachine>
     }
 
     public void Death()
-{
-    if (MoneyPrefab != null)
     {
-        for (int i = 0; i < MoneyDropAmount; i++)
+        if (MoneyPrefab != null)
         {
-            Vector3 spawnPos = CachedTransform.position;
-
-            GameObject money = BulletPool.Instance.Get(
-                MoneyPrefab,
-                spawnPos,
-                Quaternion.identity
-            );
-
-            Rigidbody2D rb = money.GetComponent<Rigidbody2D>();
-
-            if (rb != null)
+            for (int i = 0; i < MoneyDropAmount; i++)
             {
-                // random góc bay lên trên
-                float angle = Random.Range(0f, 180f) * Mathf.Deg2Rad;
+                Vector3 spawnPos = CachedTransform.position;
 
-                Vector2 dir = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+                GameObject money = BulletPool.Instance.Get(
+                    MoneyPrefab,
+                    spawnPos,
+                    Quaternion.identity
+                );
 
-                float force = Random.Range(8f, 16f);
+                Rigidbody2D rb = money.GetComponent<Rigidbody2D>();
 
-                rb.linearVelocity = dir * force;
+                if (rb != null)
+                {
+                    float angle = Random.Range(0f, 180f) * Mathf.Deg2Rad;
+
+                    Vector2 dir = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+
+                    float force = Random.Range(8f, 16f);
+
+                    rb.linearVelocity = dir * force;
+                }
             }
         }
-    }
 
-    gameObject.SetActive(false);
-}
+        gameObject.SetActive(false);
+    }
 
     public bool IsPlayerInAttackRange()
     {

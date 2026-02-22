@@ -11,6 +11,7 @@ public class PlayerData
     public int currentMoney;
     public int currentMaskFragment;
     public int currentManaFragment;
+    public int currentNotch = 4;
     public int currentDamage = 0;
     public GunType currentGun = GunType.Normal;
 

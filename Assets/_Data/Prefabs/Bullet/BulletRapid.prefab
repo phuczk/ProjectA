@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 447231252673613506}
   - component: {fileID: 5342055646380124495}
   - component: {fileID: 572511696442059002}
-  - component: {fileID: -805229839452351473}
   - component: {fileID: 4638686883793206744}
   m_Layer: 0
   m_Name: BulletRapid
@@ -78,9 +77,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -451849085
+  m_SortingLayer: 3
+  m_SortingOrder: 10
   m_Sprite: {fileID: 2208703988740019828, guid: 252740abe08830d4ca2352cd0805cc86, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -143,18 +142,6 @@ MonoBehaviour:
   _hitEffectPrefab: {fileID: 7593920708560766911, guid: 7e9aa3f2829bc0e4f96c00de1d714906, type: 3}
   _destroyEffectPrefab: {fileID: 2594135262726773537, guid: 16fecaa833025084b85518695aa4edba, type: 3}
   _direction: {x: 0, y: 0, z: 0}
---- !u!210 &-805229839452351473
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1195933723998712466}
-  m_Enabled: 1
-  m_SortingLayerID: 1036499237
-  m_SortingLayer: 0
-  m_SortingOrder: 2
-  m_SortAtRoot: 0
 --- !u!50 &4638686883793206744
 Rigidbody2D:
   serializedVersion: 5

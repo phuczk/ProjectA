@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2769727595527390409}
   - component: {fileID: 447231252673613506}
-  - component: {fileID: -805229839452351473}
   - component: {fileID: 1533546278823426819}
   m_Layer: 0
   m_Name: Bullet 1
@@ -77,8 +76,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -451849085
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 2208703988740019828, guid: 252740abe08830d4ca2352cd0805cc86, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -91,18 +90,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!210 &-805229839452351473
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1195933723998712466}
-  m_Enabled: 1
-  m_SortingLayerID: 1036499237
-  m_SortingLayer: 0
-  m_SortingOrder: 2
-  m_SortAtRoot: 0
 --- !u!114 &1533546278823426819
 MonoBehaviour:
   m_ObjectHideFlags: 0

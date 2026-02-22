@@ -135,7 +135,6 @@ public class WeaponSystem : MonoBehaviour, ISoundEmitter
     private GunConfig GetConfig() => _currentGunType switch {
         GunType.Shotgun => _gunSet.Shotgun,
         GunType.Rapid => _gunSet.Rapid,
-        GunType.Sniper => _gunSet.Sniper,
         _ => _gunSet.Normal
     };
 }

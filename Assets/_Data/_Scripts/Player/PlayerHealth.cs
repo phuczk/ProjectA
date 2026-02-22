@@ -29,10 +29,10 @@ public class PlayerHealth : MonoBehaviour, ISaveable, ISoundEmitter
     public int MaxMana;
 
     [SerializeField] private float invincibleDuration = 0.5f;
-    private float _invincibleTimer; // Thay thế Coroutine quản lý thời gian
+    private float _invincibleTimer;
 
     private SpriteRenderer _spriteRenderer;
-    private WaitForSeconds _blinkWait; // Cache yield instruction
+    private WaitForSeconds _blinkWait;
     private WaitForSeconds _invincibleWait;
 
     public event System.Action<PlayerSoundType, AudioClip> OnRequestSound;
@@ -40,7 +40,6 @@ public class PlayerHealth : MonoBehaviour, ISaveable, ISoundEmitter
     private void Awake()
     {
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        // Khởi tạo sẵn các lệnh chờ để tránh tạo rác (GC) trong lúc chơi
         _blinkWait = new WaitForSeconds(0.08f);
         _invincibleWait = new WaitForSeconds(invincibleDuration);
         var data = SaveSystemz.Load();

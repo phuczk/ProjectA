@@ -25,7 +25,6 @@ public class EnemyPuppetMovement : MonoBehaviour
     private float bobPhaseOffset;
     private float swayPhaseOffset;
 
-    // Biến lưu trữ góc xoay mục tiêu để lật mặt mượt mà
     private float _targetYRotation = 0f;
 
     void Awake()
@@ -67,7 +66,6 @@ public class EnemyPuppetMovement : MonoBehaviour
 
     public void BobAndSway(bool idle = false)
     {
-        // 1. Tính toán vị trí Bobbing (Nhấp nhô)
         float bob = Mathf.Sin(Time.time * bobSpeed + bobPhaseOffset) * bobHeight;
 
         body.localPosition = new Vector3(
@@ -76,16 +74,12 @@ public class EnemyPuppetMovement : MonoBehaviour
             bodyBaseLocalPos.z
         );
 
-        // 2. Tính toán góc nghiêng (Jiggle)
         float jiggle = Mathf.Sin(Time.time * swaySpeed + swayPhaseOffset) * bodyJiggleAmp;
 
-        // 3. KẾT HỢP XOAY Y (Lật mặt) VÀ XOAY Z (Nghiêng)
-        // Chúng ta nội suy mượt mà góc Y để tránh việc lật mặt quá gắt (instant)
         float currentY = Mathf.LerpAngle(body.localEulerAngles.y, _targetYRotation, flipSmoothTime * Time.deltaTime);
         
         body.localRotation = Quaternion.Euler(0, currentY, jiggle);
         
-        // Shadow cũng nên xoay theo nếu cần
         if (shadow != null)
         {
             shadow.localRotation = Quaternion.Euler(0, currentY, 0);
@@ -94,7 +88,6 @@ public class EnemyPuppetMovement : MonoBehaviour
 
     private void CalculateFlip()
     {
-        // Nếu di chuyển sang trái (x < 0), xoay 180 độ. Sang phải xoay 0 độ.
         if (moveDir.x < -0.01f) 
             _targetYRotation = 180f;
         else if (moveDir.x > 0.01f) 
