@@ -288,6 +288,8 @@ MonoBehaviour:
   _effectRunner: {fileID: 7645564422829626111}
   _playerUI: {fileID: 3501453196522069419}
   cursedList: {fileID: 11400000, guid: 4eb405b8852ac98488935c32aa1e7310, type: 2}
+  cursedNotchManager: {fileID: 0}
+  gunSelectionUI: {fileID: 0}
   _guns:
   - type: 0
     obj: {fileID: 7671304940015934890}
@@ -780,6 +782,61 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &2313384197958621835
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8270702868621185380}
+  - component: {fileID: 2619414752390164621}
+  m_Layer: 6
+  m_Name: VisualAnim
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8270702868621185380
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2313384197958621835}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.55, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2969068313154050965}
+  m_Father: {fileID: 2969068311962969430}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &2619414752390164621
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2313384197958621835}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6e5b5f4662f713845b0c28185c4ea62c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2314595396890780825
 GameObject:
   m_ObjectHideFlags: 0
@@ -10752,8 +10809,8 @@ Transform:
   m_Children:
   - {fileID: 2969068313184073012}
   - {fileID: 2969068311871471201}
-  - {fileID: 2969068313154050965}
   - {fileID: 4134690627275997839}
+  - {fileID: 8270702868621185380}
   m_Father: {fileID: 1544650614272011795}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &2969068311962969768
@@ -10865,7 +10922,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb09df9db553ffc4ab6600e3070de9eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _anim: {fileID: 2969068313154050966}
+  _anim: {fileID: 2619414752390164621}
   _sprite: {fileID: 2969068313154050967}
   _maxIdleSpeed: 2
   _jumpParticles: {fileID: 2969068312619346371}
@@ -30442,7 +30499,7 @@ Transform:
   m_GameObject: {fileID: 2969068313154050964}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.099, y: -0.714, z: 0}
+  m_LocalPosition: {x: -0.099, y: -0.18, z: 0}
   m_LocalScale: {x: 0.9752381, y: 1.0418605, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -30451,7 +30508,7 @@ Transform:
   - {fileID: 2042581288407110889}
   - {fileID: 5282884512663921860}
   - {fileID: 5163234564583079784}
-  m_Father: {fileID: 2969068311962969430}
+  m_Father: {fileID: 8270702868621185380}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2969068313154050967
 SpriteRenderer:
@@ -30516,7 +30573,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2969068313154050964}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 6e5b5f4662f713845b0c28185c4ea62c, type: 2}
   m_CullingMode: 0

@@ -7,7 +7,7 @@ using System.Collections;
 
 public class CameraController : MonoBehaviour
 {
-    public static CameraController Instance { get; private set; }
+    //public static CameraController Instance { get; private set; }
     public System.Action OnCameraRotationComplete;
     public GameObject playerTarget;
     public Camera cam;
@@ -18,10 +18,10 @@ public class CameraController : MonoBehaviour
 
     private Tween rotateTween;
 
-    private void Awake()
-    {
-        Instance = this;
-    }
+    // private void Awake()
+    // {
+    //     Instance = this;
+    // }
 
     private void OnEnable()
     {
@@ -113,5 +113,13 @@ public class CameraController : MonoBehaviour
             });
         
         return rotateTween;
+    }
+
+    // Trong CameraController.cs, xóa bỏ vùng Awake có Instance = this
+// Sửa hàm xoay thành:
+    public void RotateCamera(GravityDirection newDir) 
+    {
+        // Gọi Manager xoay tất cả để đồng bộ
+        CameraManager.Instance.RotateAllCameras(newDir);
     }
 }

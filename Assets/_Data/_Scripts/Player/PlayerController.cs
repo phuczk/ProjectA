@@ -10,38 +10,51 @@ using System.Collections.Generic;
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public class PlayerController : MonoBehaviour, IPlayerController
 {
-    [SerializeField] private ScriptableStats _stats;
-    [SerializeField] private GravityFlipManager _manager;
-    [SerializeField] private readonly float _dashSpeed = 28f;
-    [SerializeField] private readonly float _dashDuration = 0.15f;
-    [SerializeField] private readonly float _dashCooldownTime = 0.6f;
-    [SerializeField] private GlobalEnums.GunType _currentGunType = GlobalEnums.GunType.Normal;
-    [SerializeField] private GunConfigSet _gunSet;
+    [SerializeField] private ScriptableStats _stats;
+    [SerializeField] private GravityFlipManager _manager;
+    [SerializeField] private readonly float _dashSpeed = 28f;
+    [SerializeField] private readonly float _dashDuration = 0.15f;
+    [SerializeField] private readonly float _dashCooldownTime = 0.6f;
+    [SerializeField] private GlobalEnums.GunType _currentGunType = GlobalEnums.GunType.Normal;
+    [SerializeField] private GunConfigSet _gunSet;
     public GunConfigSet GunConfigSet => _gunSet;
-    private Rigidbody2D _rb;
-    private Collider2D _col;
-    private Vector2 _frameVelocity;
-    private bool _cachedQueryStartInColliders;
-    private bool _waitingForCamera;
-    private Vector2 _pendingGravity;
-    private Quaternion _armDefaultRotation;
-    [SerializeField] private GameObject _visuals;
-    [SerializeField] private Transform _firePoint;
+    
+    public static event Action<Vector3> OnPlayerRespawn;
+    
+    public void TriggerRespawnEvent(Vector3 respawnPosition)
+    {
+        OnPlayerRespawn?.Invoke(respawnPosition);
+    }
+    
+    public static void TriggerRespawnStatic(Vector3 respawnPosition)
+    {
+        OnPlayerRespawn?.Invoke(respawnPosition);
+    }
+    
+    private Rigidbody2D _rb;
+    private Collider2D _col;
+    private Vector2 _frameVelocity;
+    private bool _cachedQueryStartInColliders;
+    private bool _waitingForCamera;
+    private Vector2 _pendingGravity;
+    private Quaternion _armDefaultRotation;
+    [SerializeField] private GameObject _visuals;
+    [SerializeField] private Transform _firePoint;
     [SerializeField] public Transform Arm;
     [SerializeField] private float _armAngleOffset = 0f;
     [SerializeField] private WeaponSystem _weaponSystem;
 
-    private Vector2 _lastAimDir;
+    private Vector2 _lastAimDir;
 
-    #region Interface
+    #region Interface
 
-    public Vector2 FrameInput => _frameInput.Move;
-    public event Action<bool, float> GroundedChanged;
-    public event Action Jumped;
+    public Vector2 FrameInput => _frameInput.Move;
+    public event Action<bool, float> GroundedChanged;
+    public event Action Jumped;
 
-    [SerializeField] private float _armIdleDelay = 0.5f;
+    [SerializeField] private float _armIdleDelay = 0.5f;
 
-    #endregion
+    #endregion
     private float _time;
     [SerializeField] private PlayerAbility _ability;
     [SerializeField] private PlayerCursedObject _cursedObject;
@@ -102,17 +115,17 @@ public class PlayerController : MonoBehaviour, IPlayerController
         _motor.Configure(_rb, _col, _stats, _visuals, _ability);
 
         if (_manager == null) _manager = FindFirstObjectByType<GravityFlipManager>();
-        var camController = _manager != null && _manager.cameraController != null 
-            ? _manager.cameraController 
-            : FindFirstObjectByType<CameraController>();
-        if (camController != null)
-            camController.OnCameraRotationComplete += OnCameraRotationComplete;
+        
+        if (CameraManager.Instance != null)
+        {
+            CameraManager.Instance.OnAllCamerasRotated += OnCameraRotationComplete;
+        }
         if (Arm != null)
             _armDefaultRotation = Arm.localRotation;
         EnsureGunDefaults();
         SetupSystems();
         
-        _healWait = new WaitForSeconds(3f);
+        _healWait = new WaitForSeconds(1.5f);
 
         fallingSpeed = CameraManager.Instance.fallSpeed;
         SetupGunMap();
@@ -182,12 +195,59 @@ public class PlayerController : MonoBehaviour, IPlayerController
         if (scene.name == "SlotScene" || scene.name == "New Scene" || scene.name == "MainMenu")
         {
             Destroy(gameObject);
+            return;
+        }
+        
+        CheckForPendingRespawn();
+    }
+    
+    private void CheckForPendingRespawn()
+    {
+        var playerHealth = GetComponent<PlayerHealth>();
+        if (playerHealth != null && playerHealth.CurrentHealth <= 0)
+        {
+            var saveData = SaveSystemz.Load();
+            if (saveData?.player != null)
+            {
+                Vector3 savedPosition = saveData.player.position;
+                
+                transform.position = savedPosition;
+                
+                playerHealth.CurrentHealth = playerHealth.MaxHealth;
+                
+                StartCoroutine(InvulnerabilityCoroutine());
+                
+                if (CameraManager.Instance != null)
+                {
+                    CameraManager.Instance.OnPlayerRespawn(savedPosition);
+                }
+            }
+        }
+    }
+    
+    private IEnumerator InvulnerabilityCoroutine()
+    {
+        var playerHealth = GetComponent<PlayerHealth>();
+        if (playerHealth != null)
+        {
+            if (_inputHandler != null)
+            {
+                _inputHandler.DisableInputForDuration(1f);
+            }
+            
+            yield return new WaitForSeconds(1f);
         }
     }
 
     private void OnDestroy()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
+        
+        if (CameraManager.Instance != null)
+        {
+            CameraManager.Instance.OnAllCamerasRotated -= OnCameraRotationComplete;
+        }
+        
         PlayerSpawnService.Clear();
         if (_weaponSystem != null)
         {
@@ -356,7 +416,11 @@ public class PlayerController : MonoBehaviour, IPlayerController
     private void HealPlayer()
     {
         if (_isHealing) return;
-        StartCoroutine(HealRoutine());
+        
+        if (_health != null && _health.CurrentMana >= 1)
+        {
+            StartCoroutine(HealRoutine());
+        }
     }
 
     private IEnumerator HealRoutine()
@@ -524,12 +588,12 @@ public class PlayerController : MonoBehaviour, IPlayerController
         
         if (cursedNotchManager == null)
         {
-            cursedNotchManager = FindObjectOfType<CursedNotchManager>();
+            cursedNotchManager = FindAnyObjectByType<CursedNotchManager>();
         }
         
         if (gunSelectionUI == null)
         {
-            gunSelectionUI = FindObjectOfType<GunSelectionUI>();
+            gunSelectionUI = FindAnyObjectByType<GunSelectionUI>();
         }
     }
 
@@ -569,7 +633,7 @@ public class PlayerController : MonoBehaviour, IPlayerController
         
         if (gunSelectionUI == null)
         {
-            gunSelectionUI = FindObjectOfType<GunSelectionUI>();
+            gunSelectionUI = FindAnyObjectByType<GunSelectionUI>();
         }
     }
 

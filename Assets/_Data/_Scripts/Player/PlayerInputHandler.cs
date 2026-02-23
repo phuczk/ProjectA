@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using GlobalEnums;
+using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerInputHandler : MonoBehaviour
 {
@@ -25,6 +27,10 @@ public class PlayerInputHandler : MonoBehaviour
     private InputAction _gunNormalAction;
     private InputAction _gunShotgunAction;
     private InputAction _gunRapidAction;
+
+    // 🔥 VO HIEF HOA INPUT
+    private bool _inputDisabled = false;
+    private Coroutine _disableInputCoroutine;
 
     // Properties public
     public Vector2 MoveInput { get; private set; }
@@ -126,6 +132,12 @@ public class PlayerInputHandler : MonoBehaviour
 
     private void UpdateInput()
     {
+        if (_inputDisabled)
+        {
+            ResetInputs();
+            return;
+        }
+        
         float horizontal = 0f;
         float vertical = 0f;
         if (MoveLeftHeld) horizontal -= 1f;
@@ -134,6 +146,23 @@ public class PlayerInputHandler : MonoBehaviour
         if (DownHeld) vertical -= 1f;
         MoveInput = new Vector2(horizontal, 0f);
         AimInput = new Vector2(horizontal, vertical).normalized;
+    }
+    
+    public void DisableInputForDuration(float duration)
+    {
+        if (_disableInputCoroutine != null)
+        {
+            StopCoroutine(_disableInputCoroutine);
+        }
+        
+        _disableInputCoroutine = StartCoroutine(DisableInputRoutine(duration));
+    }
+    
+    private IEnumerator DisableInputRoutine(float duration)
+    {
+        _inputDisabled = true;
+        yield return new WaitForSeconds(duration);
+        _inputDisabled = false;
     }
 
     public bool TryGetGunSwitch(out GunType type)

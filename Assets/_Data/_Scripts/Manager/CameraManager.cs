@@ -2,10 +2,14 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 using Unity.Cinemachine;
+using GlobalEnums;
+using DG.Tweening;
 
 public class CameraManager : Singleton<CameraManager>
 {
-    [SerializeField] private CinemachineCamera[] allCameras;
+    [Header("Camera Settings")]
+    public CinemachineCamera[] allCameras;
+    public System.Action OnAllCamerasRotated;
     [SerializeField] private float _fallPanAmount = 0.5f;
     [SerializeField] private float _fallYPanTime = 0.5f;
     private float _normalYDamping;
@@ -22,6 +26,7 @@ public class CameraManager : Singleton<CameraManager>
     private CinemachinePositionComposer positionComposer;
 
     private Vector2 _startingTrackedObjectOffset;
+    [SerializeField] private float rotationDurationPer90 = 0.15f;
 
     // ================================
     // UNITY LIFECYCLE
@@ -36,11 +41,23 @@ public class CameraManager : Singleton<CameraManager>
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
+        
+        // 🔥 LẮNG NGHE EVENT KHI PLAYER SPAWN XONG
+        SceneFlowService.OnPlayerSpawned += OnPlayerSpawned;
     }
-
+    
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
+        
+        // 🔥 HỦY LẮNG NGHE
+        SceneFlowService.OnPlayerSpawned -= OnPlayerSpawned;
+    }
+    
+    private void OnPlayerSpawned(Vector3 playerPos)
+    {
+        // 🔥 NGAY LẬP TỨC KHI PLAYER SPAWN XONG
+        RefreshCameraSystemImmediate(playerPos);
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -215,12 +232,8 @@ public class CameraManager : Singleton<CameraManager>
     // SWAP CAMERA (SAFE VERSION)
     // ================================
 
-    public void SwapCamera(
-        CinemachineCamera cameraFromLeft,
-        CinemachineCamera cameraFromRight,
-        Vector2 triggerExitDirection)
+    public void SwapCamera(CinemachineCamera cameraFromLeft, CinemachineCamera cameraFromRight, Vector2 triggerExitDirection)
     {
-        // 🔥 Unity destroyed object safe check
         if (!cameraFromLeft || !cameraFromRight)
             return;
 
@@ -235,6 +248,125 @@ public class CameraManager : Singleton<CameraManager>
             cameraFromRight.enabled = false;
             cameraFromLeft.enabled = true;
             UpdateCurrentCameraReferences(cameraFromLeft);
+        }
+    }
+
+    public void RotateAllCameras(GravityDirection newDir)
+    {
+        allCameras = FindObjectsByType<CinemachineCamera>(FindObjectsSortMode.None);
+        foreach (var vcam in allCameras)
+        {
+            float targetAngle = newDir switch
+            {
+                GravityDirection.North => 0f,
+                GravityDirection.East => -90f,
+                GravityDirection.South => 180f,
+                GravityDirection.West => 90f,
+                _ => 0f
+            };
+
+            vcam.transform.DORotate(new Vector3(0, 0, targetAngle), 0.15f).SetEase(Ease.OutQuad);
+        }
+    }
+
+    public IEnumerator RotateAllCamerasRoutine(GravityDirection newDir)
+    {
+        var allVCams = FindObjectsByType<CinemachineCamera>(FindObjectsSortMode.None);
+        float targetAngle = GetAngleFromDirection(newDir);
+
+        Sequence seq = DOTween.Sequence();
+
+        foreach (var vcam in allVCams)
+        {
+            float currentAngle = vcam.transform.eulerAngles.z;
+            float angleDelta = Mathf.Abs(Mathf.DeltaAngle(currentAngle, targetAngle));
+
+            float dynamicDuration = (angleDelta / 90f) * rotationDurationPer90;
+
+            seq.Join(vcam.transform.DORotate(new Vector3(0, 0, targetAngle), dynamicDuration)
+                .SetEase(Ease.OutQuad));
+        }
+
+        yield return seq.WaitForCompletion();
+        OnAllCamerasRotated?.Invoke();
+    }
+
+    public float GetAngleFromDirection(GravityDirection dir)
+    {
+        return dir switch
+        {
+            GravityDirection.North => 0f,
+            GravityDirection.East  => -90f,
+            GravityDirection.South => 180f,
+            GravityDirection.West  => 90f,
+            _ => 0f
+        };
+    }
+
+    public void OnPlayerRespawn(Vector3 respawnPos)
+    {
+        RefreshCameraSystem(respawnPos);
+    }
+    
+    public void RefreshCameraSystem(Vector3 playerPos)
+    {
+        RefreshCameraSystemImmediate(playerPos);
+    }
+    
+    public void RefreshCameraSystemImmediate(Vector3 playerPos)
+    {
+        allCameras = FindObjectsByType<CinemachineCamera>(FindObjectsSortMode.None);
+        
+        GravityDirection currentDir = GravityFlipManager.Instance.gravityDirection;
+        float targetAngle = GetAngleFromDirection(currentDir);
+
+        CinemachineCamera closestCam = null;
+        float minDistance = float.MaxValue;
+
+        foreach (var vcam in allCameras)
+        {
+            vcam.enabled = false; 
+            
+            float dist = Vector3.Distance(vcam.transform.position, playerPos);
+            if (dist < minDistance)
+            {
+                minDistance = dist;
+                closestCam = vcam;
+            }
+        }
+
+        if (closestCam != null)
+        {
+            closestCam.transform.position = new Vector3(playerPos.x, playerPos.y, closestCam.transform.position.z);
+            closestCam.transform.rotation = Quaternion.Euler(0, 0, targetAngle);
+
+            GameObject player = GameObject.FindGameObjectWithTag("CameraFollow");
+            if (player != null) closestCam.Follow = player.transform;
+
+            closestCam.enabled = true;
+            UpdateCurrentCameraReferences(closestCam);
+
+            closestCam.ForceCameraPosition(closestCam.transform.position, closestCam.transform.rotation);
+            
+            var confiner = closestCam.GetComponent<CinemachineConfiner2D>();
+            if (confiner != null)
+            {
+                confiner.InvalidateCache();
+            }
+
+            StartCoroutine(DelayedCameraRefresh(closestCam));
+        }
+    }
+    
+    private IEnumerator DelayedCameraRefresh(CinemachineCamera cam)
+    {
+        yield return new WaitForFixedUpdate();
+        
+        GameObject player = GameObject.FindGameObjectWithTag("CameraFollow");
+        if (player != null && cam != null)
+        {
+            cam.Follow = player.transform;
+            cam.ForceCameraPosition(player.transform.position, cam.transform.rotation);
         }
     }
 }

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Gun Config Set
   m_EditorClassIdentifier: 
   Normal:
-    bulletSpeed: 25
-    bulletLifetime: 0.5
+    bulletSpeed: 30
+    bulletLifetime: 0.4
     bulletRange: 0
     cooldown: 0.4
     bulletCount: 1
@@ -27,8 +27,8 @@ MonoBehaviour:
     bulletPrefab: {fileID: 1195933723998712466, guid: 576a3be664dce5740a222e98422782f6, type: 3}
     manaGain: 0.05
   Shotgun:
-    bulletSpeed: 18
-    bulletLifetime: 0.3
+    bulletSpeed: 25
+    bulletLifetime: 0.2
     bulletRange: 0
     cooldown: 0.7
     bulletCount: 4
@@ -39,15 +39,15 @@ MonoBehaviour:
     shakeCameraAmount: 0.35
     shootSound: {fileID: 8300000, guid: b5803c17557c59c40bf3a6d69cb46cb3, type: 3}
     bulletPrefab: {fileID: 1195933723998712466, guid: 01f2ad4cb67edd143871a14c27dd6caf, type: 3}
-    manaGain: 0.04
+    manaGain: 0.05
   Rapid:
-    bulletSpeed: 26
-    bulletLifetime: 0.25
+    bulletSpeed: 35
+    bulletLifetime: 0.3
     bulletRange: 0
-    cooldown: 0.2
+    cooldown: 0.18
     bulletCount: 1
     spreadAngle: 0
-    damage: 3
+    damage: 2
     bulletSprite: {fileID: 0}
     gunSprite: {fileID: -7101980532016709315, guid: 1752b6144e3cdb346a946736f0afb3f7, type: 3}
     shakeCameraAmount: 0.08

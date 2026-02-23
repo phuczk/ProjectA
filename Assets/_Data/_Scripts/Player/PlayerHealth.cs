@@ -94,8 +94,11 @@ public class PlayerHealth : MonoBehaviour, ISaveable, ISoundEmitter
 
     public void Heal(int amount)
     {
-        CurrentHealth = Mathf.Min(CurrentHealth + amount, MaxHealth);
-        OnRequestSound?.Invoke(PlayerSoundType.Heal, null);
+        if (TryUseMana(1))
+        {
+            CurrentHealth = Mathf.Min(CurrentHealth + amount, MaxHealth);
+            OnRequestSound?.Invoke(PlayerSoundType.Heal, null);
+        }
     }
     
     public void ResetHealth()
@@ -118,8 +121,91 @@ public class PlayerHealth : MonoBehaviour, ISaveable, ISoundEmitter
 
     public void Die()
     {
-        Debug.Log("Player die");
         OnRequestSound?.Invoke(PlayerSoundType.Death, null);
+        
+        var inputHandler = GetComponent<PlayerInputHandler>();
+        if (inputHandler != null)
+        {
+            inputHandler.DisableInputForDuration(2f);
+        }
+        
+        StartCoroutine(RespawnCoroutine());
+    }
+    
+    private IEnumerator RespawnCoroutine()
+{
+    yield return new WaitForSeconds(1f);
+    Vector3 respawnPosition = FindRespawnPosition();
+    
+    string targetScene = GetRespawnScene();
+    
+    if (SceneTransitionManager.Instance != null)
+    {
+        SceneTransitionManager.Instance.TransitionToScene(targetScene);
+    }
+    else
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(targetScene);
+    }
+}
+
+private string GetRespawnScene()
+{
+    var saveData = SaveSystemz.Load();
+    if (saveData?.world != null && !string.IsNullOrEmpty(saveData.world.currentSceneName))
+    {
+        return saveData.world.currentSceneName;
+    }
+    
+    string currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+    return currentScene;
+}
+    
+    private Vector3 FindRespawnPosition()
+    {
+        var saveData = SaveSystemz.Load();
+        if (saveData?.player != null)
+        {
+            Vector3 savedPosition = saveData.player.position;
+            if (savedPosition != Vector3.zero)
+            {
+                return savedPosition;
+            }
+        }
+        
+        var spawnPoints = FindObjectsByType<SpawnPoint>(FindObjectsSortMode.None);
+        if (spawnPoints.Length > 0)
+        {
+            foreach (var spawn in spawnPoints)
+            {
+                if (spawn.IsDefaultSpawn && spawn.IsActive)
+                {
+                    return spawn.GetSpawnPosition();
+                }
+            }
+            
+            SpawnPoint closest = null;
+            float closestDistance = float.MaxValue;
+            
+            foreach (var spawn in spawnPoints)
+            {
+                if (!spawn.IsActive) continue;
+                
+                float distance = Vector3.Distance(transform.position, spawn.transform.position);
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closest = spawn;
+                }
+            }
+            
+            if (closest != null)
+            {
+                return closest.GetSpawnPosition();
+            }
+        }
+        
+        return Vector3.zero;
     }
 
     public void SaveData(SaveData data)

@@ -4,6 +4,8 @@ using UnityEngine.SceneManagement;
 public static class SceneFlowService
 {
     private static string _pendingSpawnKey;
+    
+    public static event System.Action<Vector3> OnPlayerSpawned;
 
     static SceneFlowService()
     {
@@ -39,11 +41,16 @@ public static class SceneFlowService
             return;
         }
 
+        Vector3 finalPlayerPos = Vector3.zero;
+
         if (!string.IsNullOrEmpty(_pendingSpawnKey))
         {
             var target = GameObject.Find(_pendingSpawnKey);
             if (target != null)
+            {
                 PlayerSpawnService.MoveTo(target.transform.position);
+                finalPlayerPos = target.transform.position;
+            }
 
             _pendingSpawnKey = null;
         }
@@ -51,8 +58,12 @@ public static class SceneFlowService
         {
             var pos = SaveManager.Instance.CurrentData.player.position;
             PlayerSpawnService.GetOrCreate(pos, true);
+            finalPlayerPos = pos;
         }
 
         SaveableRegistry.ApplyAll(SaveManager.Instance.CurrentData);
+        
+        // 🔥 THÔNG BÁO KHI PLAYER ĐÃ ĐƯỢC SPAWN XONG
+        OnPlayerSpawned?.Invoke(finalPlayerPos);
     }
 }

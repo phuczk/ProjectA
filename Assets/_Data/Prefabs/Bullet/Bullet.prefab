@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 447231252673613506}
   - component: {fileID: 5342055646380124495}
   - component: {fileID: 572511696442059002}
-  - component: {fileID: -805229839452351473}
   - component: {fileID: 1241118134118302906}
   m_Layer: 0
   m_Name: Bullet
@@ -143,18 +142,6 @@ MonoBehaviour:
   _hitEffectPrefab: {fileID: 7593920708560766911, guid: 7e9aa3f2829bc0e4f96c00de1d714906, type: 3}
   _destroyEffectPrefab: {fileID: 2594135262726773537, guid: 16fecaa833025084b85518695aa4edba, type: 3}
   _direction: {x: 0, y: 0, z: 0}
---- !u!210 &-805229839452351473
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1195933723998712466}
-  m_Enabled: 1
-  m_SortingLayerID: -451849085
-  m_SortingLayer: 3
-  m_SortingOrder: 2
-  m_SortAtRoot: 0
 --- !u!50 &1241118134118302906
 Rigidbody2D:
   serializedVersion: 5
@@ -198,7 +185,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5022541385853060665
 Transform:
   m_ObjectHideFlags: 0
@@ -208,7 +195,7 @@ Transform:
   m_GameObject: {fileID: 1593727347243819269}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.59, y: 0, z: 0}
+  m_LocalPosition: {x: 0.04, y: 0, z: 0}
   m_LocalScale: {x: 3.333333, y: 3.333333, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -238,7 +225,7 @@ TrailRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e838edadfae42f04ea5f2d8dcd7641af, type: 2}
+  - {fileID: 2100000, guid: 50b6a6bc9797ad740a5b7e47a3fd5bb5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -259,7 +246,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.05
+  m_Time: 0.03
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
@@ -269,7 +256,7 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.3189586
+        value: 0.4217113
         inSlope: -0.10980224
         outSlope: -0.10980224
         tangentMode: 0
