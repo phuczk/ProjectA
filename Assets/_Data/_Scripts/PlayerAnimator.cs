@@ -130,5 +130,4 @@ public class PlayerAnimator : MonoBehaviour, ISoundEmitter
     private static readonly int GroundedKey = Animator.StringToHash("Grounded");
     private static readonly int IdleSpeedKey = Animator.StringToHash("IdleSpeed");
     private static readonly int JumpKey = Animator.StringToHash("Jump");
-    private static readonly int IsMoveKey = Animator.StringToHash("IsMove");
 }
