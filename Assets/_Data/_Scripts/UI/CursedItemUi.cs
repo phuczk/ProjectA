@@ -8,7 +8,7 @@ public class CursedItemUI : MonoBehaviour, ISelectHandler, IDeselectHandler
 {
     [SerializeField] private Image icon;
 
-    [SerializeField] private Color equippedColor = new Color(0.3f, 0.3f, 0.3f, 1f); // Màu tối (bôi đen)
+    [SerializeField] private Color equippedColor = new Color(0.3f, 0.3f, 0.3f, 1f);
     
     private CursedObjectData data;
     private Button _button;
@@ -30,12 +30,10 @@ public class CursedItemUI : MonoBehaviour, ISelectHandler, IDeselectHandler
         this.data = data;
         icon.sprite = data.icon;
         
-        // Cập nhật trạng thái hiển thị nếu đã đeo
         icon.color = isEquipped ? equippedColor : Color.white;
         icon.transform.localScale = Vector3.one;
     }
     
-    // Tạo getter để lấy ID khi cần so sánh
     public string ItemId => data != null ? data.id : string.Empty;
 
     public void OnSelect(BaseEventData eventData)

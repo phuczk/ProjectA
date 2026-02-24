@@ -89,4 +89,18 @@ public static class Localization
             ? value
             : $"#{key}";
     }
+
+    // public static string GetCursedItemInfo(string key)
+    // {
+    //     return table.TryGetValue(key, out var value)
+    //         ? value
+    //         : $"#{key}";
+    // }
+
+    // public static string GetEnemyInfo(string key)
+    // {
+    //     return table.TryGetValue(key, out var value)
+    //         ? value
+    //         : $"#{key}";
+    // }
 }

@@ -16,6 +16,7 @@ public class EnemyUniversalMachine : EntityStateMachine<EnemyUniversalMachine>
     public GameObject MoneyPrefab;
 
     [Header("Enemy Stats")]
+    public string enemyId = "";
     public int MaxHealth = 100;
     public int CurrentHealth { get; private set; }
     public int speed = 5;
@@ -140,6 +141,12 @@ public class EnemyUniversalMachine : EntityStateMachine<EnemyUniversalMachine>
 
     public void Death()
     {
+        // 🔥 BÁO ENEMY CHẾT CHO MANAGER
+        if (!string.IsNullOrEmpty(enemyId))
+        {
+            EnemyDefeatManager.ReportEnemyDeath(enemyId);
+        }
+
         if (MoneyPrefab != null)
         {
             for (int i = 0; i < MoneyDropAmount; i++)

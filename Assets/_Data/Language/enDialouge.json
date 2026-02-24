@@ -8,5 +8,10 @@
         "Hello": "Hello, I am Player. I am a responsible person. I will help you with whatever you need.",
         "Help": "I can help you with whatever you need.",
         "Goodbye": "Goodbye"
+    },
+    "Phuc":{
+        "Hello": "Hello, I am Phuc. I am a responsible person. I will help you with whatever you need.",
+        "Help": "I can help you with whatever you need.",
+        "Goodbye": "Goodbye"
     }
 }

@@ -52,6 +52,48 @@
         "brag_bracelet": {
             "name": "Brag Bracelet",
             "desc": "When you use this bracelet, you will brag about your damage for 10 seconds."
+        },
+        "glass_shoes": {
+            "name": "Glass Shoes",
+            "desc": "When you wear these shoes, your movement speed increases by 20%."
+        },
+        "magic_mirror": {
+            "name": "Magic Mirror",
+            "desc": "Reflect enemy attacks back at them for 5 seconds when activated."
+        },
+        "scream_shell": {
+            "name": "Scream Shell",
+            "desc": "Emits a terrifying scream that stuns nearby enemies for 2 seconds."
+        },
+        "fate_card": {
+            "name": "Fate Card",
+            "desc": "Randomly increases or decreases your stats by 50% for 30 seconds."
+        },
+        "golden_egg": {
+            "name": "Golden Egg",
+            "desc": "Grants double experience points for the next 3 enemies defeated."
+        },
+        "cheating_dice": {
+            "name": "Cheating Dice",
+            "desc": "Always roll critical hits for the next 5 attacks."
+        },
+        "joy-sorrow_roulette": {
+            "name": "Joy-Sorrow Roulette",
+            "desc": "Randomly either fully heals you or deals 50% of your max HP as damage."
+        },
+        "greedy_rod": {
+            "name": "Greedy Rod",
+            "desc": "Doubles gold drops from enemies for 60 seconds."
+        },
+        "chaos_boots": {
+            "name": "Chaos Boots",
+            "desc": "Randomly teleports you short distances when taking damage."
+        }
+    },
+    "enemies": {
+        "wood": {
+            "name": "Wood",
+            "desc": "This is a tree monster"
         }
     }
 }

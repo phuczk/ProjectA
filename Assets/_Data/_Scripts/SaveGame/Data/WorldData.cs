@@ -28,17 +28,39 @@ public class WorldSaveData : ISerializationCallbackReceiver
 
     public void OnAfterDeserialize()
     {
-        visitedRooms.Clear();
-        foreach (var room in _visitedRoomsList)
+        visitedRooms = new HashSet<string>(_visitedRoomsList);
+    }
+    
+    // 🔥 XỬ LÝ ENEMY DEFEAT
+    public void OnEnemyDefeated(string enemyId, EnemyListData enemyListData)
+    {
+        // Tìm enemy trong list
+        Enemy enemy = enemies.Find(e => e.id == enemyId);
+        
+        if (enemy == null)
         {
-            visitedRooms.Add(room);
+            // Nếu chưa có, tạo mới
+            enemy = new Enemy { id = enemyId, numDeath = 0, isUnlocked = false };
+            enemies.Add(enemy);
+        }
+        
+        // Tăng số lần defeat
+        enemy.numDeath++;
+        
+        // Tìm EnemyData để check unlock
+        EnemyData enemyData = enemyListData?.enemies?.Find(e => e.id == enemyId);
+        
+        if (enemyData != null && enemy.numDeath >= enemyData.numDeathToUnlock)
+        {
+            enemy.isUnlocked = true;
+            enemyData.isUnlocked = true;
         }
     }
-}
-
-[System.Serializable]
-public class Enemy
-{
-    public string id = "";
-    public int numDeaths = 0;
+    
+    // 🔥 CHECK ENEMY ĐÃ UNLOCK CHƯA
+    public bool IsEnemyUnlocked(string enemyId)
+    {
+        Enemy enemy = enemies.Find(e => e.id == enemyId);
+        return enemy?.isUnlocked ?? false;
+    }
 }

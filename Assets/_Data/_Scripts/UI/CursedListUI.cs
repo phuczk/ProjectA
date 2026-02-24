@@ -44,9 +44,13 @@ public class CursedListUI : MonoBehaviour
             {
                 var itemUI = Instantiate(itemPrefab, contentRoot);
                 
-                // Kiểm tra xem item này có trong danh sách đang đeo không
                 bool isEquipped = equippedIds.Contains(cursed.id);
                 itemUI.Bind(cursed, isEquipped);
+
+                itemUI.OnItemSelected += (data, rect) => {
+                    ShowInfo(data);
+                    SnapTo(rect);
+                };
 
                 itemUI.OnItemClicked += (data) => {
                     var player = FindFirstObjectByType<PlayerController>();
@@ -54,17 +58,15 @@ public class CursedListUI : MonoBehaviour
                     {
                         player.EquipCursedObject(data.id);
                         UpdateNotchUI();
-                        RefreshItemStates(); // Cập nhật lại màu sắc danh sách sau khi click
+                        RefreshItemStates();
                     }
                 };
                 
                 _instantiatedItems.Add(itemUI);
-                // ... logic OnItemSelected giữ nguyên ...
             }
         }
     }
 
-    // Hàm mới để cập nhật trạng thái "bôi đen" mà không cần xóa đi tạo lại toàn bộ List
     public void RefreshItemStates()
     {
         var save = SaveManager.Instance != null ? SaveManager.Instance.CurrentData : SaveSystemz.Load();
@@ -73,7 +75,6 @@ public class CursedListUI : MonoBehaviour
         foreach (var itemUI in _instantiatedItems)
         {
             bool isEquipped = equippedIds.Contains(itemUI.ItemId);
-            // Cần sửa lại Bind hoặc tạo hàm SetEquipped trong CursedItemUI
             itemUI.Bind(cursedList.GetById(itemUI.ItemId), isEquipped);
         }
     }
@@ -83,7 +84,7 @@ public class CursedListUI : MonoBehaviour
         if (notchManager != null)
         {
             notchManager.RefreshNotchDisplay();
-            RefreshItemStates(); // Đồng bộ cả màu sắc trong list
+            RefreshItemStates();
         }
     }
 

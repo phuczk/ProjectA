@@ -12,8 +12,18 @@ public class EnemyListData : ScriptableObject
 public class EnemyData
 {
     public string id = "";
-    public string name = "";
+    public string name => $"enemies.{id}.name";
     public Sprite sprite;
-    public string description = "";
+    public string description => $"enemies.{id}.desc";
     public float lootPercent = 0f;
+    public int numDeathToUnlock = 20;
+    public bool isUnlocked = false;
+}
+
+[System.Serializable]
+public class Enemy
+{
+    public string id = "";
+    public int numDeath = 0;
+    public bool isUnlocked = false;
 }

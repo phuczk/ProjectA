@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbc6289423deb334aa04a54311d16020, type: 3}
+  m_Name: CursedObject Data 5
+  m_EditorClassIdentifier: 
+  id: magic_mirror
+  type: 1
+  icon: {fileID: -7503982551761734889, guid: b1572a0621facd841892cda77b9351d4, type: 3}
+  <Effects>k__BackingField:
+  - rid: 6937331482024476672
+  references:
+    version: 2
+    RefIds:
+    - rid: 6937331482024476672
+      type: {class: HealEffect, ns: , asm: Assembly-CSharp}
+      data:
+        bonus: 1
