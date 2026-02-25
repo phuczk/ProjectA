@@ -32,8 +32,6 @@ public class EnemyDefeatManager : Singleton<EnemyDefeatManager>
         {
             saveData.world.OnEnemyDefeated(enemyId, enemyListData);
             SaveSystemz.Save(saveData);
-            
-            Debug.Log($"Enemy {enemyId} defeated! Total deaths: {GetEnemyDeathCount(enemyId)}");
         }
         
         if (enemyListUI != null)
