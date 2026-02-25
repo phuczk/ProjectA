@@ -33,6 +33,5 @@ public class GameStateManager : Singleton<GameStateManager>
     {
         Time.timeScale = (newState == GameState.Pause) ? 0f : 1f;
         _currentState = newState;
-        //Debug.Log($"State changed to: {newState}");
     }
 }

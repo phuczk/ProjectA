@@ -139,7 +139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9061f0915f4187a47bec9a0f204a9a02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hitEffectPrefab: {fileID: 7593920708560766911, guid: 7e9aa3f2829bc0e4f96c00de1d714906, type: 3}
+  _hitEffectPrefab: {fileID: 6965401620985072296, guid: 196dc8fcef30fdf449719cf1d3d9266d, type: 3}
   _destroyEffectPrefab: {fileID: 2594135262726773537, guid: 16fecaa833025084b85518695aa4edba, type: 3}
   _direction: {x: 0, y: 0, z: 0}
 --- !u!50 &1241118134118302906

@@ -97,7 +97,7 @@ public class PlayerHealth : MonoBehaviour, ISaveable, ISoundEmitter
         if (TryUseMana(1))
         {
             CurrentHealth = Mathf.Min(CurrentHealth + amount, MaxHealth);
-            OnRequestSound?.Invoke(PlayerSoundType.Heal, null);
+            OnRequestSound?.Invoke(PlayerSoundType.Heal, null); 
         }
     }
     

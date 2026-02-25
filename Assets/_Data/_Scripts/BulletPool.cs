@@ -66,7 +66,7 @@ public class BulletPool : Singleton<BulletPool>
 
     private GameObject CreateInstance(GameObject prefab)
     {
-        var go = Instantiate(prefab);
+        var go = Instantiate(prefab, transform); // 🔥 LÀM CON CỦA BULLETPOOL
         var refComp = go.GetComponent<BulletPoolRef>();
         if (refComp == null) refComp = go.AddComponent<BulletPoolRef>();
         refComp.prefab = prefab;

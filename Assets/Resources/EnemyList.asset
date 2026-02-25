@@ -13,17 +13,38 @@ MonoBehaviour:
   m_Name: EnemyList
   m_EditorClassIdentifier: Assembly-CSharp::EnemyListData
   enemies:
-  - id: 1
-    name: wood
+  - id: wood
     sprite: {fileID: -8800942881174875001, guid: d6a43914242de2a4a9ac81e5174252bd, type: 3}
-    description: 
     lootPercent: 0
     numDeathToUnlock: 10
     isUnlocked: 0
   - id: 2
-    name: wood
     sprite: {fileID: 4801227835787818748, guid: 8fdbc02b28fdc554daf5a15940cd35ca, type: 3}
-    description: 
+    lootPercent: 0
+    numDeathToUnlock: 10
+    isUnlocked: 0
+  - id: 3
+    sprite: {fileID: 4801227835787818748, guid: 8fdbc02b28fdc554daf5a15940cd35ca, type: 3}
+    lootPercent: 0
+    numDeathToUnlock: 10
+    isUnlocked: 0
+  - id: 4
+    sprite: {fileID: 4801227835787818748, guid: 8fdbc02b28fdc554daf5a15940cd35ca, type: 3}
+    lootPercent: 0
+    numDeathToUnlock: 10
+    isUnlocked: 0
+  - id: 5
+    sprite: {fileID: 4801227835787818748, guid: 8fdbc02b28fdc554daf5a15940cd35ca, type: 3}
+    lootPercent: 0
+    numDeathToUnlock: 10
+    isUnlocked: 0
+  - id: 5
+    sprite: {fileID: 4801227835787818748, guid: 8fdbc02b28fdc554daf5a15940cd35ca, type: 3}
+    lootPercent: 0
+    numDeathToUnlock: 10
+    isUnlocked: 0
+  - id: 7
+    sprite: {fileID: 4801227835787818748, guid: 8fdbc02b28fdc554daf5a15940cd35ca, type: 3}
     lootPercent: 0
     numDeathToUnlock: 10
     isUnlocked: 0

@@ -17,7 +17,6 @@ public class PlayerSkill : MonoBehaviour
         if (!_ability.Has(AbilityType.SpecialSkill)) return;
         var data = SaveSystemz.Load();
         if (data.player == null) data.player = new PlayerData();
-        Debug.Log($"TrySpecialSkill {_health.CurrentMana}");
         _health.TryUseMana(3);
     }
 }

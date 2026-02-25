@@ -100,6 +100,7 @@ public class PlayerController : MonoBehaviour, IPlayerController
 
     private Dictionary<GunType, GameObject> _gunMap;
 
+    [SerializeField] private ParticleSystem healEffect;
 
     private void Awake()
     {
@@ -428,12 +429,18 @@ public class PlayerController : MonoBehaviour, IPlayerController
         _isHealing = true;
         
         _rb.linearVelocity = Vector2.zero;
+        if (healEffect != null)
+        {
+            healEffect.gameObject.SetActive(true);
+            healEffect.Play();
+        }
         yield return _healWait;
 
         _health?.Heal(3);
         GameEventBus.Instance?.RaiseHeal(this);
 
         _isHealing = false;
+        //healEffect.gameObject.SetActive(false);
     }
 
     private void HandleArmIdleReturn()

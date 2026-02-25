@@ -9,10 +9,8 @@ public class PlayerInputHandler : MonoBehaviour
     [SerializeField] private GameStateChannel _stateChannel;
     private PlayerInput _playerInput;
 
-    // Sử dụng InputActionMap để quản lý các action
     private InputActionMap _actionMap;
 
-    // Các action quan trọng
     private InputAction _upAction;
     private InputAction _downAction;
     private InputAction _leftAction;
@@ -28,11 +26,9 @@ public class PlayerInputHandler : MonoBehaviour
     private InputAction _gunShotgunAction;
     private InputAction _gunRapidAction;
 
-    // 🔥 VO HIEF HOA INPUT
     private bool _inputDisabled = false;
     private Coroutine _disableInputCoroutine;
 
-    // Properties public
     public Vector2 MoveInput { get; private set; }
     public Vector2 AimInput { get; private set; }
     public bool MoveLeftHeld => _leftAction?.IsPressed() ?? false;
@@ -59,7 +55,6 @@ public class PlayerInputHandler : MonoBehaviour
         _playerInput = GetComponent<PlayerInput>();
         if (_playerInput == null)
         {
-            Debug.LogError("PlayerInput component not found!");
             enabled = false;
             return;
         }
@@ -68,7 +63,6 @@ public class PlayerInputHandler : MonoBehaviour
 
         if (_actionMap == null)
         {
-            Debug.LogError("Không tìm thấy ActionMap 'InGame'!");
             enabled = false;
             return;
         }
@@ -89,9 +83,6 @@ public class PlayerInputHandler : MonoBehaviour
         _gravityAction = _actionMap.FindAction("Gravity", true);
         _scaleAction = _actionMap.FindAction("Scale", true);
         _skillAction = _actionMap.FindAction("Skill", true);
-        // _gunNormalAction = _playerInput.actions.FindAction("GunNormal");
-        // _gunShotgunAction = _playerInput.actions.FindAction("GunShotgun");
-        // _gunRapidAction = _playerInput.actions.FindAction("GunRapid");
     }
 
     private void OnEnable()

@@ -11,7 +11,6 @@ public class EnemyDefeatManager : Singleton<EnemyDefeatManager>
     [Header("UI Reference")]
     public EnemyListUI enemyListUI;
     
-    // Event để enemy báo khi chết
     public System.Action<string> OnEnemyDied;
     
     private void OnEnable()
@@ -24,7 +23,6 @@ public class EnemyDefeatManager : Singleton<EnemyDefeatManager>
         OnEnemyDied -= HandleEnemyDefeat;
     }
     
-    // 🔥 XỬ LÝ KHI ENEMY CHẾT
     private void HandleEnemyDefeat(string enemyId)
     {
         if (string.IsNullOrEmpty(enemyId)) return;
@@ -38,20 +36,17 @@ public class EnemyDefeatManager : Singleton<EnemyDefeatManager>
             Debug.Log($"Enemy {enemyId} defeated! Total deaths: {GetEnemyDeathCount(enemyId)}");
         }
         
-        // 🔥 CẬP NHẬT UI
         if (enemyListUI != null)
         {
             enemyListUI.UpdateEnemyUI();
         }
     }
     
-    // 🔥 PUBLIC METHOD ĐỂ ENEMY GỌI
     public static void ReportEnemyDeath(string enemyId)
     {
         Instance?.OnEnemyDied?.Invoke(enemyId);
     }
     
-    // 🔥 LẤY SỐ LẦN DEATH CỦA ENEMY
     public int GetEnemyDeathCount(string enemyId)
     {
         var saveData = SaveSystemz.Load();
@@ -63,7 +58,6 @@ public class EnemyDefeatManager : Singleton<EnemyDefeatManager>
         return 0;
     }
     
-    // 🔥 CHECK ENEMY ĐÃ UNLOCK CHƯA
     public bool IsEnemyUnlocked(string enemyId)
     {
         var saveData = SaveSystemz.Load();

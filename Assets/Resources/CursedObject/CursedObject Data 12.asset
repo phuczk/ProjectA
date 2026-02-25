@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbc6289423deb334aa04a54311d16020, type: 3}
   m_Name: CursedObject Data 12
   m_EditorClassIdentifier: 
-  id: greedy_rod
+  id: chaos_boots
   type: 1
   icon: {fileID: -7503982551761734889, guid: b1572a0621facd841892cda77b9351d4, type: 3}
   <Effects>k__BackingField:

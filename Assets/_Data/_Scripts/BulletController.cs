@@ -47,6 +47,12 @@ public class BulletController : MonoBehaviour
 
         float ang = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, ang);
+        float projectedSpeed = Vector2.Dot(playerVelocity, velocity.normalized);
+        projectedSpeed = Mathf.Max(0, projectedSpeed);
+
+        Vector2 finalVelocity = velocity.normalized * (_speed + projectedSpeed);
+
+        _rb.linearVelocity = finalVelocity;
     }
 
     private void Update()
@@ -63,8 +69,6 @@ public class BulletController : MonoBehaviour
             }
             return;
         }
-
-        transform.position += (_direction * _speed + _inheritedVel) * Time.deltaTime;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
