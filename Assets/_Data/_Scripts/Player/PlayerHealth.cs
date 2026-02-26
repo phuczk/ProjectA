@@ -133,33 +133,33 @@ public class PlayerHealth : MonoBehaviour, ISaveable, ISoundEmitter
     }
     
     private IEnumerator RespawnCoroutine()
-{
-    yield return new WaitForSeconds(1f);
-    Vector3 respawnPosition = FindRespawnPosition();
-    
-    string targetScene = GetRespawnScene();
-    
-    if (SceneTransitionManager.Instance != null)
     {
-        SceneTransitionManager.Instance.TransitionToScene(targetScene);
+        yield return new WaitForSeconds(1f);
+        Vector3 respawnPosition = FindRespawnPosition();
+        
+        string targetScene = GetRespawnScene();
+        
+        if (SceneTransitionManager.Instance != null)
+        {
+            SceneTransitionManager.Instance.TransitionToScene(targetScene);
+        }
+        else
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(targetScene);
+        }
     }
-    else
-    {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(targetScene);
-    }
-}
 
-private string GetRespawnScene()
-{
-    var saveData = SaveSystemz.Load();
-    if (saveData?.world != null && !string.IsNullOrEmpty(saveData.world.currentSceneName))
+    private string GetRespawnScene()
     {
-        return saveData.world.currentSceneName;
+        var saveData = SaveSystemz.Load();
+        if (saveData?.world != null && !string.IsNullOrEmpty(saveData.world.currentSceneName))
+        {
+            return saveData.world.currentSceneName;
+        }
+        
+        string currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        return currentScene;
     }
-    
-    string currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-    return currentScene;
-}
     
     private Vector3 FindRespawnPosition()
     {

@@ -28,6 +28,12 @@ public class EnemyUniversalMachine : EntityStateMachine<EnemyUniversalMachine>
     public float ChaseRange = 5f;
     public float GroundCheckDistance = 2.5f;
     public float WallCheckDistance = 1.5f;
+    
+    [Header("Raycast Fan Detection")]
+    public bool UseRaycastFan = false;
+    public float FanAngle = 60f;
+    public int RayCount = 5;
+    public float RayDistance = 8f;
 
     public LayerMask CharacterLayer;
     public LayerMask GroundLayer;
@@ -141,7 +147,6 @@ public class EnemyUniversalMachine : EntityStateMachine<EnemyUniversalMachine>
 
     public void Death()
     {
-        // 🔥 BÁO ENEMY CHẾT CHO MANAGER
         if (!string.IsNullOrEmpty(enemyId))
         {
             EnemyDefeatManager.ReportEnemyDeath(enemyId);
@@ -186,7 +191,49 @@ public class EnemyUniversalMachine : EntityStateMachine<EnemyUniversalMachine>
     public bool IsPlayerInChaseRange()
     {
         if (Target == null) return false;
+        
+        if (UseRaycastFan)
+        {
+            return IsPlayerDetectedByRaycastFan();
+        }
+        
         return (CachedTransform.position - Target.position).sqrMagnitude <= ChaseRange * ChaseRange;
+    }
+    
+    public bool IsPlayerDetectedByRaycastFan()
+    {
+        if (Target == null) return false;
+        
+        Vector2 enemyPos = CachedTransform.position;
+        Vector2 toPlayer = Target.position - enemyPos;
+        float distanceToPlayer = toPlayer.magnitude;
+        
+        if (distanceToPlayer > RayDistance) return false;
+        
+        int facingDir = LastSeenDir;
+        Vector2 forwardDir = new Vector2(facingDir, 0);
+        
+        float angleToPlayer = Vector2.Angle(forwardDir, toPlayer);
+        
+        if (angleToPlayer > FanAngle / 2f) return false;
+        
+        float angleStep = FanAngle / (RayCount - 1);
+        float startAngle = -FanAngle / 2f;
+        
+        for (int i = 0; i < RayCount; i++)
+        {
+            float currentAngle = startAngle + angleStep * i;
+            Vector2 rayDirection = Quaternion.Euler(0, 0, currentAngle * facingDir) * forwardDir;
+            
+            RaycastHit2D hit = Physics2D.Raycast(enemyPos, rayDirection, RayDistance, CharacterLayer);
+            
+            if (hit.collider != null && hit.collider.transform == Target)
+            {
+                return true;
+            }
+        }
+        
+        return false;
     }
 
     public bool HasGroundAhead(int dir)

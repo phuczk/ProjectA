@@ -10,8 +10,8 @@ public class GameStateManager : Singleton<GameStateManager>
     protected override void Awake() {
         base.Awake();
         _currentState = GameState.MainMenu;
-        Application.targetFrameRate = -1; // Mở khóa FPS tối đa
-        QualitySettings.vSyncCount = 0; // Tắt VSync    
+        Application.targetFrameRate = -1;
+        QualitySettings.vSyncCount = 0;   
     }
 
     private void OnEnable()

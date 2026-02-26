@@ -28,6 +28,8 @@ public class CameraManager : Singleton<CameraManager>
     private Vector2 _startingTrackedObjectOffset;
     [SerializeField] private float rotationDurationPer90 = 0.15f;
 
+    public string CAMERA_TAG = "CameraFollow";
+
     // ================================
     // UNITY LIFECYCLE
     // ================================
@@ -41,28 +43,22 @@ public class CameraManager : Singleton<CameraManager>
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
-        
-        // 🔥 LẮNG NGHE EVENT KHI PLAYER SPAWN XONG
         SceneFlowService.OnPlayerSpawned += OnPlayerSpawned;
     }
     
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
-        
-        // 🔥 HỦY LẮNG NGHE
         SceneFlowService.OnPlayerSpawned -= OnPlayerSpawned;
     }
     
     private void OnPlayerSpawned(Vector3 playerPos)
     {
-        // 🔥 NGAY LẬP TỨC KHI PLAYER SPAWN XONG
         RefreshCameraSystemImmediate(playerPos);
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // Scan lại camera khi load scene mới
         FindActiveCamera();
     }
 
@@ -103,11 +99,6 @@ public class CameraManager : Singleton<CameraManager>
         if (positionComposer != null)
         {
             _normalYDamping = positionComposer.Damping.y;
-            Debug.Log($"Camera {currentCamera.name} uses PositionComposer, Y damping: {_normalYDamping}");
-        }
-        else
-        {
-            Debug.LogWarning($"Camera {currentCamera.name} has no PositionComposer or FramingTransposer Body component.");
         }
     }
 
@@ -340,7 +331,7 @@ public class CameraManager : Singleton<CameraManager>
             closestCam.transform.position = new Vector3(playerPos.x, playerPos.y, closestCam.transform.position.z);
             closestCam.transform.rotation = Quaternion.Euler(0, 0, targetAngle);
 
-            GameObject player = GameObject.FindGameObjectWithTag("CameraFollow");
+            GameObject player = GameObject.FindGameObjectWithTag(CAMERA_TAG);
             if (player != null) closestCam.Follow = player.transform;
 
             closestCam.enabled = true;
@@ -351,7 +342,7 @@ public class CameraManager : Singleton<CameraManager>
             var confiner = closestCam.GetComponent<CinemachineConfiner2D>();
             if (confiner != null)
             {
-                confiner.InvalidateCache();
+                confiner.InvalidateBoundingShapeCache();
             }
 
             StartCoroutine(DelayedCameraRefresh(closestCam));
@@ -362,7 +353,7 @@ public class CameraManager : Singleton<CameraManager>
     {
         yield return new WaitForFixedUpdate();
         
-        GameObject player = GameObject.FindGameObjectWithTag("CameraFollow");
+        GameObject player = GameObject.FindGameObjectWithTag(CAMERA_TAG);
         if (player != null && cam != null)
         {
             cam.Follow = player.transform;

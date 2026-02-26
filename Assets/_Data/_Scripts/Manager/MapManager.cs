@@ -32,7 +32,6 @@ public class MapManager : Singleton<MapManager>
         }
     }
 
-    // Thay thế hàm Find (O(n)) bằng Dictionary Lookup (O(1))
     public MapRoomData GetRoomData(string roomName)
     {
         if (_roomLookup.TryGetValue(roomName, out MapRoomData data))
