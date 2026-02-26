@@ -16,6 +16,36 @@ public class DecisionPlayerInAttackRange : IStateDecision
 }
 
 /// <summary>
+/// Dùng để chuẩn bị attack với visual feedback (nghiêng 20 độ)
+/// </summary>
+[Serializable]
+public class DecisionPrepareAttack : IStateDecision
+{
+    [SerializeField] private bool _isPreparing = false;
+    
+    public bool Decide(EnemyUniversalMachine machine)
+    {
+        bool shouldAttack = machine.IsPlayerInAttackRange();
+        
+        // Khi bắt đầu chuẩn bị attack
+        if (shouldAttack && !_isPreparing)
+        {
+            machine.Movement?.OnPrepareAttack(machine.LastSeenDir);
+            _isPreparing = true;
+            return true;
+        }
+        // Khi không cần attack nữa
+        else if (!shouldAttack && _isPreparing)
+        {
+            machine.Movement?.OnResetAttack();
+            _isPreparing = false;
+        }
+        
+        return shouldAttack;
+    }
+}
+
+/// <summary>
 /// Dùng cho các trạng thái cần đợi một khoảng thời gian cố định độc lập với logic của Node.
 /// Lưu ý: Cần reset _timer khi bắt đầu sử dụng.
 /// </summary>
@@ -77,7 +107,26 @@ public class DecisionNodeTimerFinished : IStateDecision
 [Serializable]
 public class DecisionPlayerInChaseRange : IStateDecision
 {
-    public bool Decide(EnemyUniversalMachine machine) => machine.IsPlayerInChaseRange();
+    [SerializeField] private bool _hasDetected = false;
+    
+    public bool Decide(EnemyUniversalMachine machine)
+    {
+        bool isDetected = machine.IsPlayerInChaseRange();
+        
+        // Khi mới phát hiện player - nhảy lên
+        if (isDetected && !_hasDetected)
+        {
+            machine.Movement?.OnPlayerDetected();
+            _hasDetected = true;
+        }
+        // Khi mất dấu player
+        else if (!isDetected && _hasDetected)
+        {
+            _hasDetected = false;
+        }
+        
+        return isDetected;
+    }
 }
 
 /// <summary>

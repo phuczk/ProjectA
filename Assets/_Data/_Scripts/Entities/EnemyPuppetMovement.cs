@@ -93,4 +93,27 @@ public class EnemyPuppetMovement : MonoBehaviour
         else if (moveDir.x > 0.01f) 
             _targetYRotation = 0f;
     }
+    
+    public void OnPlayerDetected()
+    {
+        Vector3 jumpPos = bodyBaseLocalPos + Vector3.up * 0.5f;
+        body.localPosition = jumpPos;
+        
+        LeanTween.cancel(body.gameObject);
+        LeanTween.moveLocalY(body.gameObject, bodyBaseLocalPos.y, 0.2f).setEaseOutBounce();
+    }
+    
+    public void OnPrepareAttack(int facingDirection)
+    {
+        float tiltAngle = -20f * facingDirection;
+        
+        LeanTween.cancel(body.gameObject);
+        LeanTween.rotateLocal(body.gameObject, new Vector3(0, _targetYRotation, tiltAngle), 0.15f).setEaseOutQuad();
+    }
+    
+    public void OnResetAttack()
+    {
+        LeanTween.cancel(body.gameObject);
+        LeanTween.rotateLocal(body.gameObject, new Vector3(0, _targetYRotation, 0), 0.2f).setEaseOutQuad();
+    }
 }
