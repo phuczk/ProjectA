@@ -1,38 +1,67 @@
 using UnityEngine;
 using DG.Tweening;
+using System.Collections.Generic;
 
 public class DamageFlash : MonoBehaviour
 {
-    public SpriteRenderer spriteRenderer;
-    private Material _material;
+    [Header("Sprite Renderers")]
+    public SpriteRenderer[] spriteRenderers;
     
+    [Header("Flash Settings")]
     public Color flashColor = Color.white;
-    public float flashDuration = 0.1f;
+    public float flashDuration = 0.2f;
     
-    private Tween _currentTween;
+    private List<Material> _materials = new List<Material>();
+    private List<Tween> _currentTweens = new List<Tween>();
 
     private void Awake()
     {
-        spriteRenderer ??= GetComponent<SpriteRenderer>();
-        _material = spriteRenderer.material;
+        if (spriteRenderers == null || spriteRenderers.Length == 0)
+        {
+            spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
+        }
         
-        _material.SetColor("_FlashColor", flashColor);
+        foreach (var renderer in spriteRenderers)
+        {
+            if (renderer != null)
+            {
+                _materials.Add(renderer.material);
+                renderer.material.SetColor("_FlashColor", flashColor);
+            }
+        }
     }
 
     public void CallDamageFlash()
     {
-        _currentTween?.Kill(complete: false);
+        foreach (var tween in _currentTweens)
+        {
+            tween?.Kill(complete: false);
+        }
+        _currentTweens.Clear();
         
-        _material.SetFloat("_FlashAmount", 0f);
-
-        _currentTween = DOTween.To(() => _material.GetFloat("_FlashAmount"),x => _material.SetFloat("_FlashAmount", x),1f,flashDuration)
-        .SetEase(Ease.OutQuad)                                  
-        .SetLoops(2, LoopType.Yoyo)                             
-        .OnKill(() => _material.SetFloat("_FlashAmount", 0f));
+        foreach (var material in _materials)
+        {
+            if (material != null)
+            {
+                material.SetFloat("_FlashAmount", 0f);
+                
+                var tween = DOTween.To(() => material.GetFloat("_FlashAmount"), 
+                    x => material.SetFloat("_FlashAmount", x), 1f, flashDuration)
+                    .SetEase(Ease.OutQuad)                                  
+                    .SetLoops(2, LoopType.Yoyo)                             
+                    .OnKill(() => material.SetFloat("_FlashAmount", 0f));
+                    
+                _currentTweens.Add(tween);
+            }
+        }
     }
 
     private void OnDestroy()
     {
-        _currentTween?.Kill();
+        foreach (var tween in _currentTweens)
+        {
+            tween?.Kill();
+        }
+        _currentTweens.Clear();
     }
 }

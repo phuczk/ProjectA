@@ -14,9 +14,7 @@ public class ThrowAttackNode : EnemyStateNode
     public ThrowMode Mode = ThrowMode.HorizontalOnly;
     
     [Header("Randomness")]
-    [Tooltip("Độ lệch ngẫu nhiên theo trục dọc cho vị trí Spawn")]
     public float VerticalPosSpread = 0.5f;
-    [Tooltip("Độ lệch ngẫu nhiên cho hướng bay (chỉ ảnh hưởng AimAtPlayer và Horizontal)")]
     public float AngleSpread = 0.0f;
 
     [Header("Base Config")]
@@ -32,6 +30,7 @@ public class ThrowAttackNode : EnemyStateNode
 
     public override void Enter()
     {
+        base.Enter();
         IsFinished = false;
         _hasThrown = false;
         _timer = WindupTime;
@@ -49,17 +48,28 @@ public class ThrowAttackNode : EnemyStateNode
 
     public override void ExecuteLogic()
     {
+        base.ExecuteLogic();
         _timer -= Time.deltaTime;
+
         if (!_hasThrown && _timer <= 0f && throwCount > 0)
         {
             PerformThrow();
             _hasThrown = true;
-            _timer = RecoverTime;
+            
+            _timer = RecoverTime; 
         }
-        else if (_hasThrown && _timer <= 0f && throwCount <= 0)
+        else if (_hasThrown && _timer <= 0f) 
         {
-            IsFinished = true;
-            throwCount = ThrowCount;
+            if (throwCount > 0) 
+            {
+                _hasThrown = false; 
+                _timer = WindupTime;
+            }
+            else 
+            {
+                IsFinished = true; 
+                machine.SetCooldown("GlobalAttack", 1.0f); 
+            }
         }
     }
 
@@ -114,5 +124,8 @@ public class ThrowAttackNode : EnemyStateNode
         projectile?.Initialize(dir);
     }
 
-    public override void Exit() { }
+    public override void Exit()
+    {
+        base.Exit();
+    }
 }

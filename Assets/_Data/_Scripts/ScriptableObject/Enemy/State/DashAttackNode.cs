@@ -7,6 +7,7 @@ public class DashAttackNode : EnemyStateNode
 {
     public override EnemyStateType StateType => EnemyStateType.Attack;
 
+    [Header("Phase Timings")]
     public float WindupTime = 0.35f;
     public float DashTime = 0.5f;
     public float DashSpeed = 10f;
@@ -19,12 +20,18 @@ public class DashAttackNode : EnemyStateNode
 
     public override void Enter()
     {
+        base.Enter();
+        
         _currentPhase = Phase.Windup;
         _phaseTimer = WindupTime;
 
-        _dashDir = (machine.Target.position.x > machine.CachedTransform.position.x) ? Vector2.right : Vector2.left;
+        float targetX = machine.Target != null ? machine.Target.position.x : machine.CachedTransform.position.x + machine.CachedTransform.localScale.x;
+        _dashDir = (targetX > machine.CachedTransform.position.x) ? Vector2.right : Vector2.left;
         machine.CachedTransform.localScale = new Vector3(Mathf.Sign(_dashDir.x), 1, 1);
+        
         machine.Rb.linearVelocity = Vector2.zero;
+
+        machine.Animation.SetActionFinished(false);
     }
 
     public override void ExecuteLogic()
@@ -38,28 +45,38 @@ public class DashAttackNode : EnemyStateNode
                 {
                     _currentPhase = Phase.Dash;
                     _phaseTimer = DashTime;
+                    
+                    // [Animator] Chuyển sang Phase Dash. 
                 }
                 break;
 
             case Phase.Dash:
                 machine.Rb.linearVelocity = _dashDir * DashSpeed;
+                
                 if (_phaseTimer <= 0)
                 {
                     machine.Rb.linearVelocity = Vector2.zero;
                     _currentPhase = Phase.Recover;
                     _phaseTimer = RecoverTime;
+
+                    machine.Animation.SetActionFinished(true);
                 }
                 break;
 
             case Phase.Recover:
+                if (_phaseTimer <= 0)
+                {
+                    IsFinished = true;
+                    machine.SetCooldown("GlobalAttack", 1.0f);
+                }
                 break;
-        }
-
-        if (_currentPhase == Phase.Recover && _phaseTimer <= 0)
-        {
-            IsFinished = true;
         }
     }
 
-    public override void Exit() => machine.Rb.linearVelocity = Vector2.zero;
+    public override void Exit()
+    {
+        base.Exit();
+        machine.Rb.linearVelocity = Vector2.zero;
+        machine.Animation.SetActionFinished(true); 
+    }
 }

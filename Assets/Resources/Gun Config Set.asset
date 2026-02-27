@@ -33,7 +33,7 @@ MonoBehaviour:
     cooldown: 0.7
     bulletCount: 4
     spreadAngle: 40
-    damage: 4
+    damage: 3
     bulletSprite: {fileID: 0}
     gunSprite: {fileID: 1275589539659018210, guid: 5ff731dc26feade4088d7565e3f7431c, type: 3}
     shakeCameraAmount: 0.35

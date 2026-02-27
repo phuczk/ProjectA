@@ -11,6 +11,7 @@ public class IdleNode : EnemyStateNode
 
     public override void Enter()
     {
+        base.Enter();
         IsFinished = false;
         _timer = IdleTimeRange.RandomRange();
         machine.Movement.SetMoveDirection(Vector2.zero);
@@ -18,6 +19,7 @@ public class IdleNode : EnemyStateNode
 
     public override void ExecuteLogic()
     {
+        base.ExecuteLogic();
         if (_timer > 0)
         {
             _timer -= Time.deltaTime;
@@ -29,5 +31,9 @@ public class IdleNode : EnemyStateNode
         }
     }
 
-    public override void Exit() { }
+    public override void Exit()
+    {
+        base.Exit();
+        //machine.Movement.BobAndSway(false);
+    }
 }

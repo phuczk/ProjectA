@@ -15,6 +15,7 @@ public class PatrolNode : EnemyStateNode
 
     public override void Enter()
     {
+        base.Enter();
         IsFinished = false;
         _timer = PatrolTimeRange.RandomRange();
         _dir = machine.CachedTransform.localScale.x > 0 ? 1f : -1f;
@@ -23,6 +24,7 @@ public class PatrolNode : EnemyStateNode
 
     public override void ExecuteLogic()
     {
+        base.ExecuteLogic();
         _timer -= Time.deltaTime;
         _turnCooldown -= Time.deltaTime;
 
@@ -46,6 +48,7 @@ public class PatrolNode : EnemyStateNode
     
     public override void Exit()
     {
+        base.Exit();
         machine.Movement.SetMoveDirection(Vector2.zero);
     }
 }

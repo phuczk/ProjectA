@@ -344,6 +344,14 @@ PrefabInstance:
       value: Sparks
       objectReference: {fileID: 0}
     - target: {fileID: 4637813376089536, guid: 85ab2ba31682fca4e9c1e40ea154ee43, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4637813376089536, guid: 85ab2ba31682fca4e9c1e40ea154ee43, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4637813376089536, guid: 85ab2ba31682fca4e9c1e40ea154ee43, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -381,6 +389,38 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4637813376089536, guid: 85ab2ba31682fca4e9c1e40ea154ee43, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198437972640931972, guid: 85ab2ba31682fca4e9c1e40ea154ee43, type: 3}
+      propertyPath: ShapeModule.radius.value
+      value: 0.17
+      objectReference: {fileID: 0}
+    - target: {fileID: 198437972640931972, guid: 85ab2ba31682fca4e9c1e40ea154ee43, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 198437972640931972, guid: 85ab2ba31682fca4e9c1e40ea154ee43, type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 0.18
+      objectReference: {fileID: 0}
+    - target: {fileID: 198437972640931972, guid: 85ab2ba31682fca4e9c1e40ea154ee43, type: 3}
+      propertyPath: InitialModule.startSize.minScalar
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 198437972640931972, guid: 85ab2ba31682fca4e9c1e40ea154ee43, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 198437972640931972, guid: 85ab2ba31682fca4e9c1e40ea154ee43, type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 198437972640931972, guid: 85ab2ba31682fca4e9c1e40ea154ee43, type: 3}
+      propertyPath: InitialModule.startSpeed.minScalar
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 198437972640931972, guid: 85ab2ba31682fca4e9c1e40ea154ee43, type: 3}
+      propertyPath: EmissionModule.rateOverDistance.scalar
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 199926692013103888, guid: 85ab2ba31682fca4e9c1e40ea154ee43, type: 3}

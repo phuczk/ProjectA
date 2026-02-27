@@ -1,4 +1,5 @@
 using UnityEngine;
+using DG.Tweening;
 
 public class EnemyPuppetMovement : MonoBehaviour
 {
@@ -52,7 +53,7 @@ public class EnemyPuppetMovement : MonoBehaviour
         if (moveDir.sqrMagnitude > 0.01f)
         {
             MoveHorizontal(speed);
-            //CalculateFlip(); // Tính toán góc xoay dựa trên hướng di chuyển
+            //CalculateFlip();
         }
         
         BobAndSway(moveDir.sqrMagnitude <= 0.01f);
@@ -99,21 +100,18 @@ public class EnemyPuppetMovement : MonoBehaviour
         Vector3 jumpPos = bodyBaseLocalPos + Vector3.up * 0.5f;
         body.localPosition = jumpPos;
         
-        LeanTween.cancel(body.gameObject);
-        LeanTween.moveLocalY(body.gameObject, bodyBaseLocalPos.y, 0.2f).setEaseOutBounce();
+        body.DOLocalMoveY(bodyBaseLocalPos.y, 0.2f).SetEase(Ease.OutBounce);
     }
     
     public void OnPrepareAttack(int facingDirection)
     {
         float tiltAngle = -20f * facingDirection;
         
-        LeanTween.cancel(body.gameObject);
-        LeanTween.rotateLocal(body.gameObject, new Vector3(0, _targetYRotation, tiltAngle), 0.15f).setEaseOutQuad();
+        body.DOLocalRotate(new Vector3(0, _targetYRotation, tiltAngle), 0.15f).SetEase(Ease.OutQuad);
     }
     
     public void OnResetAttack()
     {
-        LeanTween.cancel(body.gameObject);
-        LeanTween.rotateLocal(body.gameObject, new Vector3(0, _targetYRotation, 0), 0.2f).setEaseOutQuad();
+        body.DOLocalRotate(new Vector3(0, _targetYRotation, 0), 0.2f).SetEase(Ease.OutQuad);
     }
 }

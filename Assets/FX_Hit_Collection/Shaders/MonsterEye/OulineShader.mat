@@ -42,7 +42,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _Clip: 0.8
-    - _Feature: 0.35
+    - _Feature: 0.224
     - _Power: 0.49
     - _Size: 0.136
     m_Colors:

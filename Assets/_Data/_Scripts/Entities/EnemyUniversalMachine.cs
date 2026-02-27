@@ -7,6 +7,7 @@ public class EnemyUniversalMachine : EntityStateMachine<EnemyUniversalMachine>
 {
     [Header("Modules")]
     public EnemyPuppetMovement Movement;
+    public EnemyAnimationController Animation;
     public Rigidbody2D Rb;
     public Animator Anim;
     public ParticleSystem deathParticles;
@@ -97,8 +98,10 @@ public class EnemyUniversalMachine : EntityStateMachine<EnemyUniversalMachine>
     public void TransitionToState(EnemyStateType type)
     {
         if (!_typeToNodes.ContainsKey(type)) return;
-        var potentialNodes = _typeToNodes[type];
 
+        if (type == EnemyStateType.Attack && _currentNode?.StateType == EnemyStateType.Attack && !_currentNode.IsFinished) 
+            return;
+        var potentialNodes = _typeToNodes[type];
         if (potentialNodes.Count == 0) return;
 
         EnemyStateNode selectedNode = null;
@@ -113,13 +116,14 @@ public class EnemyUniversalMachine : EntityStateMachine<EnemyUniversalMachine>
 
         selectedNode ??= potentialNodes[UnityEngine.Random.Range(0, potentialNodes.Count)];
 
-        if (selectedNode == _currentNode) return;
+        if (selectedNode == _currentNode && !_currentNode.IsFinished) return;
+
+        if (type == EnemyStateType.Attack && !IsCooldownFinished("GlobalAttack")) return;
 
         _currentNode?.Exit();
         _currentNode = selectedNode;
         _currentNode.ResetFinished();
         _currentNode.Enter();
-
     }
 
     protected override void Update()
@@ -205,7 +209,7 @@ public class EnemyUniversalMachine : EntityStateMachine<EnemyUniversalMachine>
         if (Target == null) return false;
         
         Vector2 enemyPos = CachedTransform.position;
-        Vector2 toPlayer = Target.position - enemyPos;
+        Vector2 toPlayer = (Vector2)Target.position - enemyPos;
         float distanceToPlayer = toPlayer.magnitude;
         
         if (distanceToPlayer > RayDistance) return false;
