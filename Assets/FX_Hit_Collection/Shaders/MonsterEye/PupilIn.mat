@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Pupil 3
+  m_Name: PupilIn
   m_Shader: {fileID: -6465566751694194690, guid: d5a21260a174a5e4894134c071c65692, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -55,12 +55,12 @@ Material:
     m_Ints: []
     m_Floats:
     - _Clip: 1
-    - _Feather: 0.517
-    - _Power: 2.29
-    - _Tiling: 2.63
-    - _size: 0.517
+    - _Feather: 0.267
+    - _Power: 1.05
+    - _Tiling: 1.44
+    - _size: 0.558
     m_Colors:
-    - _Color: {r: 2.3455493, g: 15.999998, b: 6.661416, a: 0}
-    - _Scroll: {r: -0.5, g: 0, b: 0, a: 0}
+    - _Color: {r: 0, g: 3.3254905, b: 0.33502722, a: 0}
+    - _Scroll: {r: -0.4, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
