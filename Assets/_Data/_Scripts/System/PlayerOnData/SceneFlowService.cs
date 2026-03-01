@@ -19,7 +19,7 @@ public static class SceneFlowService
                 ? "TestScene"
                 : data.world.currentSceneName;
 
-        SceneTransitionManager.Instance.TransitionToScene(scene);
+        SceneTransitionManager.Instance.TransitionToScene(scene, TransitionType.Death, FadeDirection.Right);
     }
 
     public static void SetSpawnKey(string key)

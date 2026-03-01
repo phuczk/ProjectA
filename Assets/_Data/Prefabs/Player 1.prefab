@@ -453,6 +453,15 @@ MonoBehaviour:
   MaxHealth: 5
   MaxMana: 6
   invincibleDuration: 1
+  deathSlowMoDuration: 0.5
+  deathSlowMoTimeScale: 0.3
+  deathFlyUpDuration: 2
+  deathFlyUpForce: 2
+  deathFloatDuration: 3
+  deathFloatAmplitude: 0.1
+  deathFloatFrequency: 1
+  deathTargetRotation: -30
+  _rb2d: {fileID: 1544650614272011793}
 --- !u!114 &1594969903124630946
 MonoBehaviour:
   m_ObjectHideFlags: 0

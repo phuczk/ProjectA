@@ -55,12 +55,12 @@ Material:
     m_Ints: []
     m_Floats:
     - _Clip: 1
-    - _Feather: 0.267
-    - _Power: 1.05
+    - _Feather: 0.51
+    - _Power: 1.02
     - _Tiling: 1.44
-    - _size: 0.558
+    - _size: 1
     m_Colors:
-    - _Color: {r: 0, g: 3.3254905, b: 0.33502722, a: 0}
+    - _Color: {r: 4.4397917, g: 0.043988068, b: 0, a: 0}
     - _Scroll: {r: -0.4, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

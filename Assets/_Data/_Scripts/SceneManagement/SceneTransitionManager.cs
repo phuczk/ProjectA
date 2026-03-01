@@ -2,22 +2,23 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
-using DG.Tweening; // Thêm namespace DOTween
+using DG.Tweening;
 
 public class SceneTransitionManager : MonoBehaviour
 {
     public static SceneTransitionManager Instance { get; private set; }
 
     [Header("UI References")]
-    [SerializeField] private RectTransform _leftPanel;
-    [SerializeField] private RectTransform _rightPanel;
+    [SerializeField] private RectTransform _transitionPanel;
+    [SerializeField] private RectTransform _deathTransition;
+    [SerializeField] private RectTransform _horizontalFadePanel;
 
     [Header("Settings")]
     [SerializeField] private float _transitionTime = 0.5f;
     [SerializeField] private Ease _easeType = Ease.InOutQuad;
 
-    private Vector2 _leftPanelOpenPos;
-    private Vector2 _rightPanelOpenPos;
+    private Vector2 _panelStartPos;
+    private Vector2 _panelCenterPos;
 
     private void Awake()
     {
@@ -32,55 +33,188 @@ public class SceneTransitionManager : MonoBehaviour
             return;
         }
 
-        // Thiết lập vị trí ban đầu dựa trên Resolution
         SetupPositions();
     }
 
     private void SetupPositions()
     {
         float screenWidth = GetComponentInChildren<Canvas>().GetComponent<RectTransform>().rect.width;
+        float screenHeight = GetComponentInChildren<Canvas>().GetComponent<RectTransform>().rect.height;
         
-        // Vị trí khi mở: Đẩy sang 2 bên ngoài màn hình
-        _leftPanelOpenPos = new Vector2(-screenWidth / 2, 0);
-        _rightPanelOpenPos = new Vector2(screenWidth / 2, 0);
-
-        // Khởi tạo trạng thái ban đầu là đang mở
-        _leftPanel.anchoredPosition = _leftPanelOpenPos;
-        _rightPanel.anchoredPosition = _rightPanelOpenPos;
+        _panelCenterPos = Vector2.zero;
+        
+        _transitionPanel.anchoredPosition = _panelCenterPos;
+        _transitionPanel.gameObject.SetActive(false);
+        
+        if (_horizontalFadePanel != null)
+        {
+            _horizontalFadePanel.gameObject.SetActive(false);
+        }
+    }
+    
+    private Vector2 GetStartPosition(FadeDirection direction)
+    {
+        float screenWidth = GetComponentInChildren<Canvas>().GetComponent<RectTransform>().rect.width;
+        float screenHeight = GetComponentInChildren<Canvas>().GetComponent<RectTransform>().rect.height;
+        
+        switch (direction)
+        {
+            case FadeDirection.Up:
+                return new Vector2(0, screenHeight / 2);
+            case FadeDirection.Down:
+                return new Vector2(0, -screenHeight / 2);
+            case FadeDirection.Left:
+                return new Vector2(-screenWidth / 2, 0);
+            case FadeDirection.Right:
+                return new Vector2(screenWidth / 2, 0);
+            default:
+                return Vector2.zero;
+        }
     }
 
-    public void TransitionToScene(string sceneName)
+    public void TransitionToScene(string sceneName, TransitionType transitionType, FadeDirection direction)
     {
-        StartCoroutine(LoadSceneRoutine(sceneName));
+        StartCoroutine(LoadSceneRoutine(sceneName, transitionType, direction));
     }
 
-    private IEnumerator LoadSceneRoutine(string sceneName)
+    private IEnumerator LoadSceneRoutine(string sceneName, TransitionType transitionType, FadeDirection direction)
     {
-        // 1. Ẩn màn hình
-        _leftPanel.gameObject.SetActive(true);
-        _rightPanel.gameObject.SetActive(true);
+        if (transitionType == TransitionType.Death)
+        {
+            yield return StartCoroutine(DeathTransitionRoutine(sceneName));
+        }
+        else
+        {
+            yield return StartCoroutine(MoveTransitionRoutine(sceneName, direction));
+        }
+    }
+    
+    public void HorizontalFadeTransition(string sceneName, FadeDirection direction)
+    {
+        StartCoroutine(HorizontalFadeRoutine(sceneName, direction));
+    }
+    
+    private IEnumerator HorizontalFadeRoutine(string sceneName, FadeDirection direction)
+    {
+        _horizontalFadePanel.gameObject.SetActive(true);
+        
+        CanvasGroup canvasGroup = _horizontalFadePanel.GetComponent<CanvasGroup>();
+        if (canvasGroup == null)
+        {
+            canvasGroup = _horizontalFadePanel.gameObject.AddComponent<CanvasGroup>();
+        }
+        
+        if (direction == FadeDirection.Left)
+        {
+            canvasGroup.alpha = 0f;
+            yield return canvasGroup.DOFade(1f, _transitionTime).SetEase(_easeType).WaitForCompletion();
+            
+            AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
+            while (!operation.isDone)
+            {
+                yield return null;
+            }
+            
+            yield return canvasGroup.DOFade(0f, _transitionTime).SetEase(_easeType).WaitForCompletion();
+        }
+        else
+        {
+            canvasGroup.alpha = 0f;
+            yield return canvasGroup.DOFade(1f, _transitionTime).SetEase(_easeType).WaitForCompletion();
+            
+            AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
+            while (!operation.isDone)
+            {
+                yield return null;
+            }
+            
+            yield return canvasGroup.DOFade(0f, _transitionTime).SetEase(_easeType).WaitForCompletion();
+        }
+        
+        _horizontalFadePanel.gameObject.SetActive(false);
+    }
+    
+    private IEnumerator DeathTransitionRoutine(string sceneName)
+    {
+        _deathTransition.gameObject.SetActive(true);
+        
+        CanvasGroup canvasGroup = _deathTransition.GetComponent<CanvasGroup>();
+        if (canvasGroup == null)
+        {
+            canvasGroup = _deathTransition.gameObject.AddComponent<CanvasGroup>();
+        }
+        canvasGroup.alpha = 0f;
+        
+        yield return canvasGroup.DOFade(1f, _transitionTime).SetEase(_easeType).WaitForCompletion();
 
-        // 1. Đóng màn lại (Về Vector2.zero)
-        Sequence closeSequence = DOTween.Sequence();
-        closeSequence.Join(_leftPanel.DOAnchorPos(Vector2.zero, _transitionTime).SetEase(_easeType));
-        closeSequence.Join(_rightPanel.DOAnchorPos(Vector2.zero, _transitionTime).SetEase(_easeType));
-
-        yield return closeSequence.WaitForCompletion();
-
-        // 2. Load Scene mới
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
         while (!operation.isDone)
         {
             yield return null;
         }
 
-        // 3. Mở màn ra (Về vị trí OpenPos)
-        Sequence openSequence = DOTween.Sequence();
-        openSequence.Join(_leftPanel.DOAnchorPos(_leftPanelOpenPos, _transitionTime).SetEase(_easeType));
-        openSequence.Join(_rightPanel.DOAnchorPos(_rightPanelOpenPos, _transitionTime).SetEase(_easeType));
-
-        yield return openSequence.WaitForCompletion();
-        _leftPanel.gameObject.SetActive(false);
-        _rightPanel.gameObject.SetActive(false);
+        yield return canvasGroup.DOFade(0f, _transitionTime).SetEase(_easeType).WaitForCompletion();
+        _deathTransition.gameObject.SetActive(false);
     }
+    
+    private IEnumerator MoveTransitionRoutine(string sceneName, FadeDirection direction)
+{
+    _transitionPanel.gameObject.SetActive(true);
+    _panelStartPos = GetStartPosition(direction);
+    _transitionPanel.anchoredPosition = _panelStartPos;
+
+    AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
+    operation.allowSceneActivation = false;
+
+    yield return _transitionPanel.DOAnchorPos(_panelCenterPos, _transitionTime)
+        .SetEase(_easeType)
+        .SetUpdate(true) 
+        .WaitForCompletion();
+
+    while (operation.progress < 0.9f)
+    {
+        yield return null;
+    }
+
+    operation.allowSceneActivation = true;
+
+    while (!operation.isDone)
+    {
+        yield return null;
+    }
+
+    Vector2 exitPos = GetOppositePosition(direction);
+    yield return _transitionPanel.DOAnchorPos(exitPos, _transitionTime)
+        .SetEase(_easeType)
+        .SetUpdate(true)
+        .WaitForCompletion();
+    
+    _transitionPanel.gameObject.SetActive(false);
+}
+    
+    private Vector2 GetOppositePosition(FadeDirection direction)
+    {
+        float screenWidth = GetComponentInChildren<Canvas>().GetComponent<RectTransform>().rect.width;
+        float screenHeight = GetComponentInChildren<Canvas>().GetComponent<RectTransform>().rect.height;
+        
+        switch (direction)
+        {
+            case FadeDirection.Up:
+                return new Vector2(0, -screenHeight / 2);
+            case FadeDirection.Down:
+                return new Vector2(0, screenHeight / 2);
+            case FadeDirection.Left:
+                return new Vector2(screenWidth / 2, 0);
+            case FadeDirection.Right:
+                return new Vector2(-screenWidth / 2, 0);
+            default:
+                return Vector2.zero;
+        }
+    }
+}
+
+public enum TransitionType
+{
+    Death,
+    Move
 }

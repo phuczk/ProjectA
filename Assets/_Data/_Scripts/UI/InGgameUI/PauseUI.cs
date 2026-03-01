@@ -82,7 +82,7 @@ public class PauseUI : MonoBehaviour, IBackHandler
 
     private void OnExitClick()
     {
-        SceneTransitionManager.Instance.TransitionToScene(_slotSceneName);
+        SceneTransitionManager.Instance.TransitionToScene(_slotSceneName, TransitionType.Death, FadeDirection.Right);
         _stateChannel.RaiseRequest(GameState.MainMenu);
     }
 

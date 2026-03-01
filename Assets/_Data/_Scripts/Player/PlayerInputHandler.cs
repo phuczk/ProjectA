@@ -10,6 +10,7 @@ public class PlayerInputHandler : MonoBehaviour
     private PlayerInput _playerInput;
 
     private InputActionMap _actionMap;
+    private InputActionMap _uiMap;
 
     private InputAction _upAction;
     private InputAction _downAction;
@@ -60,6 +61,7 @@ public class PlayerInputHandler : MonoBehaviour
         }
 
         _actionMap = _playerInput.actions.FindActionMap("InGame", true);
+        _uiMap = _playerInput.actions.FindActionMap("UI", true);
 
         if (_actionMap == null)
         {
@@ -126,7 +128,16 @@ public class PlayerInputHandler : MonoBehaviour
         if (_inputDisabled)
         {
             ResetInputs();
+            if (_actionMap.enabled)
+            {
+                _actionMap.Disable();
+            }
             return;
+        }
+        
+        if (!_actionMap.enabled)
+        {
+            _actionMap.Enable();
         }
         
         float horizontal = 0f;
@@ -147,6 +158,22 @@ public class PlayerInputHandler : MonoBehaviour
         }
         
         _disableInputCoroutine = StartCoroutine(DisableInputRoutine(duration));
+    }
+    
+    public void DisableInput()
+    {
+        if (_disableInputCoroutine != null)
+        {
+            StopCoroutine(_disableInputCoroutine);
+            _disableInputCoroutine = null;
+        }
+        
+        _inputDisabled = true;
+    }
+    
+    public void EnableInput()
+    {
+        _inputDisabled = false;
     }
     
     private IEnumerator DisableInputRoutine(float duration)
