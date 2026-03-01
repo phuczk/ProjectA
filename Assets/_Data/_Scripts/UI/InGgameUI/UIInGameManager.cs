@@ -181,4 +181,24 @@ public class UIInGameManager : Singleton<UIInGameManager>
             _stateChannel.RaiseRequest(GameState.Pause);
         }
     }
+    
+    public void DisableUI()
+    {
+        if (_pauseAction != null && _pauseAction.enabled)
+            _pauseAction.Disable();
+        if (_mapAction != null && _mapAction.enabled)
+            _mapAction.Disable();
+        if (_inventoryAction != null && _inventoryAction.enabled)
+            _inventoryAction.Disable();
+    }
+    
+    public void EnableUI()
+    {
+        if (_pauseAction != null && !_pauseAction.enabled)
+            _pauseAction.Enable();
+        if (_mapAction != null && !_mapAction.enabled)
+            _mapAction.Enable();
+        if (_inventoryAction != null && !_inventoryAction.enabled)
+            _inventoryAction.Enable();
+    }
 }

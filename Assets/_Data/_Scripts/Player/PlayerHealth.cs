@@ -48,6 +48,8 @@ public class PlayerHealth : MonoBehaviour, ISaveable, ISoundEmitter
     private WaitForSeconds _invincibleWait;
     public Rigidbody2D _rb2d;
     private PlayerInputHandler _inputHandler;
+    
+    private static bool _isRespawning = false;
 
     public event System.Action<PlayerSoundType, AudioClip> OnRequestSound;
 
@@ -70,7 +72,11 @@ public class PlayerHealth : MonoBehaviour, ISaveable, ISoundEmitter
     
     private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, LoadSceneMode mode)
     {
-        ResetPlayerState();
+        if (_isRespawning)
+        {
+            ResetPlayerState();
+            _isRespawning = false;
+        }
     }
     
     private void OnDestroy()
@@ -177,9 +183,17 @@ public class PlayerHealth : MonoBehaviour, ISaveable, ISoundEmitter
     {
         OnRequestSound?.Invoke(PlayerSoundType.Death, null);
         
+        _isRespawning = true;
+        
         if (_inputHandler != null)
         {
             _inputHandler.DisableInput();
+        }
+        
+        var uiManager = UIInGameManager.Instance;
+        if (uiManager != null)
+        {
+            uiManager.DisableUI();
         }
         
         StartCoroutine(RespawnCoroutine());
@@ -240,7 +254,11 @@ public class PlayerHealth : MonoBehaviour, ISaveable, ISoundEmitter
             _inputHandler.EnableInput();
         }
         
-        Time.timeScale = 1f;
+        var uiManager = UIInGameManager.Instance;
+        if (uiManager != null)
+        {
+            uiManager.EnableUI();
+        }
     }
     
     private IEnumerator FlyUpAndRotateAnimation()
