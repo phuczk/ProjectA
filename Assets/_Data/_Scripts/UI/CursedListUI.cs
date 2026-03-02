@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using DG.Tweening;
+using System;
 
 public class CursedListUI : MonoBehaviour
 {
@@ -26,6 +27,31 @@ public class CursedListUI : MonoBehaviour
         Refresh();
         UpdateNotchUI();
         StartCoroutine(ResetScroll());
+        
+        // 🔥 FIXED: Đăng ký nghe sự kiện để reset list
+        CursedNotchUI.OnNotchClicked += HandleNotchClicked;
+        Debug.Log("CursedListUI đã đăng ký nghe OnNotchClicked event");
+    }
+    
+    private void OnDestroy()
+    {
+        // 🔥 NEW: Unsubscribe event
+        CursedNotchUI.OnNotchClicked -= HandleNotchClicked;
+    }
+    
+    // 🔥 NEW: Xử lý khi notch được click
+    private void HandleNotchClicked(string itemId)
+    {
+        Debug.Log($"CursedListUI nhận được OnNotchClicked: {itemId}");
+        try
+        {
+            UpdateNotchUI();
+            Debug.Log("CursedListUI đã reset list thành công");
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"Lỗi khi reset list: {e.Message}");
+        }
     }
 
     void Refresh()

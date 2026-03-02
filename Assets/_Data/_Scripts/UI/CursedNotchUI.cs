@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
-//[RequireComponent(typeof(Button))]
 public class CursedNotchUI : MonoBehaviour
 {
     [SerializeField] private Image icon;
@@ -9,6 +9,8 @@ public class CursedNotchUI : MonoBehaviour
     
     private CursedObjectData _currentData;
     [SerializeField] private Button _button;
+
+    public static event Action<string> OnNotchClicked;
 
     private void Awake()
     {
@@ -39,12 +41,15 @@ public class CursedNotchUI : MonoBehaviour
 
     private void HandleNotchClick()
     {
-        if (_currentData != null)
+        if (_currentData != null && !string.IsNullOrEmpty(_currentData.id))
         {
-            var player = Object.FindFirstObjectByType<PlayerController>();
+            string itemId = _currentData.id;
+            
+            var player = UnityEngine.Object.FindFirstObjectByType<PlayerController>();
             if (player != null)
             {
-                player.EquipCursedObject(_currentData.id);
+                player.EquipCursedObject(itemId);
+                OnNotchClicked?.Invoke(itemId);
             }
         }
     }

@@ -9,10 +9,8 @@ public class UISelectionManager : MonoBehaviour
     public static UISelectionManager Instance { get; private set; }
 
     [Header("Settings")]
-    [Tooltip("Nếu tích, Array sẽ được tự động quét lại từ các con mỗi khi Enable.")]
     [SerializeField] private bool _isDynamic = true;
 
-    [Tooltip("Danh sách các UI Objects (Có thể kéo tay hoặc tự quét)")]
     public GameObject[] UIObjects;
 
     public GameObject LastSelected { get; set; }
@@ -44,7 +42,7 @@ public class UISelectionManager : MonoBehaviour
     private void CleanMissingReferences()
     {
         if (UIObjects == null) return;
-        UIObjects = UIObjects.Where(obj => obj != null).ToArray();
+        UIObjects = UIObjects.Where(obj => obj != null && obj.activeInHierarchy).ToArray();
     }
 
     private IEnumerator WaitAndInitialize()
@@ -52,7 +50,7 @@ public class UISelectionManager : MonoBehaviour
         yield return new WaitForEndOfFrame();
         InitializeFromChildren();
 
-        if (UIObjects != null && UIObjects.Length > 0 && UIObjects[0] != null)
+        if (UIObjects != null && UIObjects.Length > 0 && UIObjects[0] != null && UIObjects[0].activeInHierarchy)
         {
             EventSystem.current.SetSelectedGameObject(UIObjects[0]);
             LastSelected = UIObjects[0];
@@ -65,14 +63,28 @@ public class UISelectionManager : MonoBehaviour
         var allHandlers = GetComponentsInChildren<UISelectionHandler>(true).ToList();
         if (allHandlers.Count > 0)
         {
-            UIObjects = allHandlers.Select(h => h.gameObject).ToArray();
+            UIObjects = allHandlers.Where(h => h.gameObject.activeInHierarchy).Select(h => h.gameObject).ToArray();
+            
+            foreach (var handler in allHandlers)
+            {
+                handler.ResetScaleState();
+            }
+            
+            // 🔥 FIXED: Cần gọi SetSelectedAfterOneFrame để thực sự select object
+            if (UIObjects.Length > 0)
+            {
+                StartCoroutine(SetSelectedAfterOneFrame());
+            }
         }
     }
 
     private IEnumerator SetSelectedAfterOneFrame()
     {
         yield return null;
-        if (UIObjects.Length > 0 && UIObjects[0] != null)
+        
+        CleanMissingReferences();
+        
+        if (UIObjects.Length > 0 && UIObjects[0] != null && UIObjects[0].activeInHierarchy)
         {
             EventSystem.current.SetSelectedGameObject(UIObjects[0]);
             LastSelected = UIObjects[0];

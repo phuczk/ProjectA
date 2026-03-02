@@ -5,13 +5,13 @@
         "take": "Take"
     },
     "menu" : {
-        "start" : "Start Game",
+        "start" : "START",
         "options" : {
-            "title" : "Options",
-            "language" : "Language",
-            "audio" : "Audio",
-            "graphic" : "Graphic",
-            "keyboard" : "Keyboard",
+            "title" : "OPTIONS",
+            "language" : "LANGUAGE",
+            "audio" : "AUDIO",
+            "graphic" : "GRAPHIC",
+            "keyboard" : "KEYBOARD",
             "controls" : {
                 "title" : "Controls",
                 "jump" : "Jump",
@@ -29,12 +29,15 @@
                 "map" : "Map"
             }
         },
-        "resume" : "Resume",
+        "extras" : {
+            "title" : "EXTRAS"
+        },
+        "resume" : "RESUME",
         "achievement" : {
-            "title" : "Achievement",
+            "title" : "ACHIEVEMENT",
             "desc" : "Show your achievements"
         },
-        "exit" : "Exit Game"
+        "exit" : "EXIT"
     },
     "cursed": {
         "cunning_eyes": {

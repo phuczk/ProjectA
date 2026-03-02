@@ -22,6 +22,19 @@ public class UISelectionHandler : MonoBehaviour, IPointerEnterHandler, IPointerE
         _startScale = transform.localScale;
     }
 
+    // 🔥 NEW: Reset scale state khi được enable lại
+    private void OnEnable()
+    {
+        ResetScaleState();
+    }
+
+    // 🔥 NEW: Reset scale về trạng thái ban đầu
+    public void ResetScaleState()
+    {
+        StopAllCoroutines();
+        transform.localScale = _startScale;
+    }
+
     public void CheckQuickClick(Vector2 input)
     {
         if (_triggerDirection == NavigationTrigger.None || _button == null || !_button.interactable) return;

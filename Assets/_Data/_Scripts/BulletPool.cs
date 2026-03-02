@@ -1,10 +1,32 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BulletPool : Singleton<BulletPool>
 {
     [SerializeField] private int _initialSize = 24;
     private readonly Dictionary<GameObject, Stack<GameObject>> _pools = new();
+
+    protected override void Awake()
+    {
+        base.Awake();
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        foreach (Transform child in transform)
+        {
+            Destroy(child.gameObject);
+        }
+        
+        _pools.Clear();
+    }
 
     public GameObject Get(GameObject prefab, Vector3 position, Quaternion rotation)
     {
@@ -66,7 +88,7 @@ public class BulletPool : Singleton<BulletPool>
 
     private GameObject CreateInstance(GameObject prefab)
     {
-        var go = Instantiate(prefab, transform); // 🔥 LÀM CON CỦA BULLETPOOL
+        var go = Instantiate(prefab, transform);
         var refComp = go.GetComponent<BulletPoolRef>();
         if (refComp == null) refComp = go.AddComponent<BulletPoolRef>();
         refComp.prefab = prefab;

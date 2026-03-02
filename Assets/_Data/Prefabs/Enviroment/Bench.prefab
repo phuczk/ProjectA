@@ -188,6 +188,7 @@ GameObject:
   - component: {fileID: 7974656691177351023}
   - component: {fileID: 7026638804905625303}
   - component: {fileID: 1736247632221311606}
+  - component: {fileID: 2757211796321492141}
   m_Layer: 0
   m_Name: Bench
   m_TagString: Untagged
@@ -326,7 +327,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactText: {fileID: 4155827822248921779}
+  interactObject: {fileID: 4342355259713051387}
   _interactKey: game.interact
+--- !u!210 &2757211796321492141
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5781001919129377065}
+  m_Enabled: 1
+  m_SortingLayerID: -451849085
+  m_SortingLayer: 3
+  m_SortingOrder: 1
+  m_SortAtRoot: 0
 --- !u!1 &6518591347220825966
 GameObject:
   m_ObjectHideFlags: 0

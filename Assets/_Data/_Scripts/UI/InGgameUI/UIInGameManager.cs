@@ -142,6 +142,13 @@ public class UIInGameManager : Singleton<UIInGameManager>
         else
         {
             _bookUI.OpenToPage(pageIndex);
+            
+            var selectionManager = _bookUI.GetComponent<UISelectionManager>();
+            if (selectionManager != null)
+            {
+                selectionManager.InitializeFromChildren();
+            }
+            
             _stateChannel.RaiseRequest(GameState.Pause);
         }
     }
@@ -178,6 +185,13 @@ public class UIInGameManager : Singleton<UIInGameManager>
         {
             _bookUI.gameObject.SetActive(false); 
             panel.SetActive(true);
+            
+            var selectionManager = panel.GetComponent<UISelectionManager>();
+            if (selectionManager != null)
+            {
+                selectionManager.InitializeFromChildren();
+            }
+            
             _stateChannel.RaiseRequest(GameState.Pause);
         }
     }

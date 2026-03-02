@@ -15,6 +15,7 @@ public class MainMenuUI : MonoBehaviour, IBackHandler
     [SerializeField] private TextMeshProUGUI _playText;
     [SerializeField] private TextMeshProUGUI _settingText;
     [SerializeField] private TextMeshProUGUI _achievementText;
+    [SerializeField] private TextMeshProUGUI _extrasText;
     [SerializeField] private TextMeshProUGUI _exitText;
 
     //Setting buttons
@@ -33,6 +34,7 @@ public class MainMenuUI : MonoBehaviour, IBackHandler
     [SerializeField] private Button _playButton;
     [SerializeField] private Button _settingButton;
     [SerializeField] private Button _achievementButton;
+    [SerializeField] private Button _extrasButton;
     [SerializeField] private Button _exitButton;
 
     [Header("Setting UI - Options List")]
@@ -167,6 +169,7 @@ public class MainMenuUI : MonoBehaviour, IBackHandler
         if (_playText) _playText.text = Localization.Get("menu.start");
         if (_settingText) _settingText.text = Localization.Get("menu.options.title");
         if (_exitText) _exitText.text = Localization.Get("menu.exit");
+        if (_extrasText) _extrasText.text = Localization.Get("menu.extras.title");
         if (_achievementText) _achievementText.text = Localization.Get("menu.achievement.title");
         if (_languageText) _languageText.text = Localization.Get("menu.options.language");
         if (_graphicsText) _graphicsText.text = Localization.Get("menu.options.graphic");

@@ -21750,6 +21750,7 @@ GameObject:
   - component: {fileID: 1266704995}
   - component: {fileID: 1266704994}
   - component: {fileID: 1266704993}
+  - component: {fileID: 1266704996}
   m_Layer: 0
   m_Name: NPC (1)
   m_TagString: Untagged
@@ -21816,7 +21817,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactText: {fileID: 2106458618}
+  interactObject: {fileID: 2106458617}
   _interactKey: game.talk
+  delayShowMessage: 0
   NPCKey: Player
   dialougeText: {fileID: 11400000, guid: b4dfa07fcd3654243bf13e7d7b889f6d, type: 2}
 --- !u!4 &1266704995
@@ -21836,6 +21839,18 @@ Transform:
   - {fileID: 2106458620}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &1266704996
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1266704992}
+  m_Enabled: 1
+  m_SortingLayerID: -451849085
+  m_SortingLayer: 3
+  m_SortingOrder: 1
+  m_SortAtRoot: 0
 --- !u!1 &1267695823
 GameObject:
   m_ObjectHideFlags: 0
@@ -22830,6 +22845,7 @@ GameObject:
   - component: {fileID: 1387735386}
   - component: {fileID: 1387735385}
   - component: {fileID: 1387735384}
+  - component: {fileID: 1387735387}
   m_Layer: 0
   m_Name: NPC
   m_TagString: Untagged
@@ -22896,7 +22912,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactText: {fileID: 247709983}
+  interactObject: {fileID: 247709982}
   _interactKey: game.talk
+  delayShowMessage: 0.3
   NPCKey: Joker
   dialougeText: {fileID: 11400000, guid: c83500368e9c8f84aba71442bf3d0f3f, type: 2}
 --- !u!4 &1387735386
@@ -22908,7 +22926,7 @@ Transform:
   m_GameObject: {fileID: 1387735383}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10.25, y: -2.68, z: 0}
+  m_LocalPosition: {x: 10.25, y: -4.08, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -22916,6 +22934,18 @@ Transform:
   - {fileID: 247709985}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &1387735387
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1387735383}
+  m_Enabled: 1
+  m_SortingLayerID: -451849085
+  m_SortingLayer: 3
+  m_SortingOrder: 1
+  m_SortAtRoot: 0
 --- !u!1 &1394721618
 GameObject:
   m_ObjectHideFlags: 0
@@ -28300,6 +28330,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 774866366829147317, guid: 1f5de68b0b83ea745baa980e38b972b2, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2986235070672038267, guid: 1f5de68b0b83ea745baa980e38b972b2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.02
@@ -28348,6 +28382,10 @@ PrefabInstance:
       propertyPath: _abilityType
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7625707739032337209, guid: 1f5de68b0b83ea745baa980e38b972b2, type: 3}
+      propertyPath: delayShowMessage
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -28368,13 +28406,17 @@ PrefabInstance:
       propertyPath: _interactKey
       value: game.interact
       objectReference: {fileID: 0}
+    - target: {fileID: 1736247632221311606, guid: ec2c0061b14ef1141b1792d1f314f76f, type: 3}
+      propertyPath: delayShowMessage
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 5323087539016608165, guid: ec2c0061b14ef1141b1792d1f314f76f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.5
       objectReference: {fileID: 0}
     - target: {fileID: 5323087539016608165, guid: ec2c0061b14ef1141b1792d1f314f76f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3
+      value: -4.5
       objectReference: {fileID: 0}
     - target: {fileID: 5323087539016608165, guid: ec2c0061b14ef1141b1792d1f314f76f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -28440,6 +28482,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 616853415692842721, guid: d52740a2515ff7b438c0ff1b1dff8c8c, type: 3}
+      propertyPath: delayShowMessage
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 880015109325193010, guid: d52740a2515ff7b438c0ff1b1dff8c8c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.04
@@ -28495,7 +28541,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5703944905080311624, guid: d52740a2515ff7b438c0ff1b1dff8c8c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2013474169647783070}
-    - targetCorrespondingSourceObject: {fileID: 4373285601940692481, guid: d52740a2515ff7b438c0ff1b1dff8c8c, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 1112737889368967849, guid: d52740a2515ff7b438c0ff1b1dff8c8c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: d52740a2515ff7b438c0ff1b1dff8c8c, type: 3}
@@ -28568,11 +28614,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: GunItem
       objectReference: {fileID: 0}
+    - target: {fileID: 4985659597078696858, guid: 2f7363ea7e8ab0b4e93110cffe734a66, type: 3}
+      propertyPath: delayShowMessage
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2807596581002503003, guid: 2f7363ea7e8ab0b4e93110cffe734a66, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 3463012859878775976, guid: 2f7363ea7e8ab0b4e93110cffe734a66, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 2f7363ea7e8ab0b4e93110cffe734a66, type: 3}

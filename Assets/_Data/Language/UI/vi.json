@@ -5,13 +5,13 @@
         "take": "Lấy"
     },
     "menu" : {
-        "start" : "Bắt đầu chơi",
+        "start" : "BẮT ĐẦU",
         "options" : {
-            "title" : "Tùy chọn",
-            "language" : "Ngôn ngữ",
-            "audio" : "Âm thanh",
-            "graphic" : "Hình ảnh",
-            "keyboard" : "Bàn phím",
+            "title" : "TÙY CHỌN",
+            "language" : "NGÔN NGỮ",
+            "audio" : "ÂM THANH",
+            "graphic" : "HÌNH ẢNH",
+            "keyboard" : "BÀN PHÍM",
             "controls" : {
                 "title" : "Phím điều khiển",
                 "jump" : "Nhảy",
@@ -29,12 +29,15 @@
                 "map" : "Map"
             }
         },
-        "resume" : "Tiếp tục",
+        "extras" : {
+            "title" : "THÊM"
+        },
+        "resume" : "TIẾP TỤC",
         "achievement" : {
-            "title" : "Thành tựu",
+            "title" : "THÀNH TỰU",
             "desc" : "Hiển thị các thành tựu của bạn"
         },
-        "exit" : "Thoát Game"
+        "exit" : "THOÁT"
     },
     "cursed":{
         "cunning_eyes":{
