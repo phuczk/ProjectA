@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using GlobalEnums;
 using DG.Tweening;
+using System.Linq;
 
 public class UIInGameManager : Singleton<UIInGameManager>
 {
@@ -106,9 +107,21 @@ public class UIInGameManager : Singleton<UIInGameManager>
         if (!IsInputAllowed()) return;
         if (GameStateManager.Instance.GetCurrentState() != GameState.Pause) return;
 
-        if (_pausePanel.activeSelf && _pauseBackHandler != null)
+        var allBackHandlers = FindObjectsOfType<MonoBehaviour>()
+            .OfType<IBackHandler>()
+            .Where(h => h as MonoBehaviour != null)
+            .ToList();
+        
+        foreach (var handler in allBackHandlers)
         {
-            if (_pauseBackHandler.OnBack()) 
+            var monoHandler = handler as MonoBehaviour;
+            
+            if (!monoHandler.gameObject.activeInHierarchy)
+            {
+                continue;
+            }
+            
+            if (handler.OnBack())
             {
                 return;
             }

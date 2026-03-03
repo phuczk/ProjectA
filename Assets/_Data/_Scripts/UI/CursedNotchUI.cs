@@ -24,6 +24,7 @@ public class CursedNotchUI : MonoBehaviour
         {
             icon.sprite = data.icon;
             icon.gameObject.SetActive(true);
+            icon.gameObject.transform.localScale = Vector3.one;
             if (emptyVisual != null) emptyVisual.SetActive(false);
         }
         else

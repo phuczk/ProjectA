@@ -7,7 +7,10 @@ using System;
 public class GunSlotUI : MonoBehaviour, ISelectHandler, IDeselectHandler
 {
     [SerializeField] private Image gunIcon;
-    [SerializeField] private Color selectedColor = new Color(0.3f, 0.3f, 0.3f, 1f); // Màu tối khi được chọn
+    public float GunScale = 1.1f;
+    [SerializeField] private Color delectedColor = new Color(0.3f, 0.3f, 0.3f, 1f);
+    public bool isCurrentButton = false;
+    public bool isEquipped = false;
     
     private Button _button;
     private RectTransform _rect;
@@ -15,7 +18,8 @@ public class GunSlotUI : MonoBehaviour, ISelectHandler, IDeselectHandler
     
     public GunType GunType => _gunType;
     public Action<GunType> OnGunClicked;
-    public Action<GunType, RectTransform> OnGunSelected; // Cho scroll snap
+    public Action<GunType, RectTransform> OnGunSelected;
+    private Vector3 OriginalScale;
 
     private void Awake()
     {
@@ -24,6 +28,13 @@ public class GunSlotUI : MonoBehaviour, ISelectHandler, IDeselectHandler
 
         if (_button != null)
             _button.onClick.AddListener(() => OnGunClicked?.Invoke(_gunType));
+        OriginalScale = gunIcon.transform.localScale;
+        if (!isCurrentButton)
+        {
+            gunIcon.transform.localScale = OriginalScale / GunScale;
+            OriginalScale = gunIcon.transform.localScale;
+            gunIcon.color = delectedColor;
+        }
     }
 
     public void Initialize(GunType gunType, Sprite icon)
@@ -35,14 +46,14 @@ public class GunSlotUI : MonoBehaviour, ISelectHandler, IDeselectHandler
     
     public void OnSelect(BaseEventData eventData)
     {
-        gunIcon.transform.localScale *= 1.1f;
-        gunIcon.color = selectedColor;
+        gunIcon.transform.localScale = OriginalScale * GunScale;
+        gunIcon.color = Color.white;
         OnGunSelected?.Invoke(_gunType, _rect);
     }
 
     public void OnDeselect(BaseEventData eventData)
     {
-        gunIcon.transform.localScale /= 1.1f;
-        gunIcon.color = Color.white;
+        gunIcon.transform.localScale = OriginalScale;
+        if (!isCurrentButton) gunIcon.color = delectedColor;
     }
 }

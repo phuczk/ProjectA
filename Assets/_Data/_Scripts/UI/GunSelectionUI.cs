@@ -5,22 +5,23 @@ using System.Collections.Generic;
 using System;
 using DG.Tweening;
 
-public class GunSelectionUI : MonoBehaviour
+public class GunSelectionUI : MonoBehaviour, IBackHandler
 {
     [Header("Gun Configuration")]
     [SerializeField] private GunSlotUI currentGunSlot;
     [SerializeField] private GameObject gunSlotPrefab;
-    [SerializeField] private Transform gunListContainer;
+    [SerializeField] private RectTransform gunListContainer;
     [SerializeField] private GameObject gunListPanel;
     [SerializeField] private Button currentGunButton; 
     [SerializeField] private GunConfigSet gunConfigSet;
     
     [Header("Scroll Settings")]
-    [SerializeField] private ScrollRect gunListScrollRect;
+    [SerializeField] private RectTransform view;
     [SerializeField] private float scrollSnapDuration = 0.25f;
     
     [Header("UI References")]
     [SerializeField] private GameObject bookUI;
+    [SerializeField] private GameStateChannel stateChannel;
     
     private List<GunType> _unlockedGuns = new List<GunType>();
     private GunType _currentGun;
@@ -43,25 +44,6 @@ public class GunSelectionUI : MonoBehaviour
         if (currentGunButton != null)
         {
             currentGunButton.onClick.AddListener(ToggleGunList);
-        }
-    }
-    
-    void Update()
-    {
-        HandleESCInput();
-    }
-    
-    private void HandleESCInput()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape) && _isGunListVisible)
-        {
-            _isGunListVisible = false;
-            gunListPanel.SetActive(false);
-            
-            if (bookUI != null)
-            {
-                bookUI.SetActive(true);
-            }
         }
     }
     
@@ -111,40 +93,32 @@ public class GunSelectionUI : MonoBehaviour
                 {
                     slotUI.Initialize(gunType, GetGunSprite(gunType));
                     slotUI.OnGunClicked += HandleGunSelected;
-                    slotUI.OnGunSelected += HandleGunSlotSelected; 
+                    slotUI.OnGunSelected += (gunType, rect) => {
+                        SnapToGun(rect);
+                    }; 
                     _gunListSlots.Add(slotUI);
                 }
             }
         }
     }
     
-    private void HandleGunSlotSelected(GunType gunType, RectTransform rect)
+    private void SnapToGun(RectTransform target)
     {
-        SnapToGun(rect);
-    }
-    
-    private void SnapToGun(Transform target)
-    {
-        if (gunListScrollRect == null) return;
+        if (view == null || gunListContainer == null) return;
+        if (target == null) return;
         
-        Canvas.ForceUpdateCanvases();
-        RectTransform viewport = gunListScrollRect.viewport;
-        RectTransform content = gunListScrollRect.content;
-
-        Bounds itemBounds = RectTransformUtility.CalculateRelativeRectTransformBounds(viewport, target);
-        Bounds viewBounds = new Bounds(viewport.rect.center, viewport.rect.size);
-
-        float offset = 0f;
-        if (itemBounds.max.y > viewBounds.max.y) offset = itemBounds.max.y - viewBounds.max.y;
-        else if (itemBounds.min.y < viewBounds.min.y) offset = itemBounds.min.y - viewBounds.min.y;
-
-        if (Mathf.Approximately(offset, 0f)) return;
-
-        float targetNormalized = Mathf.Clamp01(gunListScrollRect.verticalNormalizedPosition + (offset / (content.rect.height - viewport.rect.height)));
-
+        Vector3 viewCenter = view.position;
+        Vector3 itemCenter = target.position;
+        
+        float offsetX = viewCenter.x - itemCenter.x;
+        
+        Vector3 currentContainerPos = gunListContainer.position;
+        Vector3 targetContainerPos = new Vector3(currentContainerPos.x + offsetX, currentContainerPos.y, currentContainerPos.z);
+        
         _gunScrollTween?.Kill();
-        _gunScrollTween = DOTween.To(() => gunListScrollRect.verticalNormalizedPosition, x => gunListScrollRect.verticalNormalizedPosition = x, targetNormalized, scrollSnapDuration)
-            .SetEase(Ease.OutCubic).SetUpdate(true);
+        _gunScrollTween = gunListContainer.DOMove(targetContainerPos, scrollSnapDuration)
+            .SetEase(Ease.OutCubic)
+            .SetUpdate(true);
     }
 
     private void HandleGunSelected(GunType gunType)
@@ -234,10 +208,23 @@ public class GunSelectionUI : MonoBehaviour
         {
             ToggleGunList();
         }
-        
-        if (currentGunSlot != null)
+    }
+    
+    public bool OnBack()
+    {
+        if (_isGunListVisible)
         {
-            Debug.Log("Focused on gun selection");
+            _isGunListVisible = false;
+            gunListPanel.SetActive(false);
+            
+            if (bookUI != null)
+            {
+                bookUI.SetActive(true);
+            }
+            
+            return true;
         }
+        
+        return false;
     }
 }
