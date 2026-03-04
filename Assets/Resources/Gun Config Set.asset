@@ -16,7 +16,7 @@ MonoBehaviour:
     bulletSpeed: 30
     bulletLifetime: 0.4
     bulletRange: 0
-    cooldown: 0.4
+    cooldown: 0.5
     bulletCount: 1
     spreadAngle: 0
     damage: 5
@@ -42,9 +42,9 @@ MonoBehaviour:
     manaGain: 0.05
   Rapid:
     bulletSpeed: 35
-    bulletLifetime: 0.3
+    bulletLifetime: 0.2
     bulletRange: 0
-    cooldown: 0.18
+    cooldown: 0.2
     bulletCount: 1
     spreadAngle: 0
     damage: 2

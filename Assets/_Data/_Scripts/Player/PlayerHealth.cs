@@ -60,7 +60,7 @@ public class PlayerHealth : MonoBehaviour, ISaveable, ISoundEmitter
         _blinkWait = new WaitForSeconds(0.08f);
         _invincibleWait = new WaitForSeconds(invincibleDuration);
         _inputHandler = GetComponent<PlayerInputHandler>();
-        var data = SaveSystemz.Load();
+        var data = SaveSystem.Load();
         if (data != null && data.player != null)
         {
             MaxHealth = data.player.maxHealth;
@@ -303,7 +303,7 @@ public class PlayerHealth : MonoBehaviour, ISaveable, ISoundEmitter
 
     private string GetRespawnScene()
     {
-        var saveData = SaveSystemz.Load();
+        var saveData = SaveSystem.Load();
         if (saveData?.world != null && !string.IsNullOrEmpty(saveData.world.currentSceneName))
         {
             return saveData.world.currentSceneName;
@@ -315,7 +315,7 @@ public class PlayerHealth : MonoBehaviour, ISaveable, ISoundEmitter
     
     private Vector3 FindRespawnPosition()
     {
-        var saveData = SaveSystemz.Load();
+        var saveData = SaveSystem.Load();
         if (saveData?.player != null)
         {
             Vector3 savedPosition = saveData.player.position;

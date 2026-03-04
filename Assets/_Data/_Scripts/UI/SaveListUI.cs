@@ -26,7 +26,7 @@ public class SaveListUI : MonoBehaviour
             Object.Destroy(it.gameObject);
         }
         _items.Clear();
-        var slots = _manager != null ? _manager.GetSlots() : new List<SaveSystemz.SaveSlotInfo>();
+        var slots = _manager != null ? _manager.GetSlots() : new List<SaveSystem.SaveSlotInfo>();
         foreach (var info in slots)
         {
             var item = Object.Instantiate(_itemPrefab, _listRoot);
@@ -39,7 +39,6 @@ public class SaveListUI : MonoBehaviour
     {
         _manager ??= Object.FindFirstObjectByType<SaveManager>();
         if (_manager == null) return;
-        Debug.Log($"Load slot {slot}");
         _manager.LoadSlot(slot);
         _stateChannel.RaiseRequest(GameState.Playing);
         Refresh();
@@ -47,7 +46,7 @@ public class SaveListUI : MonoBehaviour
 
     public void OnSlotRightClick(int slot)
     {
-        SaveSystemz.DeleteSlot(slot);
+        SaveSystem.DeleteSlot(slot);
         Refresh();
     }
     

@@ -13,10 +13,8 @@ public class BulletController : MonoBehaviour
     private float _speed;
     public Vector3 _direction;
 
-
     private PlayerHealth playerHealth;
     private Rigidbody2D _rb;
-
     private Vector3 _inheritedVel;
 
     private void Awake()
@@ -39,6 +37,16 @@ public class BulletController : MonoBehaviour
         _spawnTime = Time.time;
         _isPlayerBullet = isPlayerBullet;
         _isActive = true;
+
+        // 🔥 FIXED: Cộng thêm currentDamage từ PlayerData
+        if (isPlayerBullet)
+        {
+            var save = SaveManager.Instance != null ? SaveManager.Instance.CurrentData : SaveSystem.Load();
+            if (save?.player != null)
+            {
+                _damage += save.player.currentDamage;
+            }
+        }
 
         _speed = config.bulletSpeed;
         _direction = new Vector3(velocity.x, velocity.y, 0);

@@ -15,7 +15,7 @@ public class PlayerSkill : MonoBehaviour
     public void TrySpecialSkill(Vector2 inputDir)
     {
         if (!_ability.Has(AbilityType.SpecialSkill)) return;
-        var data = SaveSystemz.Load();
+        var data = SaveSystem.Load();
         if (data.player == null) data.player = new PlayerData();
         _health.TryUseMana(3);
     }

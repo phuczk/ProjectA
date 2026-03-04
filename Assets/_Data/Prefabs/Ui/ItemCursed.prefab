@@ -54,6 +54,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: {fileID: 6532984952022129462}
+  equippedColor: {r: 0.3, g: 0.3, b: 0.3, a: 1}
 --- !u!114 &6148023347400905252
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -91,7 +92,7 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 1, g: 0.3679244, b: 0.3679244, a: 1}
+    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
     m_PressedColor: {r: 0, g: 1, b: 0.009902, a: 1}
     m_SelectedColor: {r: 0.25471687, g: 0.981536, b: 1, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}

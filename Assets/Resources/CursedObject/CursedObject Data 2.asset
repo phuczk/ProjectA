@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CursedObject Data 2
   m_EditorClassIdentifier: 
   id: poison_apple
-  type: 1
+  type: 3
   icon: {fileID: -7503982551761734889, guid: b1572a0621facd841892cda77b9351d4, type: 3}
   <Effects>k__BackingField:
   - rid: 6937331482024476672

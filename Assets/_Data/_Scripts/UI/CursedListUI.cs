@@ -28,25 +28,19 @@ public class CursedListUI : MonoBehaviour
         UpdateNotchUI();
         StartCoroutine(ResetScroll());
         
-        // 🔥 FIXED: Đăng ký nghe sự kiện để reset list
         CursedNotchUI.OnNotchClicked += HandleNotchClicked;
-        Debug.Log("CursedListUI đã đăng ký nghe OnNotchClicked event");
     }
     
     private void OnDestroy()
     {
-        // 🔥 NEW: Unsubscribe event
         CursedNotchUI.OnNotchClicked -= HandleNotchClicked;
     }
     
-    // 🔥 NEW: Xử lý khi notch được click
     private void HandleNotchClicked(string itemId)
     {
-        Debug.Log($"CursedListUI nhận được OnNotchClicked: {itemId}");
         try
         {
             UpdateNotchUI();
-            Debug.Log("CursedListUI đã reset list thành công");
         }
         catch (System.Exception e)
         {
@@ -60,7 +54,7 @@ public class CursedListUI : MonoBehaviour
         foreach (Transform child in contentRoot)
             Destroy(child.gameObject);
 
-        var save = SaveManager.Instance != null ? SaveManager.Instance.CurrentData : SaveSystemz.Load();
+        var save = SaveManager.Instance?.CurrentData;
         List<string> unlockedIds = save?.items?.unlockedCursedObjects ?? new List<string>();
         List<string> equippedIds = save?.player?.currentCursedObjects ?? new List<string>();
 
@@ -95,7 +89,7 @@ public class CursedListUI : MonoBehaviour
 
     public void RefreshItemStates()
     {
-        var save = SaveManager.Instance != null ? SaveManager.Instance.CurrentData : SaveSystemz.Load();
+        var save = SaveManager.Instance?.CurrentData;
         List<string> equippedIds = save?.player?.currentCursedObjects ?? new List<string>();
 
         foreach (var itemUI in _instantiatedItems)

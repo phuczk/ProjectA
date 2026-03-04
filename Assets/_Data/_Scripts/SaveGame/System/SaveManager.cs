@@ -17,28 +17,28 @@ public class SaveManager : Singleton<SaveManager>
     {
         base.Awake();
 
-        SaveSystemz.SetActiveSlot(_defaultSlot);
+        SaveSystem.SetActiveSlot(_defaultSlot);
         PlayerSpawnService.Init(_playerPrefab.GetComponent<PlayerController>());
     }
 
     public void LoadSlot(int slot)
     {
         if (slot <= 0) slot = _defaultSlot;
-        CurrentData = SaveSystemz.LoadFromSlot(slot);
+        CurrentData = SaveSystem.LoadFromSlot(slot);
 
         OnDataLoaded?.Invoke(); 
 
         SceneFlowService.LoadScene(CurrentData);
     }
 
-    public List<SaveSystemz.SaveSlotInfo> GetSlots()
+    public List<SaveSystem.SaveSlotInfo> GetSlots()
     {
-        return SaveSystemz.ListSlots();
+        return SaveSystem.ListSlots();
     }
 
     public void SaveGame()
     {
         SaveableRegistry.SaveAll(CurrentData);
-        SaveSystemz.SaveToSlot(_defaultSlot, CurrentData);
+        SaveSystem.SaveToSlot(_defaultSlot, CurrentData);
     }
 }

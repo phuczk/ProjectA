@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using GlobalEnums;
 
 public class CursedNotchManager : Singleton<CursedNotchManager>
 {
@@ -14,6 +15,8 @@ public class CursedNotchManager : Singleton<CursedNotchManager>
     
     private List<CursedNotchUI> notchSlots = new List<CursedNotchUI>();
     private PlayerController _playerController;
+
+    public CursedList CursedList => cursedList;
 
     protected override void Awake()
     {
@@ -41,6 +44,12 @@ public class CursedNotchManager : Singleton<CursedNotchManager>
             var notch = Instantiate(notchPrefab, container);
             notch.name = $"Notch_{i}";
             
+            if (i == 0)
+            {
+                notch.name = "SkillNotch_0";
+                notch.gameObject.transform.localScale = Vector3.one * 1.5f;
+            }
+            
             notch.gameObject.SetActive(true); 
             notch.Clear();
             notchSlots.Add(notch);
@@ -54,11 +63,23 @@ public class CursedNotchManager : Singleton<CursedNotchManager>
 
     public void RefreshNotchDisplay()
     {
-        var save = SaveManager.Instance != null ? SaveManager.Instance.CurrentData : SaveSystemz.Load();
+        var save = SaveManager.Instance != null ? SaveManager.Instance.CurrentData : SaveSystem.Load();
         if (save?.player == null || cursedList == null) return;
 
         int currentNotchCount = save.player.currentNotch; 
-        var equippedItemIds = save.player.currentCursedObjects; 
+        var equippedItemIds = new List<string>(save.player.currentCursedObjects);
+
+        var skillItem = equippedItemIds.FirstOrDefault(id => 
+        {
+            var item = cursedList.GetById(id);
+            return item != null && item.type == CursedObjectType.Skill;
+        });
+
+        var normalItems = equippedItemIds.Where(id => 
+        {
+            var item = cursedList.GetById(id);
+            return item != null && item.type != CursedObjectType.Skill;
+        }).ToList();
 
         for (int i = 0; i < notchSlots.Count; i++)
         {
@@ -67,29 +88,133 @@ public class CursedNotchManager : Singleton<CursedNotchManager>
 
             if (isSlotUnlocked)
             {
-                if (i < equippedItemIds.Count)
+                if (i == 0)
                 {
-                    var itemData = cursedList.GetById(equippedItemIds[i]);
-                    if (itemData != null) notchSlots[i].SetItem(itemData);
+                    if (skillItem != null)
+                    {
+                        var itemData = cursedList.GetById(skillItem);
+                        if (itemData != null)
+                        {
+                            notchSlots[i].SetItem(itemData);
+                        }
+                        else
+                        {
+                            notchSlots[i].Clear();
+                        }
+                    }
+                    else
+                    {
+                        notchSlots[i].Clear();
+                    }
                 }
                 else
                 {
-                    notchSlots[i].Clear(); 
+                    int normalIndex = i - 1;
+                    if (normalIndex < normalItems.Count)
+                    {
+                        var itemData = cursedList.GetById(normalItems[normalIndex]);
+                        if (itemData != null)
+                        {
+                            notchSlots[i].SetItem(itemData);
+                        }
+                        else
+                        {
+                            notchSlots[i].Clear();
+                        }
+                    }
+                    else
+                    {
+                        notchSlots[i].Clear();
+                    }
                 }
             }
         }
     }
 
+    public bool CanEquipItem(string cursedId, int notchIndex)
+    {
+        var itemData = cursedList.GetById(cursedId);
+        if (itemData == null) return false;
+
+        if (notchIndex == 0)
+        {
+            return itemData.type == CursedObjectType.Skill;
+        }
+
+        if (itemData.type == CursedObjectType.Skill)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    public bool TryEquipItemToNotch(string cursedId, int notchIndex)
+    {
+        if (!CanEquipItem(cursedId, notchIndex)) return false;
+
+        var save = SaveManager.Instance != null ? SaveManager.Instance.CurrentData : SaveSystem.Load();
+        if (save?.player == null) return false;
+
+        var itemData = cursedList.GetById(cursedId);
+        if (itemData == null) return false;
+
+        if (notchIndex == 0)
+        {
+            var oldSkillIndex = save.player.currentCursedObjects.FindIndex(id => 
+            {
+                var oldItem = cursedList.GetById(id);
+                return oldItem != null && oldItem.type == CursedObjectType.Skill;
+            });
+
+            if (oldSkillIndex >= 0)
+            {
+                save.player.currentCursedObjects[oldSkillIndex] = cursedId;
+            }
+            else
+            {
+                save.player.currentCursedObjects.Insert(0, cursedId);
+            }
+        }
+        else
+        {
+            int normalIndex = notchIndex - 1;
+            
+            var normalItems = save.player.currentCursedObjects.Where(id => 
+            {
+                var item = cursedList.GetById(id);
+                return item != null && item.type != CursedObjectType.Skill;
+            }).ToList();
+            
+            if (normalIndex < normalItems.Count)
+            {
+                var oldNormalId = normalItems[normalIndex];
+                int oldIndex = save.player.currentCursedObjects.IndexOf(oldNormalId);
+                save.player.currentCursedObjects[oldIndex] = cursedId;
+            }
+            else
+            {
+                save.player.currentCursedObjects.Add(cursedId);
+            }
+        }
+
+        if (SaveManager.Instance != null) SaveManager.Instance.SaveGame();
+        else SaveSystem.Save(save);
+
+        RefreshNotchDisplay();
+        return true;
+    }
+
     public void SetNotchCount(int notchCount)
     {
         notchCount = Mathf.Clamp(notchCount, 0, maxNotches);
-        var save = SaveManager.Instance != null ? SaveManager.Instance.CurrentData : SaveSystemz.Load();
+        var save = SaveManager.Instance != null ? SaveManager.Instance.CurrentData : SaveSystem.Load();
         
         if (save.player == null) save.player = new PlayerData();
         save.player.currentNotch = notchCount;
 
         if (SaveManager.Instance != null) SaveManager.Instance.SaveGame();
-        else SaveSystemz.Save(save);
+        else SaveSystem.Save(save);
 
         RefreshNotchDisplay();
     }

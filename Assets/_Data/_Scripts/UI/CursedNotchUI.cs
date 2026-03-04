@@ -1,20 +1,24 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using UnityEngine.EventSystems;
 
-public class CursedNotchUI : MonoBehaviour
+public class CursedNotchUI : MonoBehaviour, ISelectHandler, IDeselectHandler
 {
     [SerializeField] private Image icon;
-    [SerializeField] private GameObject emptyVisual;
+    [SerializeField] private Image emptyVisual;
     
     private CursedObjectData _currentData;
     [SerializeField] private Button _button;
+    [SerializeField] private float scale = 1.5f;
+    private Vector3 _defaultScale;
 
     public static event Action<string> OnNotchClicked;
 
     private void Awake()
     {
         _button?.onClick.AddListener(HandleNotchClick);
+        _defaultScale = icon.transform.localScale;
     }
 
     public void SetItem(CursedObjectData data)
@@ -24,8 +28,7 @@ public class CursedNotchUI : MonoBehaviour
         {
             icon.sprite = data.icon;
             icon.gameObject.SetActive(true);
-            icon.gameObject.transform.localScale = Vector3.one;
-            if (emptyVisual != null) emptyVisual.SetActive(false);
+            if (emptyVisual != null) emptyVisual.gameObject.SetActive(false);
         }
         else
         {
@@ -37,7 +40,7 @@ public class CursedNotchUI : MonoBehaviour
     {
         _currentData = null;
         icon.gameObject.SetActive(false);
-        if (emptyVisual != null) emptyVisual.SetActive(true);
+        if (emptyVisual != null) emptyVisual.gameObject.SetActive(true);
     }
 
     private void HandleNotchClick()
@@ -53,5 +56,15 @@ public class CursedNotchUI : MonoBehaviour
                 OnNotchClicked?.Invoke(itemId);
             }
         }
+    }
+    
+    public void OnSelect(BaseEventData eventData)
+    {
+        icon.transform.localScale = _defaultScale * scale;
+    }
+
+    public void OnDeselect(BaseEventData eventData)
+    {
+        icon.transform.localScale = _defaultScale;
     }
 }

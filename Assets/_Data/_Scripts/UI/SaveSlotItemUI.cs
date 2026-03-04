@@ -16,7 +16,7 @@ public class SaveSlotItemUI : MonoBehaviour, IPointerClickHandler
     private int _slot;
     private SaveListUI _owner;
 
-    public void Setup(SaveSystemz.SaveSlotInfo info, SaveListUI owner)
+    public void Setup(SaveSystem.SaveSlotInfo info, SaveListUI owner)
     {
         _slot = info.slot;
         _owner = owner;
@@ -36,14 +36,12 @@ public class SaveSlotItemUI : MonoBehaviour, IPointerClickHandler
     private void LoadSlot()
     {
         transform.DOKill(true);
-        Debug.Log($"Click slot {_slot}");
         _owner.OnSlotLeftClick(_slot);
     }
 
     private void DeleteSlot()
     {
         transform.DOKill(true);
-        Debug.Log($"Click delete slot {_slot}");
         transform.localScale = Vector3.one * 0.98f;
             transform.DOScale(1f, 0.12f)
                 .SetEase(Ease.OutBack)

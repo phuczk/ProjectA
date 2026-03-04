@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CursedObject Data 1
   m_EditorClassIdentifier: 
   id: blood_cloak
-  type: 1
+  type: 3
   icon: {fileID: -7503982551761734889, guid: b1572a0621facd841892cda77b9351d4, type: 3}
   <Effects>k__BackingField:
   - rid: 8716254537954099258

@@ -26,13 +26,21 @@ public class PlayerCursedObject: MonoBehaviour, ISaveable
             mgr.SaveGame();
             return;
         }
-        var data = SaveSystemz.Load();
+        var data = SaveSystem.Load();
         if (data.items == null) data.items = new ItemData();
         if (!data.items.unlockedCursedObjects.Contains(item.id))
         {
             data.items.unlockedCursedObjects.Add(item.id);
         }
-        SaveSystemz.Save(data);
+        SaveSystem.Save(data);
+    }
+
+    // 🔥 NEW: Unlock cursed object by ID
+    public void UnlockCursedObject(string cursedId)
+    {
+        // Tạo CursedObjectData tạm thời
+        var tempData = new CursedObjectData { id = cursedId };
+        OnUnlocked(tempData);
     }
     
     public void SetCurrentCursedObject(CursedObjectData item)
@@ -46,17 +54,29 @@ public class PlayerCursedObject: MonoBehaviour, ISaveable
             return;
         }
 
-        var data = SaveSystemz.Load();
+        var data = SaveSystem.Load();
         if (data.player == null) data.player = new PlayerData();
         data.player.currentCursedObjects = new List<string>() { item.id};
-        SaveSystemz.Save(data);
+        SaveSystem.Save(data);
     }
 
     public void SaveData(SaveData data)
     {
-        data.items.unlockedCursedObjects.Clear();
+        // 🔥 FIXED: Không clear unlockedCursedObjects, chỉ sync missing items
+        if (data.items?.unlockedCursedObjects == null)
+        {
+            if (data.items == null) data.items = new ItemData();
+            data.items.unlockedCursedObjects = new List<string>();
+        }
+
+        // Chỉ add items từ _unlocked set mà chưa có trong list
         foreach (var id in _unlocked)
-            data.items.unlockedCursedObjects.Add(id);
+        {
+            if (!data.items.unlockedCursedObjects.Contains(id))
+            {
+                data.items.unlockedCursedObjects.Add(id);
+            }
+        }
     }
 
     public void LoadData(SaveData data)

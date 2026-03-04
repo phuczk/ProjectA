@@ -40,7 +40,7 @@ public class EnemyListUI : MonoBehaviour
         }
         _enemyUIEntries.Clear();
         
-        var saveData = SaveSystemz.Load();
+        var saveData = SaveSystem.Load();
         
         foreach (var enemyData in enemyListData.enemies)
         {
@@ -83,7 +83,7 @@ public class EnemyListUI : MonoBehaviour
     
     public int GetEnemyDeathCount(string enemyId)
     {
-        var saveData = SaveSystemz.Load();
+        var saveData = SaveSystem.Load();
         if (saveData?.world != null)
         {
             var enemy = saveData.world.enemies.Find(e => e.id == enemyId);
@@ -94,7 +94,7 @@ public class EnemyListUI : MonoBehaviour
     
     public bool IsEnemyUnlocked(string enemyId)
     {
-        var saveData = SaveSystemz.Load();
+        var saveData = SaveSystem.Load();
         if (saveData?.world != null)
         {
             var enemy = saveData.world.enemies.Find(e => e.id == enemyId);
@@ -105,7 +105,7 @@ public class EnemyListUI : MonoBehaviour
 
     private void ShowInfo(EnemyData data)
     {
-        var saveData = SaveSystemz.Load();
+        var saveData = SaveSystem.Load();
         Enemy savedEnemy = null;
         bool hasSaveData = false;
         

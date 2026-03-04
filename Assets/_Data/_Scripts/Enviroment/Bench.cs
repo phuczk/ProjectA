@@ -19,12 +19,12 @@ public class Bench : Interactable
         }
         else
         {
-            var data = SaveSystemz.Load();
+            var data = SaveSystem.Load();
             data.player.position = new Vector3(rx, ry, 0f);
             data.world.currentSceneName = scene;
             data.world.currentBench = bench;
             data.player.currentMoney = money;
-            SaveSystemz.Save(data);
+            SaveSystem.Save(data);
         }
     }
 

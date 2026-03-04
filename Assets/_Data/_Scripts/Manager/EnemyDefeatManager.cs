@@ -27,11 +27,11 @@ public class EnemyDefeatManager : Singleton<EnemyDefeatManager>
     {
         if (string.IsNullOrEmpty(enemyId)) return;
         
-        var saveData = SaveSystemz.Load();
+        var saveData = SaveSystem.Load();
         if (saveData?.world != null)
         {
             saveData.world.OnEnemyDefeated(enemyId, enemyListData);
-            SaveSystemz.Save(saveData);
+            SaveSystem.Save(saveData);
         }
         
         if (enemyListUI != null)
@@ -47,7 +47,7 @@ public class EnemyDefeatManager : Singleton<EnemyDefeatManager>
     
     public int GetEnemyDeathCount(string enemyId)
     {
-        var saveData = SaveSystemz.Load();
+        var saveData = SaveSystem.Load();
         if (saveData?.world != null)
         {
             var enemy = saveData.world.enemies.Find(e => e.id == enemyId);
@@ -58,7 +58,7 @@ public class EnemyDefeatManager : Singleton<EnemyDefeatManager>
     
     public bool IsEnemyUnlocked(string enemyId)
     {
-        var saveData = SaveSystemz.Load();
+        var saveData = SaveSystem.Load();
         if (saveData?.world != null)
         {
             var enemy = saveData.world.enemies.Find(e => e.id == enemyId);

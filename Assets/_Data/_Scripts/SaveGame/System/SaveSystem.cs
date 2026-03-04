@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using GlobalEnums;
 
-public static class SaveSystemz
+public static class SaveSystem
 {
     private static int ActiveSlot = 1;
     private static string Dir => Application.persistentDataPath + "/saves";
@@ -35,6 +35,10 @@ public static class SaveSystemz
                 data.world = new WorldSaveData { currentSceneName = "TestScene" };
             if (data.items == null)
                 data.items = new ItemData();
+            
+            if (data.player.unlockedAbilities == null)
+                data.player.unlockedAbilities = new List<AbilityType> { AbilityType.Move };
+            
             return data;
         }
         catch (Exception ex)

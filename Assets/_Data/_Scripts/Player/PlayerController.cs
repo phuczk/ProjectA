@@ -5,6 +5,7 @@ using DG.Tweening;
 using GlobalEnums;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
@@ -207,7 +208,7 @@ public class PlayerController : MonoBehaviour, IPlayerController
         var playerHealth = GetComponent<PlayerHealth>();
         if (playerHealth != null && playerHealth.CurrentHealth <= 0)
         {
-            var saveData = SaveSystemz.Load();
+            var saveData = SaveSystem.Load();
             if (saveData?.player != null)
             {
                 Vector3 savedPosition = saveData.player.position;
@@ -315,20 +316,20 @@ public class PlayerController : MonoBehaviour, IPlayerController
     }
 
     #if UNITY_EDITOR
-    private void OnDrawGizmosSelected()
-    {
-        Vector2 up = GetUpDir();
-        Vector3 origin = transform.position;
-        Vector3 end = origin + (Vector3)up * 1.2f;
+    private void OnDrawGizmosSelected()
+    {
+        Vector2 up = GetUpDir();
+        Vector3 origin = transform.position;
+        Vector3 end = origin + (Vector3)up * 1.2f;
 
-        Gizmos.color = Color.green;
-        Gizmos.DrawLine(origin, end);
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(origin, end);
 
-        Vector3 right = Quaternion.Euler(0, 0, 20) * -up * 0.3f;
-        Vector3 left  = Quaternion.Euler(0, 0, -20) * -up * 0.3f;
-        Gizmos.DrawLine(end, end + right);
-        Gizmos.DrawLine(end, end + left);
-    }
+        Vector3 right = Quaternion.Euler(0, 0, 20) * -up * 0.3f;
+        Vector3 left = Quaternion.Euler(0, 0, -20) * -up * 0.3f;
+        Gizmos.DrawLine(end, end + right);
+        Gizmos.DrawLine(end, end + left);
+    }
     #endif
 
     private void HandleGunFireEffect(PlayerController player, Vector2 direction)
@@ -370,17 +371,17 @@ public class PlayerController : MonoBehaviour, IPlayerController
         }
     }
 
-    private Vector2 GetUpDir()
-    {
-        var g = Physics2D.gravity;
-        if (g.sqrMagnitude < 0.0001f) return Vector2.up;
-        return -g.normalized;
-    }
+    private Vector2 GetUpDir()
+    {
+        var g = Physics2D.gravity;
+        if (g.sqrMagnitude < 0.0001f) return Vector2.up;
+        return -g.normalized;
+    }
 
-    private Vector2 GetRightDir(Vector2 up)
-    {
-        return new Vector2(up.y, -up.x);
-    }
+    private Vector2 GetRightDir(Vector2 up)
+    {
+        return new Vector2(up.y, -up.x);
+    }
 
     private void OnCameraRotationComplete()
     {
@@ -396,9 +397,7 @@ public class PlayerController : MonoBehaviour, IPlayerController
         Vector2 right = GetRightDir(up);
         inputDir = inputDir.normalized;
         
-        Vector2 dir = inputDir.sqrMagnitude > 0.1f 
-            ? (inputDir.x * right + inputDir.y * up) 
-            : (_visuals.transform.localScale.x < 0 ? -right : right);
+        Vector2 dir = inputDir.sqrMagnitude > 0.1f ? (inputDir.x * right + inputDir.y * up) : (_visuals.transform.localScale.x < 0 ? -right : right);
         
         _lastAimDir = dir.normalized;
 
@@ -478,16 +477,16 @@ public class PlayerController : MonoBehaviour, IPlayerController
         _weaponSystem?.SetGunType(type);
     }
 
-    private void EnsureGunDefaults()
-    {
-        var n = _gunSet.Normal;
-        if (n.bulletSpeed <= 0) n.bulletSpeed = 30f;
-        if (n.bulletLifetime <= 0) n.bulletLifetime = 2.5f;
-        if (n.cooldown <= 0) n.cooldown = 0.15f;
-        if (n.damage <= 0) n.damage = 10f;
-        if (n.bulletCount <= 0) n.bulletCount = 1;
-        if (n.spreadAngle < 0) n.spreadAngle = 0f;
-        _gunSet.Normal = n;
+    private void EnsureGunDefaults()
+    {
+         var n = _gunSet.Normal;
+        if (n.bulletSpeed <= 0) n.bulletSpeed = 30f;
+        if (n.bulletLifetime <= 0) n.bulletLifetime = 2.5f;
+        if (n.cooldown <= 0) n.cooldown = 0.15f;
+        if (n.damage <= 0) n.damage = 10f;
+        if (n.bulletCount <= 0) n.bulletCount = 1;
+        if (n.spreadAngle < 0) n.spreadAngle = 0f;
+        _gunSet.Normal = n;
 
         var s = _gunSet.Shotgun;
         if (s.bulletSpeed <= 0) s.bulletSpeed = 22f;
@@ -498,21 +497,21 @@ public class PlayerController : MonoBehaviour, IPlayerController
         if (s.spreadAngle <= 0) s.spreadAngle = 18f;
         _gunSet.Shotgun = s;
 
-        var r = _gunSet.Rapid;
-        if (r.bulletSpeed <= 0) r.bulletSpeed = 26f;
-        if (r.bulletLifetime <= 0) r.bulletLifetime = 1.6f;
-        if (r.cooldown <= 0) r.cooldown = 0.08f;
-        if (r.damage <= 0) r.damage = 6f;
-        if (r.bulletCount <= 0) r.bulletCount = 1;
-        if (r.spreadAngle < 0) r.spreadAngle = 0f;
-        _gunSet.Rapid = r;
-    }
+        var r = _gunSet.Rapid;
+        if (r.bulletSpeed <= 0) r.bulletSpeed = 26f;
+        if (r.bulletLifetime <= 0) r.bulletLifetime = 1.6f;
+        if (r.cooldown <= 0) r.cooldown = 0.08f;
+        if (r.damage <= 0) r.damage = 6f;
+        if (r.bulletCount <= 0) r.bulletCount = 1;
+        if (r.spreadAngle < 0) r.spreadAngle = 0f;
+        _gunSet.Rapid = r;
+    }
 
 #if UNITY_EDITOR
-    private void OnValidate()
-    {
-        if (_stats == null) Debug.LogWarning("Please assign a ScriptableStats asset to the Player Controller's Stats slot", this);
-    }
+    private void OnValidate()
+    {
+        if (_stats == null) Debug.LogWarning("Please assign a ScriptableStats asset to the Player Controller's Stats slot", this);
+    }
 #endif
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -567,7 +566,7 @@ public class PlayerController : MonoBehaviour, IPlayerController
             return;
         }
 
-        var save = SaveSystemz.Load();
+        var save = SaveSystem.Load();
         if (save.items == null) save.items = new ItemData();
 
         CacheFromSave(save);
@@ -579,14 +578,14 @@ public class PlayerController : MonoBehaviour, IPlayerController
                 save.items.unlockedCursedObjects
             );
 
-            SaveSystemz.Save(save);
+            SaveSystem.Save(save);
             _cursedObject?.OnUnlocked(data);
         }
     }
 
     private void LoadActiveCursedObjects()
     {
-        var save = SaveSystemz.Load();
+        var save = SaveManager.Instance != null ? SaveManager.Instance.CurrentData : SaveSystem.Load();
         if (save == null) return;
 
         CacheFromSave(save);
@@ -607,33 +606,86 @@ public class PlayerController : MonoBehaviour, IPlayerController
     public void EquipCursedObject(string cursedId)
     {
         var mgr = SaveManager.Instance;
-        var data = mgr != null ? mgr.CurrentData : SaveSystemz.Load();
+        var data = mgr != null ? mgr.CurrentData : SaveSystem.Load();
         
         if (data.player == null || data.items == null) return;
 
         if (!data.items.unlockedCursedObjects.Contains(cursedId))
         {
-            return;
+            data.items.unlockedCursedObjects.Add(cursedId);
         }
 
-        if (data.player.currentCursedObjects.Contains(cursedId))
+        if (cursedNotchManager == null)
         {
-            data.player.currentCursedObjects.Remove(cursedId);
+            cursedNotchManager = FindAnyObjectByType<CursedNotchManager>();
         }
-        else
+
+        if (cursedNotchManager != null)
         {
-            if (data.player.currentCursedObjects.Count < data.player.currentNotch)
+            if (data.player.currentCursedObjects.Contains(cursedId))
             {
-                data.player.currentCursedObjects.Add(cursedId);
+                data.player.currentCursedObjects.Remove(cursedId);
             }
             else
             {
-                return;
+                var itemData = cursedNotchManager.CursedList?.GetById(cursedId);
+                if (itemData != null)
+                {
+                    if (itemData.type == CursedObjectType.Skill)
+                    {
+                        cursedNotchManager.TryEquipItemToNotch(cursedId, 0);
+                    }
+                    else
+                    {
+                        bool equipped = false;
+                        
+                        var currentNormalItems = data.player.currentCursedObjects.Where(id => 
+                        {
+                            var item = cursedNotchManager.CursedList.GetById(id);
+                            return item != null && item.type != CursedObjectType.Skill;
+                        }).ToList();
+
+                        for (int i = 1; i < data.player.currentNotch; i++)
+                        {
+                            if (cursedNotchManager.CanEquipItem(cursedId, i))
+                            {
+                                int normalIndex = i - 1;
+                                if (normalIndex >= currentNormalItems.Count)
+                                {
+                                    equipped = cursedNotchManager.TryEquipItemToNotch(cursedId, i);
+                                    if (equipped) break;
+                                }
+                            }
+                        }
+
+                        if (!equipped) return;
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (data.player.currentCursedObjects.Contains(cursedId))
+            {
+                data.player.currentCursedObjects.Remove(cursedId);
+            }
+            else
+            {
+                if (data.player.currentCursedObjects.Count < data.player.currentNotch)
+                {
+                    data.player.currentCursedObjects.Add(cursedId);
+                }
+                else
+                {
+                    return;
+                }
             }
         }
 
+        CacheFromSave(data);
+
         if (mgr != null) mgr.SaveGame();
-        else SaveSystemz.Save(data);
+        else SaveSystem.Save(data);
 
         cursedNotchManager?.RefreshNotchDisplay();
         LoadActiveCursedObjects();

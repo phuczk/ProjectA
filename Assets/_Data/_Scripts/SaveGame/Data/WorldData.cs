@@ -20,6 +20,11 @@ public class WorldSaveData : ISerializationCallbackReceiver
 
     public List<AreaType> unlockedMaps = new();
 
+    // 🔥 NEW: Track collected items in world
+    public List<string> collectedAbilityItems = new();
+    public List<string> collectedCursedItems = new();
+    public List<string> collectedGunItems = new();
+
     public void OnBeforeSerialize()
     {
         _visitedRoomsList.Clear();
