@@ -23,14 +23,19 @@ public class ThrowAttackNode : EnemyStateNode
     public float RecoverTime = 0.5f;
     public Vector2 SpawnOffset = new Vector2(0.5f, 0.5f);
     public int ThrowCount = 1;
+    public float Cooldown = 1.0f;
 
     private float _timer;
     private bool _hasThrown;
     private int throwCount;
+    
+    public int RemainingThrows => throwCount;
+    
+    public void DecrementThrowCount() => throwCount--;
 
     public override void Enter()
     {
-        base.Enter();
+        //base.Enter();
         IsFinished = false;
         _hasThrown = false;
         _timer = WindupTime;
@@ -51,24 +56,29 @@ public class ThrowAttackNode : EnemyStateNode
         base.ExecuteLogic();
         _timer -= Time.deltaTime;
 
-        if (!_hasThrown && _timer <= 0f && throwCount > 0)
+        if (!_hasThrown && _timer <= 0f && RemainingThrows > 0)
         {
-            PerformThrow();
+            machine.Animation.PlayAttack();
             _hasThrown = true;
             
-            _timer = RecoverTime; 
+            _timer = WindupTime + RecoverTime; 
         }
-        else if (_hasThrown && _timer <= 0f) 
+        else if (_hasThrown && _timer <= RecoverTime) 
         {
-            if (throwCount > 0) 
+            if (RemainingThrows > 0)
             {
-                _hasThrown = false; 
-                _timer = WindupTime;
-            }
-            else 
-            {
-                IsFinished = true; 
-                machine.SetCooldown("GlobalAttack", 1.0f); 
+                PerformThrow();
+                
+                if (RemainingThrows > 0) 
+                {
+                    _hasThrown = false; 
+                    _timer = WindupTime + RecoverTime;
+                }
+                else 
+                {
+                    IsFinished = true; 
+                    machine.SetCooldown("GlobalAttack", Cooldown); 
+                }
             }
         }
     }
@@ -114,7 +124,7 @@ public class ThrowAttackNode : EnemyStateNode
             default:
                 break;
         }
-        throwCount--;
+        DecrementThrowCount();
     }
 
     private void SpawnProjectile(Vector3 pos, Vector2 dir)

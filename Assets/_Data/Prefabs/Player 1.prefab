@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1554478636666879210}
   - component: {fileID: 3248692454544243136}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: enemyT_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5773333484428766663}
   - component: {fileID: 8494362841497266333}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: leftArm_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -183,7 +183,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8658002092833131648}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -233,7 +233,7 @@ GameObject:
   - component: {fileID: 5926665464882457147}
   - component: {fileID: -2304432878011252912}
   - component: {fileID: -7481076767477374935}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Player 1
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -715,7 +715,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5163234564583079784}
   - component: {fileID: 8648188406268304492}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Square (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -802,7 +802,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8270702868621185380}
   - component: {fileID: 2619414752390164621}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: VisualAnim
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -857,7 +857,7 @@ GameObject:
   m_Component:
   - component: {fileID: 297209642997822889}
   - component: {fileID: 4327452270369613017}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: leftArm_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -945,7 +945,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8148367224517366744}
   - component: {fileID: 8717232884434617480}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ShotGun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1036,7 +1036,7 @@ GameObject:
   - component: {fileID: 2969068311587289282}
   - component: {fileID: 2969068311587289284}
   - component: {fileID: 2969068311587289283}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: DashRing Particles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5927,7 +5927,7 @@ GameObject:
   - component: {fileID: 2969068311631949166}
   - component: {fileID: 2969068311631949152}
   - component: {fileID: 2969068311631949167}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Move Particles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10758,7 +10758,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2969068311871471201}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Particles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10797,7 +10797,7 @@ GameObject:
   - component: {fileID: 2969068311962969430}
   - component: {fileID: 2969068311962969768}
   - component: {fileID: 2969068311962969431}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10955,7 +10955,7 @@ GameObject:
   - component: {fileID: 2969068312368229176}
   - component: {fileID: 2969068312368229178}
   - component: {fileID: 2969068312368229177}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Land Particles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15846,7 +15846,7 @@ GameObject:
   - component: {fileID: 2969068312440364620}
   - component: {fileID: 2969068312440364622}
   - component: {fileID: 2969068312440364621}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Dash Particles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20679,7 +20679,7 @@ GameObject:
   - component: {fileID: 2969068312619346369}
   - component: {fileID: 2969068312619346371}
   - component: {fileID: 2969068312619346370}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Jump Particles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25571,7 +25571,7 @@ GameObject:
   - component: {fileID: 2969068312669941332}
   - component: {fileID: 2969068312669941334}
   - component: {fileID: 2969068312669941333}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Launch Particles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30460,7 +30460,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2969068312704584583}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Dash Ring
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30494,7 +30494,7 @@ GameObject:
   - component: {fileID: 2969068313154050965}
   - component: {fileID: 2969068313154050967}
   - component: {fileID: 2969068313154050966}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30608,7 +30608,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2969068313184073012}
   - component: {fileID: 2969068313184073013}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: TrailRenderer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30757,7 +30757,7 @@ GameObject:
   - component: {fileID: 2969068313322230366}
   - component: {fileID: 2969068313322230352}
   - component: {fileID: 2969068313322230367}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Double Jump Particles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35646,7 +35646,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3430450634901312133}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35678,7 +35678,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3373339039181298522}
   - component: {fileID: 6252097814210117780}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: enemyT_0 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35765,7 +35765,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2286831280575580492}
   - component: {fileID: 5321610548051387822}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ShotGun (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35853,7 +35853,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2895746904691504541}
   - component: {fileID: 5818919131561927627}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: leftArm_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35940,7 +35940,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7628570601607691617}
   - component: {fileID: 2532391104502654609}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36026,7 +36026,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2169078980493239791}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36058,7 +36058,7 @@ GameObject:
   m_Component:
   - component: {fileID: 607843381090923362}
   - component: {fileID: 7500758665093943501}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: rightArm_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36148,7 +36148,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4134690627275997839}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: CameraFollow
   m_TagString: CameraFollow
   m_Icon: {fileID: 0}
@@ -36180,7 +36180,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2042581288407110889}
   - component: {fileID: 5585075746532097747}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: PlayerHead_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36267,7 +36267,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5282884512663921860}
   - component: {fileID: 1367001141952073288}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Square (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36354,7 +36354,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9141969109933500710}
   - component: {fileID: 7207908205855246197}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: NormalGun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36444,7 +36444,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3095008083583126130}
   - component: {fileID: 3252913400452103485}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: enemyT_0 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36577,6 +36577,10 @@ PrefabInstance:
       propertyPath: InitialModule.startColor.maxColor.a
       value: 0.34117648
       objectReference: {fileID: 0}
+    - target: {fileID: 1049423943286080770, guid: 6c52ee79710704a4dab242c5ba8e0408, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 1228536841699624824, guid: 6c52ee79710704a4dab242c5ba8e0408, type: 3}
       propertyPath: looping
       value: 0
@@ -36586,8 +36590,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2023249538775352577, guid: 6c52ee79710704a4dab242c5ba8e0408, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2023249538775352577, guid: 6c52ee79710704a4dab242c5ba8e0408, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3283966305277374901, guid: 6c52ee79710704a4dab242c5ba8e0408, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3700426126769181355, guid: 6c52ee79710704a4dab242c5ba8e0408, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4394605258278862145, guid: 6c52ee79710704a4dab242c5ba8e0408, type: 3}
       propertyPath: lengthInSec
@@ -36616,6 +36632,10 @@ PrefabInstance:
     - target: {fileID: 4394605258278862145, guid: 6c52ee79710704a4dab242c5ba8e0408, type: 3}
       propertyPath: InitialModule.startColor.maxColor.a
       value: 0.41568628
+      objectReference: {fileID: 0}
+    - target: {fileID: 4824708463025786202, guid: 6c52ee79710704a4dab242c5ba8e0408, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4834697464027884440, guid: 6c52ee79710704a4dab242c5ba8e0408, type: 3}
       propertyPath: m_LocalPosition.x
@@ -36661,6 +36681,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FX_Greenlight_shrink
       objectReference: {fileID: 0}
+    - target: {fileID: 5631927496442371602, guid: 6c52ee79710704a4dab242c5ba8e0408, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 6427513168218930987, guid: 6c52ee79710704a4dab242c5ba8e0408, type: 3}
       propertyPath: playOnAwake
       value: 0
@@ -36680,6 +36704,10 @@ PrefabInstance:
     - target: {fileID: 6427513168218930987, guid: 6c52ee79710704a4dab242c5ba8e0408, type: 3}
       propertyPath: InitialModule.startLifetime.scalar
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6678328781472240036, guid: 6c52ee79710704a4dab242c5ba8e0408, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6678328781472240036, guid: 6c52ee79710704a4dab242c5ba8e0408, type: 3}
       propertyPath: m_IsActive
@@ -36804,6 +36832,10 @@ PrefabInstance:
     - target: {fileID: 6989427999890271992, guid: 6c52ee79710704a4dab242c5ba8e0408, type: 3}
       propertyPath: InitialModule.startLifetime.scalar
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7241331296273863979, guid: 6c52ee79710704a4dab242c5ba8e0408, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

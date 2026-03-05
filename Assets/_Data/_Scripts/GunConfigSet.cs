@@ -24,4 +24,6 @@ public struct GunConfig
     public AudioClip shootSound;
     public GameObject bulletPrefab;
     public float manaGain;
+    public int ammo;
+    public float reloadTime;
 }

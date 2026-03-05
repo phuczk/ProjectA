@@ -19,15 +19,14 @@ public class EnemyAIGraphWindow : EditorWindow
     }
 
     private void OnSelectionChange()
-{
-    var machine = Selection.activeGameObject?.GetComponent<EnemyUniversalMachine>();
-    
-    // Nếu chọn trúng vật thể không có Machine, không làm gì cả hoặc xóa Graph
-    if (machine != null)
     {
-        _selectedMachine = machine;
-        _graphView.Load(_selectedMachine);
+        var machine = Selection.activeGameObject?.GetComponent<EnemyUniversalMachine>();
+        
+        if (machine != null)
+        {
+            _selectedMachine = machine;
+            _graphView.Load(_selectedMachine);
+        }
     }
-}
 }
 #endif

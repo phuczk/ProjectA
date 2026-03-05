@@ -24,17 +24,31 @@ public class EnemyUniversalMachine : EntityStateMachine<EnemyUniversalMachine>
 
     public DamageFlash _damageFlash;
 
-    [Header("Global Detection")]
+    [Header("Enemy Type Detection")]
+    public EnemyMovementType EnemyType = EnemyMovementType.Ground;
+    
+    [Header("Global Detection - Air Enemy")]
     public float AttackRange = 2f;
     public float ChaseRange = 5f;
+    
+    [Header("Global Detection - Ground Enemy")]
+    public float GroundChaseDistance = 8f;
+    public float GroundChaseSpread = 30f;
+    public float GroundAttackDistance = 3f;
+    public float GroundAttackSpread = 15f;
+    public int GroundRayCount = 3;
+    
+    [Header("Ground Enemy - Back Detection")]
+    public bool EnableBackDetection = true;
+    public float BackChaseDistance = 4f;
+    public float BackChaseSpread = 45f;
+    public float BackAttackDistance = 2f;
+    public float BackAttackSpread = 30f;
+    public int BackRayCount = 3;
+    
+    [Header("Ground Movement")]
     public float GroundCheckDistance = 2.5f;
     public float WallCheckDistance = 1.5f;
-    
-    [Header("Raycast Fan Detection")]
-    public bool UseRaycastFan = false;
-    public float FanAngle = 60f;
-    public int RayCount = 5;
-    public float RayDistance = 8f;
 
     public LayerMask CharacterLayer;
     public LayerMask GroundLayer;
@@ -100,7 +114,11 @@ public class EnemyUniversalMachine : EntityStateMachine<EnemyUniversalMachine>
         if (!_typeToNodes.ContainsKey(type)) return;
 
         if (type == EnemyStateType.Attack && _currentNode?.StateType == EnemyStateType.Attack && !_currentNode.IsFinished) 
-            return;
+        {
+            if (!(_currentNode is ThrowAttackNode throwNode && throwNode.RemainingThrows > 1))
+                return;
+        }
+
         var potentialNodes = _typeToNodes[type];
         if (potentialNodes.Count == 0) return;
 
@@ -131,6 +149,13 @@ public class EnemyUniversalMachine : EntityStateMachine<EnemyUniversalMachine>
         _cachedRaycastDir = CachedTransform.localScale.x >= 0 ? 1 : -1;
         _isGroundAhead = HasGroundAheadInternal(_cachedRaycastDir);
         _isWallAhead = HasWallAheadInternal(_cachedRaycastDir);
+
+        if (Target != null)
+        {
+            Vector2 toPlayer = (Target.position - CachedTransform.position).normalized;
+            int newDir = toPlayer.x >= 0 ? 1 : -1;
+            LastSeenDir = newDir;
+        }
 
         _currentNode?.LogicUpdate();
     }
@@ -189,22 +214,38 @@ public class EnemyUniversalMachine : EntityStateMachine<EnemyUniversalMachine>
     public bool IsPlayerInAttackRange()
     {
         if (Target == null) return false;
-        return (CachedTransform.position - Target.position).sqrMagnitude <= AttackRange * AttackRange;
+        
+        if (EnemyType == EnemyMovementType.Air)
+        {
+            return (CachedTransform.position - Target.position).sqrMagnitude <= AttackRange * AttackRange;
+        }
+        else
+        {
+            bool frontDetection = IsPlayerDetectedByGroundRaycast(true);
+            bool backDetection = IsPlayerDetectedByBackRaycast(true);
+            
+            return frontDetection || backDetection;
+        }
     }
 
     public bool IsPlayerInChaseRange()
     {
         if (Target == null) return false;
         
-        if (UseRaycastFan)
+        if (EnemyType == EnemyMovementType.Air)
         {
-            return IsPlayerDetectedByRaycastFan();
+            return (CachedTransform.position - Target.position).sqrMagnitude <= ChaseRange * ChaseRange;
         }
-        
-        return (CachedTransform.position - Target.position).sqrMagnitude <= ChaseRange * ChaseRange;
+        else
+        {
+            bool frontDetection = IsPlayerDetectedByGroundRaycast(false);
+            bool backDetection = IsPlayerDetectedByBackRaycast(false);
+            
+            return frontDetection || backDetection;
+        }
     }
     
-    public bool IsPlayerDetectedByRaycastFan()
+    private bool IsPlayerDetectedByGroundRaycast(bool isAttackRange)
     {
         if (Target == null) return false;
         
@@ -212,32 +253,91 @@ public class EnemyUniversalMachine : EntityStateMachine<EnemyUniversalMachine>
         Vector2 toPlayer = (Vector2)Target.position - enemyPos;
         float distanceToPlayer = toPlayer.magnitude;
         
-        if (distanceToPlayer > RayDistance) return false;
+        float maxDistance = isAttackRange ? GroundAttackDistance : GroundChaseDistance;
+        float maxAngle = isAttackRange ? GroundAttackSpread : GroundChaseSpread;
+        
+        if (distanceToPlayer > maxDistance) return false;
         
         int facingDir = LastSeenDir;
         Vector2 forwardDir = new Vector2(facingDir, 0);
         
         float angleToPlayer = Vector2.Angle(forwardDir, toPlayer);
+        if (angleToPlayer > maxAngle) return false;
         
-        if (angleToPlayer > FanAngle / 2f) return false;
+        float angleStep = (maxAngle * 2f) / (GroundRayCount - 1);
+        float startAngle = -maxAngle;
         
-        float angleStep = FanAngle / (RayCount - 1);
-        float startAngle = -FanAngle / 2f;
+        int hitCount = 0;
         
-        for (int i = 0; i < RayCount; i++)
+        for (int i = 0; i < GroundRayCount; i++)
         {
             float currentAngle = startAngle + angleStep * i;
             Vector2 rayDirection = Quaternion.Euler(0, 0, currentAngle * facingDir) * forwardDir;
             
-            RaycastHit2D hit = Physics2D.Raycast(enemyPos, rayDirection, RayDistance, CharacterLayer);
+            RaycastHit2D hit = Physics2D.Raycast(enemyPos, rayDirection, maxDistance, CharacterLayer);
             
             if (hit.collider != null && hit.collider.transform == Target)
             {
-                return true;
+                hitCount++;
+                
+                Color rayColor = isAttackRange ? Color.red : Color.blue;
+                Debug.DrawRay(enemyPos, rayDirection * maxDistance, rayColor, 0.1f);
+            }
+            else
+            {
+                Debug.DrawRay(enemyPos, rayDirection * maxDistance, Color.gray, 0.1f);
             }
         }
         
-        return false;
+        return hitCount > 0;
+    }
+    
+    private bool IsPlayerDetectedByBackRaycast(bool isAttackRange)
+    {
+        if (Target == null) return false;
+        if (!EnableBackDetection) return false;
+        
+        Vector2 enemyPos = CachedTransform.position;
+        Vector2 toPlayer = (Vector2)Target.position - enemyPos;
+        float distanceToPlayer = toPlayer.magnitude;
+        
+        float maxDistance = isAttackRange ? BackAttackDistance : BackChaseDistance;
+        float maxAngle = isAttackRange ? BackAttackSpread : BackChaseSpread;
+        
+        if (distanceToPlayer > maxDistance) return false;
+        
+        int facingDir = LastSeenDir;
+        Vector2 backwardDir = new Vector2(-facingDir, 0);
+        
+        float angleToPlayer = Vector2.Angle(backwardDir, toPlayer);
+        if (angleToPlayer > maxAngle) return false;
+        
+        float angleStep = (maxAngle * 2f) / (BackRayCount - 1);
+        float startAngle = -maxAngle;
+        
+        int hitCount = 0;
+        
+        for (int i = 0; i < BackRayCount; i++)
+        {
+            float currentAngle = startAngle + angleStep * i;
+            Vector2 rayDirection = Quaternion.Euler(0, 0, currentAngle * facingDir) * backwardDir;
+            
+            RaycastHit2D hit = Physics2D.Raycast(enemyPos, rayDirection, maxDistance, CharacterLayer);
+            
+            if (hit.collider != null && hit.collider.transform == Target)
+            {
+                hitCount++;
+                
+                Color rayColor = isAttackRange ? Color.yellow : Color.green;
+                Debug.DrawRay(enemyPos, rayDirection * maxDistance, rayColor, 0.1f);
+            }
+            else
+            {
+                Debug.DrawRay(enemyPos, rayDirection * maxDistance, Color.gray, 0.1f);
+            }
+        }
+        
+        return hitCount > 0;
     }
 
     public bool HasGroundAhead(int dir)
@@ -278,20 +378,83 @@ public class EnemyUniversalMachine : EntityStateMachine<EnemyUniversalMachine>
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = new Color(0, 0, 1, 0.2f);
-        Gizmos.DrawWireSphere(transform.position, ChaseRange);
-        Gizmos.color = new Color(1, 0, 0, 0.2f);
-        Gizmos.DrawWireSphere(transform.position, AttackRange);
+        if (EnemyType == EnemyMovementType.Air)
+        {
+            Gizmos.color = new Color(0, 0, 1, 0.2f);
+            Gizmos.DrawWireSphere(transform.position, ChaseRange);
+            Gizmos.color = new Color(1, 0, 0, 0.2f);
+            Gizmos.DrawWireSphere(transform.position, AttackRange);
+        }
+        else
+        {
+            int currentDir = transform.localScale.x >= 0 ? 1 : -1;
+            Vector2 enemyPos = transform.position;
+            Vector2 forwardDir = new Vector2(currentDir, 0);
+            Vector2 backwardDir = new Vector2(-currentDir, 0);
+            
+            float frontChaseAngleStep = (GroundChaseSpread * 2f) / (GroundRayCount - 1);
+            float frontChaseStartAngle = -GroundChaseSpread;
+            
+            Gizmos.color = new Color(0, 0, 1, 0.3f);
+            for (int i = 0; i < GroundRayCount; i++)
+            {
+                float currentAngle = frontChaseStartAngle + frontChaseAngleStep * i;
+                Vector2 rayDirection = Quaternion.Euler(0, 0, currentAngle * currentDir) * forwardDir;
+                Gizmos.DrawRay(enemyPos, rayDirection * GroundChaseDistance);
+            }
+            
+            if (EnableBackDetection)
+            {
+                float backChaseAngleStep = (BackChaseSpread * 2f) / (BackRayCount - 1);
+                float backChaseStartAngle = -BackChaseSpread;
+                
+                Gizmos.color = new Color(1, 0.5f, 0, 0.3f); // Orange for back chase
+                for (int i = 0; i < BackRayCount; i++)
+                {
+                    float currentAngle = backChaseStartAngle + backChaseAngleStep * i;
+                    Vector2 rayDirection = Quaternion.Euler(0, 0, currentAngle * currentDir) * backwardDir;
+                    Gizmos.DrawRay(enemyPos, rayDirection * BackChaseDistance);
+                }
+            }
+            
+            float frontAttackAngleStep = (GroundAttackSpread * 2f) / (GroundRayCount - 1);
+            float frontAttackStartAngle = -GroundAttackSpread;
+            
+            Gizmos.color = new Color(1, 0, 0, 0.3f);
+            for (int i = 0; i < GroundRayCount; i++)
+            {
+                float currentAngle = frontAttackStartAngle + frontAttackAngleStep * i;
+                Vector2 rayDirection = Quaternion.Euler(0, 0, currentAngle * currentDir) * forwardDir;
+                Gizmos.DrawRay(enemyPos, rayDirection * GroundAttackDistance);
+            }
+            
+            if (EnableBackDetection)
+            {
+                float backAttackAngleStep = (BackAttackSpread * 2f) / (BackRayCount - 1);
+                float backAttackStartAngle = -BackAttackSpread;
+                
+                Gizmos.color = new Color(1, 1, 0, 0.3f);
+                for (int i = 0; i < BackRayCount; i++)
+                {
+                    float currentAngle = backAttackStartAngle + backAttackAngleStep * i;
+                    Vector2 rayDirection = Quaternion.Euler(0, 0, currentAngle * currentDir) * backwardDir;
+                    Gizmos.DrawRay(enemyPos, rayDirection * BackAttackDistance);
+                }
+            }
+        }
 
-        int currentDir = transform.localScale.x >= 0 ? 1 : -1;
+        if (EnemyType == EnemyMovementType.Ground)
+        {
+            int currentDir = transform.localScale.x >= 0 ? 1 : -1;
 
-        Vector2 groundOrigin = (Vector2)transform.position + Vector2.right * currentDir * 0.5f;
-        Gizmos.color = _isGroundAhead ? Color.green : Color.red;
-        Gizmos.DrawLine(groundOrigin, groundOrigin + Vector2.down * GroundCheckDistance);
+            Vector2 groundOrigin = (Vector2)transform.position + Vector2.right * currentDir * 0.5f;
+            Gizmos.color = _isGroundAhead ? Color.green : Color.red;
+            Gizmos.DrawLine(groundOrigin, groundOrigin + Vector2.down * GroundCheckDistance);
 
-        Vector2 wallOrigin = (Vector2)transform.position + Vector2.up * 0.5f;
-        Gizmos.color = _isWallAhead ? Color.red : Color.green;
-        Gizmos.DrawLine(wallOrigin, wallOrigin + Vector2.right * currentDir * WallCheckDistance);
+            Vector2 wallOrigin = (Vector2)transform.position + Vector2.up * 0.5f;
+            Gizmos.color = _isWallAhead ? Color.red : Color.green;
+            Gizmos.DrawLine(wallOrigin, wallOrigin + Vector2.right * currentDir * WallCheckDistance);
+        }
 
         if (_currentNode != null && _currentNode.StateType == EnemyStateType.Chase)
         {

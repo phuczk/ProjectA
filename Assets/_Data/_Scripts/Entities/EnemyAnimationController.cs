@@ -40,14 +40,21 @@ public class EnemyAnimationController : MonoBehaviour
 
     public void PlayAnimationByName(string animName)
     {
-        if (_currentAnimName == animName) return;
-
+        bool shouldReset = _currentAnimName == animName && animName == "attack";
+        
         ResetAllBools();
         
         _currentAnimName = animName;
         _currentAnimHash = Animator.StringToHash(animName);
         
-        animator.SetBool(_currentAnimHash, true);
+        if (shouldReset)
+        {
+            animator.Play("attack", 0, 0f);
+        }
+        else
+        {
+            animator.SetBool(_currentAnimHash, true);
+        }
     }
 
     public void PlayIdle() => PlayAnimationByName("idle");
@@ -62,14 +69,13 @@ public class EnemyAnimationController : MonoBehaviour
 
     public void SetActionFinished(bool finished)
     {
-        // "isActionFinished" là tên Parameter bạn đặt trong Animator transition
         animator.SetBool("isActionFinished", finished);
     }
 
     public void PlayComplexAction(string startAnimName)
     {
         ResetAllBools();
-        animator.SetBool("isActionFinished", false); // Reset lại flag
+        animator.SetBool("isActionFinished", false);
         PlayAnimationByName(startAnimName);
     }
 

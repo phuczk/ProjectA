@@ -39,6 +39,13 @@
         },
         "exit" : "THOÁT"
     },
+    "ui": {
+        "cursed": {
+            "skill": "Kỹ năng",
+            "ability": "Khả năng",
+            "passive": "Bị động"
+        }
+    },
     "cursed":{
         "cunning_eyes":{
             "name":"Con mắt xảo trá",
@@ -49,7 +56,7 @@
             "desc":"Khi còn một hp tăng sát thương, bất tử 1 giây sau mỗi 10 giây."
         },
         "poison_apple": {
-            "name": "Táo Bốc Mùi",
+            "name": "Táo Độc",
             "desc": "Khi ăn táo này, bạn sẽ bị mùi táo kéo dài 10 giây."
         },
         "brag_bracelet": {
@@ -61,15 +68,15 @@
             "desc": "Khi mang đôi giày này, tốc độ di chuyển tăng 20%."
         },
         "magic_mirror": {
-            "name": "Gương Phép Thuật",
+            "name": "Gương Thần",
             "desc": "Phản chiếu đòn tấn công của kẻ địch trong 5 giây khi kích hoạt."
         },
         "scream_shell": {
-            "name": "Vỏ Sò Hét",
+            "name": "Vỏ Sò La Hét",
             "desc": "Phát ra tiếng hét đáng sợ làm choáng kẻ địch gần đó trong 2 giây."
         },
         "fate_card": {
-            "name": "Thẻ Số Mệnh",
+            "name": "Lá Bài Số Mệnh",
             "desc": "Ngẫu nhiên tăng hoặc giảm chỉ số của bạn 50% trong 30 giây."
         },
         "golden_egg": {

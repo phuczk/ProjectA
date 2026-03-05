@@ -27,11 +27,18 @@ public class DashAttackNode : EnemyStateNode
 
         float targetX = machine.Target != null ? machine.Target.position.x : machine.CachedTransform.position.x + machine.CachedTransform.localScale.x;
         _dashDir = (targetX > machine.CachedTransform.position.x) ? Vector2.right : Vector2.left;
-        machine.CachedTransform.localScale = new Vector3(Mathf.Sign(_dashDir.x), 1, 1);
+        FacePlayer();
         
         machine.Rb.linearVelocity = Vector2.zero;
 
         machine.Animation.SetActionFinished(false);
+    }
+
+    private void FacePlayer()
+    {
+        if (machine.Target == null) return;
+        float dir = (machine.Target.position.x > machine.CachedTransform.position.x) ? 1f : -1f;
+        machine.CachedTransform.localScale = new Vector3(dir, 1, 1);
     }
 
     public override void ExecuteLogic()
@@ -45,8 +52,6 @@ public class DashAttackNode : EnemyStateNode
                 {
                     _currentPhase = Phase.Dash;
                     _phaseTimer = DashTime;
-                    
-                    // [Animator] Chuyển sang Phase Dash. 
                 }
                 break;
 

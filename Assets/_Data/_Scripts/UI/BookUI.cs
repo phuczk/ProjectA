@@ -8,7 +8,6 @@ public class BookUI : MonoBehaviour
     [SerializeField] List<Transform> pages;
     [SerializeField] GameObject backButton;
     [SerializeField] GameObject forwardButton;
-    //[SerializeField] private MapAtlasUI mapAtlas;
     private List<PageUI> pageScripts = new List<PageUI>();
     private int index = -1;
     private bool isRotating = false;
@@ -61,43 +60,13 @@ public class BookUI : MonoBehaviour
         Vector3 endRotation = forward ? new Vector3(0, 180f, 0) : Vector3.zero;
 
         pages[movingPageIndex].DOKill();
-        //if (mapAtlas != null && contentIndex == mapIndex) mapAtlas.gameObject.SetActive(true);
         pages[movingPageIndex].DOLocalRotate(endRotation, duration)
             .SetEase(Ease.InOutSine)
             .SetUpdate(true)
-            // .OnUpdate(() => {
-            //     float yAngle = pages[movingPageIndex].localEulerAngles.y;
-            //     activePage.CheckAndSwap(yAngle, forward);
-                
-            //     float t = yAngle / 180f;
-
-            //     if (mapAtlas == null) return;
-
-            //     if (contentIndex == mapIndex + 1)
-            //     {
-            //         mapAtlas.SetReveal(1f - t, 0); 
-            //     }
-            //     else if (contentIndex == mapIndex - 1)
-            //     {
-            //         mapAtlas.SetReveal(t, 1);
-            //     }
-            //     else if (contentIndex == mapIndex)
-            //     {
-            //         float revealValue = 0.4f + (t * 0.6f);
-            //         mapAtlas.SetReveal(forward ? revealValue : 1f - (t * 0.6f), forward ? 1 : 0);
-            //     }
-            // })
             .OnComplete(() => {
                 if (forward) index++; else index--;
                 isRotating = false;
                 UpdateButtons();
-                // if (contentIndex == mapIndex + 1 || contentIndex == mapIndex - 1)
-                // {
-                //     mapAtlas.gameObject.SetActive(false);
-                // }else if (contentIndex == mapIndex)
-                // {
-                //     mapAtlas.gameObject.SetActive(true);
-                // }
                 RefreshAllPagesVisibility();
             })
             .OnKill(() => isRotating = false);

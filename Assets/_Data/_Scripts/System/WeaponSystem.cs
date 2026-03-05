@@ -23,12 +23,19 @@ public class WeaponSystem : MonoBehaviour, ISoundEmitter
     private Quaternion _armDefaultRotation;
     private bool _isPlayerWeapon;
 
+    [Header("Ammo & Reload")]
+    private int _currentAmmo;
+    private bool _isReloading;
+    private float _reloadStartTime;
+
     [Header("Impulse Settings")]
     [SerializeField] private CinemachineImpulseSource _impulseSource;
 
-    // Events
     public event System.Action<PlayerController, Vector2> OnFireTriggered;
     public event System.Action<PlayerSoundType, AudioClip> OnRequestSound;
+    public event System.Action<int, int> OnAmmoChanged;
+    public event System.Action<float> OnReloadStarted;
+    public event System.Action OnReloadCompleted;
 
     private void Awake()
     {
@@ -39,6 +46,15 @@ public class WeaponSystem : MonoBehaviour, ISoundEmitter
         if (_impulseSource == null) _impulseSource = GetComponent<CinemachineImpulseSource>();
         
         _cachedPlayerController = GetComponent<PlayerController>();
+        
+        InitializeAmmo();
+    }
+
+    private void InitializeAmmo()
+    {
+        var config = GetConfig();
+        _currentAmmo = config.ammo;
+        OnAmmoChanged?.Invoke(_currentAmmo, config.ammo);
     }
 
     public void Configure(GunConfigSet gunSet, Transform firePoint, Transform arm, GameObject visuals, 
@@ -59,18 +75,76 @@ public class WeaponSystem : MonoBehaviour, ISoundEmitter
         _isPlayerWeapon = isPlayerWeapon;
 
         if (_cachedPlayerController == null) _cachedPlayerController = GetComponent<PlayerController>();
+        
+        InitializeAmmo();
     }
 
-    public void SetGunType(GunType type) => _currentGunType = type;
+    public void SetGunType(GunType type) 
+    { 
+        _currentGunType = type;
+        InitializeAmmo();
+    }
 
     public void RequestFire(Vector2 direction, Vector2 ownerVelocity, Vector2 playerVelocity)
     {
         var config = GetConfig();
+        
+        if (_isReloading) return;
+        if (_currentAmmo <= 0)
+        {
+            StartReload();
+            return;
+        }
+        
         if (Time.time < _lastFireTime + config.cooldown) return;
 
         _lastFireTime = Time.time;
         UpdateArmRotation(direction);
         ExecuteShot(direction, ownerVelocity, config);
+        
+        _currentAmmo--;
+        OnAmmoChanged?.Invoke(_currentAmmo, config.ammo);
+        
+        if (_currentAmmo <= 0)
+        {
+            StartReload();
+        }
+    }
+
+    public void StartReload()
+    {
+        if (_isReloading || _currentAmmo >= GetConfig().ammo) return;
+        
+        var config = GetConfig();
+        _isReloading = true;
+        _reloadStartTime = Time.time;
+        
+        OnReloadStarted?.Invoke(config.reloadTime);
+        
+        DOVirtual.DelayedCall(config.reloadTime, () => {
+            CompleteReload();
+        });
+    }
+
+    private void CompleteReload()
+    {
+        var config = GetConfig();
+        _currentAmmo = config.ammo;
+        _isReloading = false;
+        
+        OnAmmoChanged?.Invoke(_currentAmmo, config.ammo);
+        OnReloadCompleted?.Invoke();
+    }
+
+    public (int current, int max) GetAmmoStatus()
+    {
+        var config = GetConfig();
+        return (_currentAmmo, config.ammo);
+    }
+
+    public bool CanShoot()
+    {
+        return !_isReloading && _currentAmmo > 0 && Time.time >= _lastFireTime + GetConfig().cooldown;
     }
 
     private void ExecuteShot(Vector2 dir, Vector2 ownerVel, GunConfig config)

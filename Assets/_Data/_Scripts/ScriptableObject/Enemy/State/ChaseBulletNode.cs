@@ -11,7 +11,7 @@ public class ChaseBulletNode : EnemyStateNode
     public GameObject ChasingProjectilePrefab;
     public int BulletCount = 3;
     public float TimeBetweenBullets = 0.3f;
-    public float SpreadAngle = 30f; // Độ lệch ban đầu khi bắn ra
+    public float SpreadAngle = 30f;
 
     [Header("Timing")]
     public float WindupTime = 0.5f;
