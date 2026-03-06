@@ -30,7 +30,6 @@ public class BossAIGraphWindow : EditorWindow
     {
         var toolbar = new Toolbar();
         
-        // Add Start Node button
         var addStartButton = new Button(() => {
             var graphView = _graphView as BossAIGraphView;
             graphView?.CreateStartNode();
@@ -38,7 +37,6 @@ public class BossAIGraphWindow : EditorWindow
         addStartButton.text = "Start";
         toolbar.Add(addStartButton);
         
-        // Add Random Node button
         var addRandomButton = new Button(() => {
             var graphView = _graphView as BossAIGraphView;
             graphView?.CreateRandomNode();
@@ -46,7 +44,6 @@ public class BossAIGraphWindow : EditorWindow
         addRandomButton.text = "Random";
         toolbar.Add(addRandomButton);
         
-        // Add Phase Node button
         var addPhaseButton = new Button(() => {
             var graphView = _graphView as BossAIGraphView;
             graphView?.CreatePhaseNode();
@@ -54,7 +51,6 @@ public class BossAIGraphWindow : EditorWindow
         addPhaseButton.text = "Phase";
         toolbar.Add(addPhaseButton);
         
-        // Add If Node button
         var addIfButton = new Button(() => {
             var graphView = _graphView as BossAIGraphView;
             graphView?.CreateIfNode();
@@ -62,7 +58,6 @@ public class BossAIGraphWindow : EditorWindow
         addIfButton.text = "If";
         toolbar.Add(addIfButton);
         
-        // Add End Node button
         var addEndButton = new Button(() => {
             var graphView = _graphView as BossAIGraphView;
             graphView?.CreateEndNode();
@@ -70,24 +65,23 @@ public class BossAIGraphWindow : EditorWindow
         addEndButton.text = "End";
         toolbar.Add(addEndButton);
         
-        // Add Skill buttons
         var addAttackButton = new Button(() => {
             var graphView = _graphView as BossAIGraphView;
-            graphView?.CreateAttackSkillNode();
+            graphView?.CreateSkillNode(typeof(AttackSkillNode));
         });
         addAttackButton.text = "Attack";
         toolbar.Add(addAttackButton);
         
         var addShootButton = new Button(() => {
             var graphView = _graphView as BossAIGraphView;
-            graphView?.CreateShootSkillNode();
+            graphView?.CreateSkillNode(typeof(ShootSkillNode));
         });
         addShootButton.text = "Shoot";
         toolbar.Add(addShootButton);
         
         var addSpecialButton = new Button(() => {
             var graphView = _graphView as BossAIGraphView;
-            graphView?.CreateSpecialSkillNode();
+            graphView?.CreateSkillNode(typeof(SpecialSkillNode));
         });
         addSpecialButton.text = "Special";
         toolbar.Add(addSpecialButton);
@@ -99,10 +93,18 @@ public class BossAIGraphWindow : EditorWindow
     {
         var machine = Selection.activeGameObject?.GetComponent<BossController>();
         
-        if (machine != null)
+        if (_selectedMachine != machine)
         {
-            _selectedMachine = machine;
-            _graphView.Load(_selectedMachine);
+            if (machine != null)
+            {
+                _selectedMachine = machine;
+                _graphView.Load(_selectedMachine);
+            }
+            else
+            {
+                _selectedMachine = null;
+                _graphView.ClearVisualOnly();
+            }
         }
     }
 }

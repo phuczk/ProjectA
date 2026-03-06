@@ -9,6 +9,17 @@ public class PhaseNode : BossNode
     public string PhaseName;
     public override BossStateType StateType => BossStateType.Phase;
 
+    public override void Enter()
+    {
+        base.Enter();
+        Debug.Log($"PhaseNode.Enter() - Entering phase: {PhaseName}");
+    }
+
+    public override void ExecuteLogic()
+    {
+        IsFinished = true;
+    }
+
     public override BossNode Execute(BossController boss)
     {
         if (boss.Animator != null && !string.IsNullOrEmpty(AnimatorState))

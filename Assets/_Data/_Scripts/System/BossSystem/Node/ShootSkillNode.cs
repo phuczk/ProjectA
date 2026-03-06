@@ -18,10 +18,15 @@ public class ShootSkillNode : SkillNode
     public override BossSkillType SkillType => BossSkillType.Shoot;
     public override BossStateType StateType => BossStateType.Shoot;
 
+    public override void Enter()
+    {
+        base.Enter();
+        Debug.Log($"ShootSkillNode.Enter() - Entering shoot state");
+    }
+
     public override void ExecuteLogic()
     {
         // Perform shoot logic here
-        Debug.Log("ShootSkillNode.ExecuteLogic() - Performing shoot");
         
         // For now, just mark as finished immediately
         // You can add bullet spawning, etc. later

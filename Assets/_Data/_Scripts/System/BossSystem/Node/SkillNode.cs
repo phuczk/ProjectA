@@ -10,6 +10,7 @@ public abstract class SkillNode : BossNode
     [Header("Base Settings")]
     public float Weight = 1f;
     public float DelayBeforeExecute = 1f;
+    public bool IsCollapsed = false; // Save collapse state
     
     [Header("Animation Settings")]
     public string AnimationName = "";
@@ -21,9 +22,7 @@ public abstract class SkillNode : BossNode
     [Header("Entry Conditions")]
     [SerializeReference, SR] public List<IBossCondition> EntryConditions = new List<IBossCondition>();
 
-    protected BossController machine;
     public abstract BossSkillType SkillType { get; }
-    public bool IsFinished { get; protected set; } = false;
 
     public virtual void Initialize(BossController bossMachine)
     {
@@ -36,22 +35,19 @@ public abstract class SkillNode : BossNode
         return true;
     }
 
-    public virtual void Enter()
+    public override void Enter()
     {
         IsFinished = false;
-        Debug.Log($"Entering {SkillType} skill");
     }
 
-    public virtual void ExecuteLogic()
+    public override void ExecuteLogic()
     {
         // Override in derived classes for specific skill logic
-        Debug.Log($"Executing {SkillType} skill");
     }
 
-    public virtual void Exit()
+    public override void Exit()
     {
         IsFinished = true;
-        Debug.Log($"Exiting {SkillType} skill");
     }
 
     public virtual void LogicUpdate()
@@ -61,14 +57,8 @@ public abstract class SkillNode : BossNode
 
     public override BossNode Execute(BossController boss)
     {
-        if (!CanEnter()) return null;
-
-        Enter();
-        ExecuteLogic();
-        Exit();
-
-        // For testing, return default next node
-        return boss.GetNode(NextNodeGuid);
+        // Call base Execute() to handle ExecuteLogic()
+        return base.Execute(boss);
     }
 
     protected virtual string GetAnimationName()

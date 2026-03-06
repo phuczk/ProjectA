@@ -22,7 +22,6 @@ public class EndNodeView : Node
         style.left = node.GraphPosition.x;
         style.top = node.GraphPosition.y;
         
-        // INPUT PORT
         Input = InstantiatePort(
             Orientation.Horizontal,
             Direction.Input,
@@ -32,7 +31,6 @@ public class EndNodeView : Node
         Input.portName = "In";
         inputContainer.Add(Input);
         
-        // INSPECTOR
         IMGUIContainer inspector = new IMGUIContainer(() =>
         {
             EditorGUILayout.LabelField("End Node", EditorStyles.boldLabel);
@@ -43,6 +41,11 @@ public class EndNodeView : Node
         
         RefreshExpandedState();
         RefreshPorts();
+    }
+    
+    public EndNode GetNode()
+    {
+        return _node;
     }
 }
 #endif

@@ -61,10 +61,16 @@ public class AttackSkillNodeView : SkillNodeView
             EditorGUILayout.LabelField($"Count: {_attackNode.Transitions.Count}", EditorStyles.helpBox);
             
             if (GUI.changed)
-                EditorUtility.SetDirty(_machine);
+                if (_machine != null)
+                    EditorUtility.SetDirty(_machine);
         });
         
         extensionContainer.Add(inspector);
+    }
+    
+    public AttackSkillNode GetNode()
+    {
+        return _attackNode;
     }
 }
 #endif

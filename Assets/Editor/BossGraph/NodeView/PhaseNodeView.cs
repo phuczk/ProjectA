@@ -24,10 +24,6 @@ public class PhaseNodeView : Node
         style.left = node.GraphPosition.x;
         style.top = node.GraphPosition.y;
 
-        //--------------------------------
-        // INPUT
-        //--------------------------------
-
         Input = InstantiatePort(
             Orientation.Horizontal,
             Direction.Input,
@@ -38,10 +34,6 @@ public class PhaseNodeView : Node
 
         inputContainer.Add(Input);
 
-        //--------------------------------
-        // OUTPUT
-        //--------------------------------
-
         Output = InstantiatePort(
             Orientation.Horizontal,
             Direction.Output,
@@ -51,10 +43,6 @@ public class PhaseNodeView : Node
         Output.portName = "Next";
 
         outputContainer.Add(Output);
-
-        //--------------------------------
-        // INSPECTOR
-        //--------------------------------
 
         IMGUIContainer inspector = new IMGUIContainer(() =>
         {
@@ -75,13 +63,19 @@ public class PhaseNodeView : Node
                 false);
 
             if (GUI.changed)
-                EditorUtility.SetDirty(_machine);
+                if (_machine != null)
+                    EditorUtility.SetDirty(_machine);
         });
 
         extensionContainer.Add(inspector);
 
         RefreshExpandedState();
         RefreshPorts();
+    }
+    
+    public PhaseNode GetNode()
+    {
+        return _node;
     }
 }
 #endif

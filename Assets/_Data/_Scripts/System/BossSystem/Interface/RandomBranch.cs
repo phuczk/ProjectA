@@ -3,6 +3,6 @@ using System;
 [Serializable]
 public class RandomBranch
 {
-    public int Percent;
+    public float Percent;
     public string NextNodeGuid;
 }

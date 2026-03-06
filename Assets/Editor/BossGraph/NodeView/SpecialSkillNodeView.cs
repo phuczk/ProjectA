@@ -61,7 +61,8 @@ public class SpecialSkillNodeView : SkillNodeView
             EditorGUILayout.LabelField($"Count: {_specialNode.Transitions.Count}", EditorStyles.helpBox);
             
             if (GUI.changed)
-                EditorUtility.SetDirty(_machine);
+                if (_machine != null)
+                    EditorUtility.SetDirty(_machine);
         });
         
         extensionContainer.Add(inspector);

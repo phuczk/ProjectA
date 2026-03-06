@@ -206,87 +206,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1001 &5735047
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1646548247}
-    m_Modifications:
-    - target: {fileID: 1736247632221311606, guid: ec2c0061b14ef1141b1792d1f314f76f, type: 3}
-      propertyPath: _interactKey
-      value: game.interact
-      objectReference: {fileID: 0}
-    - target: {fileID: 5323087539016608165, guid: ec2c0061b14ef1141b1792d1f314f76f, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -5.73
-      objectReference: {fileID: 0}
-    - target: {fileID: 5323087539016608165, guid: ec2c0061b14ef1141b1792d1f314f76f, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1.92
-      objectReference: {fileID: 0}
-    - target: {fileID: 5323087539016608165, guid: ec2c0061b14ef1141b1792d1f314f76f, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5323087539016608165, guid: ec2c0061b14ef1141b1792d1f314f76f, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5323087539016608165, guid: ec2c0061b14ef1141b1792d1f314f76f, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5323087539016608165, guid: ec2c0061b14ef1141b1792d1f314f76f, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5323087539016608165, guid: ec2c0061b14ef1141b1792d1f314f76f, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5323087539016608165, guid: ec2c0061b14ef1141b1792d1f314f76f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5323087539016608165, guid: ec2c0061b14ef1141b1792d1f314f76f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5323087539016608165, guid: ec2c0061b14ef1141b1792d1f314f76f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5502743733628841498, guid: ec2c0061b14ef1141b1792d1f314f76f, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 1.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5781001919129377065, guid: ec2c0061b14ef1141b1792d1f314f76f, type: 3}
-      propertyPath: m_Name
-      value: Bench
-      objectReference: {fileID: 0}
-    - target: {fileID: 5781001919129377065, guid: ec2c0061b14ef1141b1792d1f314f76f, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7974656691177351023, guid: ec2c0061b14ef1141b1792d1f314f76f, type: 3}
-      propertyPath: m_SortingOrder
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4342355259713051387, guid: ec2c0061b14ef1141b1792d1f314f76f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-  m_SourcePrefab: {fileID: 100100000, guid: ec2c0061b14ef1141b1792d1f314f76f, type: 3}
---- !u!4 &5735048 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5323087539016608165, guid: ec2c0061b14ef1141b1792d1f314f76f, type: 3}
-  m_PrefabInstance: {fileID: 5735047}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &21686032
 GameObject:
   m_ObjectHideFlags: 0
@@ -682,6 +601,288 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 68.7672, y: 1.5805292}
   m_EdgeRadius: 0
+--- !u!1 &233820868
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 233820871}
+  - component: {fileID: 233820870}
+  - component: {fileID: 233820869}
+  m_Layer: 0
+  m_Name: Boss
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!210 &233820869
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 233820868}
+  m_Enabled: 1
+  m_SortingLayerID: -451849085
+  m_SortingLayer: 3
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
+--- !u!114 &233820870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 233820868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 151a3ccdcf9f4b44490d8d96869caabd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StateNodes:
+  - rid: 4042312854814064799
+  - rid: 4042312854814064800
+  - rid: 4042312854814064802
+  - rid: 4042312854814064803
+  - rid: 4042312854814064806
+  - rid: 4042312854814064807
+  - rid: 4042312854814064808
+  - rid: 4042312854814064838
+  - rid: 4042312854814064839
+  - rid: 4042312854814064846
+  - rid: 4042312854814064847
+  - rid: 4042312854814064848
+  - rid: 4042312854814064849
+  DefaultStateType: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 4042312854814064799
+      type: {class: StartNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: 4ac1546e-e7c8-4bbc-86d5-df194b3c0a06
+        GraphPosition: {x: -371.2, y: 101.6}
+        NextNodeGuid: 
+        Transitions: []
+    - rid: 4042312854814064800
+      type: {class: PhaseNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: dce11273-6b91-4028-b7e7-1f5dba3ced31
+        GraphPosition: {x: -87.2, y: 101.6}
+        NextNodeGuid: 
+        Transitions: []
+        AnimatorState: 
+        PhaseAudio: {fileID: 0}
+        PhaseName: phase 1
+    - rid: 4042312854814064802
+      type: {class: AttackSkillNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: c22aad93-1ddf-495d-9955-b9951dfc8ce8
+        GraphPosition: {x: 454.4, y: 52}
+        NextNodeGuid: 
+        Transitions: []
+        Weight: 1
+        DelayBeforeExecute: 1
+        IsCollapsed: 1
+        AnimationName: 
+        UseCustomAnimation: 0
+        AnimationType: 0
+        AttackVariant: -1
+        DelayAnimation: 0
+        EntryConditions: []
+        Damage: 1
+        AttackRange: 2
+        AttackCooldown: 1
+        TargetLayer:
+          serializedVersion: 2
+          m_Bits: 0
+        AttackOffset: {x: 0, y: 0, z: 0}
+        UseAttackAnimation: 1
+    - rid: 4042312854814064803
+      type: {class: EndNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: ee48c7b6-6812-4589-9738-2878dfe6cc56
+        GraphPosition: {x: 639.2, y: 7.199999}
+        NextNodeGuid: 
+        Transitions: []
+        StartNodeGuid: 
+    - rid: 4042312854814064806
+      type: {class: IfNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: 2bdcfe4d-e78d-46da-9302-65d8c7f7eac9
+        GraphPosition: {x: 172.8, y: 112.799995}
+        NextNodeGuid: 
+        Transitions: []
+        Conditions:
+        - NextNodeGuid: c22aad93-1ddf-495d-9955-b9951dfc8ce8
+        ElseNodeGuid: 525ccbad-d2af-417d-90b6-2ecd1a1c6db5
+    - rid: 4042312854814064807
+      type: {class: ShootSkillNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: 525ccbad-d2af-417d-90b6-2ecd1a1c6db5
+        GraphPosition: {x: 478.4, y: 214.40001}
+        NextNodeGuid: 
+        Transitions: []
+        Weight: 1
+        DelayBeforeExecute: 1
+        IsCollapsed: 1
+        AnimationName: 
+        UseCustomAnimation: 0
+        AnimationType: 0
+        AttackVariant: -1
+        DelayAnimation: 0
+        EntryConditions: []
+        BulletPrefab: {fileID: 0}
+        BulletSpeed: 10
+        BulletDamage: 5
+        FireRate: 2
+        BurstCount: 1
+        BurstDelay: 0.1
+        ShootOffset: {x: 0, y: 0, z: 1}
+        AimAtPlayer: 1
+    - rid: 4042312854814064808
+      type: {class: EndNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: e9210436-3065-47f7-a966-c14e4cb33745
+        GraphPosition: {x: 1364, y: 245.6}
+        NextNodeGuid: 
+        Transitions: []
+        StartNodeGuid: 
+    - rid: 4042312854814064838
+      type: {class: ShootSkillNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: 6aded088-6c67-42f8-a5bc-9ceab0833dbb
+        GraphPosition: {x: 956.8, y: 248.80002}
+        NextNodeGuid: 
+        Transitions: []
+        Weight: 1
+        DelayBeforeExecute: 1
+        IsCollapsed: 1
+        AnimationName: 
+        UseCustomAnimation: 0
+        AnimationType: 0
+        AttackVariant: -1
+        DelayAnimation: 0
+        EntryConditions: []
+        BulletPrefab: {fileID: 0}
+        BulletSpeed: 10
+        BulletDamage: 5
+        FireRate: 2
+        BurstCount: 1
+        BurstDelay: 0.1
+        ShootOffset: {x: 0, y: 0, z: 1}
+        AimAtPlayer: 1
+    - rid: 4042312854814064839
+      type: {class: AttackSkillNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: 67c51ab2-b889-49d2-a57e-a3ef66aa823b
+        GraphPosition: {x: 1152.8, y: 246.4}
+        NextNodeGuid: 
+        Transitions: []
+        Weight: 1
+        DelayBeforeExecute: 1
+        IsCollapsed: 1
+        AnimationName: 
+        UseCustomAnimation: 0
+        AnimationType: 0
+        AttackVariant: -1
+        DelayAnimation: 0
+        EntryConditions: []
+        Damage: 1
+        AttackRange: 2
+        AttackCooldown: 1
+        TargetLayer:
+          serializedVersion: 2
+          m_Bits: 0
+        AttackOffset: {x: 0, y: 0, z: 0}
+        UseAttackAnimation: 1
+    - rid: 4042312854814064846
+      type: {class: RandomNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: 704edb9a-b6c5-4276-8292-247adb64aaa7
+        GraphPosition: {x: 681.6, y: 175.20001}
+        NextNodeGuid: 
+        Transitions: []
+        Branches:
+        - Percent: 80
+          NextNodeGuid: d9b3700a-d916-4536-afbc-273cf5c4f1bd
+        - Percent: 20
+          NextNodeGuid: 6aded088-6c67-42f8-a5bc-9ceab0833dbb
+    - rid: 4042312854814064847
+      type: {class: AttackSkillNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: d9b3700a-d916-4536-afbc-273cf5c4f1bd
+        GraphPosition: {x: 956, y: 101.6}
+        NextNodeGuid: 
+        Transitions: []
+        Weight: 1
+        DelayBeforeExecute: 1
+        IsCollapsed: 1
+        AnimationName: 
+        UseCustomAnimation: 0
+        AnimationType: 0
+        AttackVariant: -1
+        DelayAnimation: 0
+        EntryConditions: []
+        Damage: 1
+        AttackRange: 2
+        AttackCooldown: 1
+        TargetLayer:
+          serializedVersion: 2
+          m_Bits: 0
+        AttackOffset: {x: 0, y: 0, z: 0}
+        UseAttackAnimation: 1
+    - rid: 4042312854814064848
+      type: {class: ShootSkillNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: 70fd94dc-c9f2-4e32-924b-428e38761e7d
+        GraphPosition: {x: 1177.6, y: 60}
+        NextNodeGuid: 
+        Transitions: []
+        Weight: 1
+        DelayBeforeExecute: 1
+        IsCollapsed: 1
+        AnimationName: 
+        UseCustomAnimation: 0
+        AnimationType: 0
+        AttackVariant: -1
+        DelayAnimation: 0
+        EntryConditions: []
+        BulletPrefab: {fileID: 0}
+        BulletSpeed: 10
+        BulletDamage: 5
+        FireRate: 2
+        BurstCount: 1
+        BurstDelay: 0.1
+        ShootOffset: {x: 0, y: 0, z: 1}
+        AimAtPlayer: 1
+    - rid: 4042312854814064849
+      type: {class: EndNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: 29f3cd6b-e7a3-45a9-acd4-653b9de1fbb5
+        GraphPosition: {x: 1346.4, y: 52.799995}
+        NextNodeGuid: 
+        Transitions: []
+        StartNodeGuid: 
+--- !u!4 &233820871
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 233820868}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -4.88, y: -0.44, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &371722981
 GameObject:
   m_ObjectHideFlags: 0
@@ -712,6 +913,288 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 848376219}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &510658583
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 510658586}
+  - component: {fileID: 510658585}
+  - component: {fileID: 510658584}
+  m_Layer: 0
+  m_Name: Boss (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!210 &510658584
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 510658583}
+  m_Enabled: 1
+  m_SortingLayerID: -451849085
+  m_SortingLayer: 3
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
+--- !u!114 &510658585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 510658583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 151a3ccdcf9f4b44490d8d96869caabd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StateNodes:
+  - rid: 4042312854814064799
+  - rid: 4042312854814064800
+  - rid: 4042312854814064802
+  - rid: 4042312854814064803
+  - rid: 4042312854814064806
+  - rid: 4042312854814064807
+  - rid: 4042312854814064808
+  - rid: 4042312854814064838
+  - rid: 4042312854814064839
+  - rid: 4042312854814064846
+  - rid: 4042312854814064847
+  - rid: 4042312854814064848
+  - rid: 4042312854814064849
+  DefaultStateType: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 4042312854814064799
+      type: {class: StartNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: 4ac1546e-e7c8-4bbc-86d5-df194b3c0a06
+        GraphPosition: {x: -371.2, y: 101.6}
+        NextNodeGuid: dce11273-6b91-4028-b7e7-1f5dba3ced31
+        Transitions: []
+    - rid: 4042312854814064800
+      type: {class: PhaseNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: dce11273-6b91-4028-b7e7-1f5dba3ced31
+        GraphPosition: {x: -87.2, y: 101.6}
+        NextNodeGuid: 2bdcfe4d-e78d-46da-9302-65d8c7f7eac9
+        Transitions: []
+        AnimatorState: 
+        PhaseAudio: {fileID: 0}
+        PhaseName: phase 1
+    - rid: 4042312854814064802
+      type: {class: AttackSkillNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: c22aad93-1ddf-495d-9955-b9951dfc8ce8
+        GraphPosition: {x: 454.4, y: 52}
+        NextNodeGuid: ee48c7b6-6812-4589-9738-2878dfe6cc56
+        Transitions: []
+        Weight: 1
+        DelayBeforeExecute: 1
+        IsCollapsed: 1
+        AnimationName: 
+        UseCustomAnimation: 0
+        AnimationType: 0
+        AttackVariant: -1
+        DelayAnimation: 0
+        EntryConditions: []
+        Damage: 1
+        AttackRange: 2
+        AttackCooldown: 1
+        TargetLayer:
+          serializedVersion: 2
+          m_Bits: 0
+        AttackOffset: {x: 0, y: 0, z: 0}
+        UseAttackAnimation: 1
+    - rid: 4042312854814064803
+      type: {class: EndNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: ee48c7b6-6812-4589-9738-2878dfe6cc56
+        GraphPosition: {x: 639.2, y: 7.199999}
+        NextNodeGuid: 
+        Transitions: []
+        StartNodeGuid: 
+    - rid: 4042312854814064806
+      type: {class: IfNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: 2bdcfe4d-e78d-46da-9302-65d8c7f7eac9
+        GraphPosition: {x: 172.8, y: 112.799995}
+        NextNodeGuid: 
+        Transitions: []
+        Conditions:
+        - NextNodeGuid: c22aad93-1ddf-495d-9955-b9951dfc8ce8
+        ElseNodeGuid: 525ccbad-d2af-417d-90b6-2ecd1a1c6db5
+    - rid: 4042312854814064807
+      type: {class: ShootSkillNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: 525ccbad-d2af-417d-90b6-2ecd1a1c6db5
+        GraphPosition: {x: 472, y: 204.8}
+        NextNodeGuid: 704edb9a-b6c5-4276-8292-247adb64aaa7
+        Transitions: []
+        Weight: 1
+        DelayBeforeExecute: 1
+        IsCollapsed: 1
+        AnimationName: 
+        UseCustomAnimation: 0
+        AnimationType: 0
+        AttackVariant: -1
+        DelayAnimation: 0
+        EntryConditions: []
+        BulletPrefab: {fileID: 0}
+        BulletSpeed: 10
+        BulletDamage: 5
+        FireRate: 2
+        BurstCount: 1
+        BurstDelay: 0.1
+        ShootOffset: {x: 0, y: 0, z: 1}
+        AimAtPlayer: 1
+    - rid: 4042312854814064808
+      type: {class: EndNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: e9210436-3065-47f7-a966-c14e4cb33745
+        GraphPosition: {x: 1364, y: 245.6}
+        NextNodeGuid: 
+        Transitions: []
+        StartNodeGuid: 
+    - rid: 4042312854814064838
+      type: {class: ShootSkillNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: 6aded088-6c67-42f8-a5bc-9ceab0833dbb
+        GraphPosition: {x: 956.8, y: 248.80002}
+        NextNodeGuid: 70fd94dc-c9f2-4e32-924b-428e38761e7d
+        Transitions: []
+        Weight: 1
+        DelayBeforeExecute: 1
+        IsCollapsed: 1
+        AnimationName: 
+        UseCustomAnimation: 0
+        AnimationType: 0
+        AttackVariant: -1
+        DelayAnimation: 0
+        EntryConditions: []
+        BulletPrefab: {fileID: 0}
+        BulletSpeed: 10
+        BulletDamage: 5
+        FireRate: 2
+        BurstCount: 1
+        BurstDelay: 0.1
+        ShootOffset: {x: 0, y: 0, z: 1}
+        AimAtPlayer: 1
+    - rid: 4042312854814064839
+      type: {class: AttackSkillNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: 67c51ab2-b889-49d2-a57e-a3ef66aa823b
+        GraphPosition: {x: 1152.8, y: 246.4}
+        NextNodeGuid: 
+        Transitions: []
+        Weight: 1
+        DelayBeforeExecute: 1
+        IsCollapsed: 1
+        AnimationName: 
+        UseCustomAnimation: 0
+        AnimationType: 0
+        AttackVariant: -1
+        DelayAnimation: 0
+        EntryConditions: []
+        Damage: 1
+        AttackRange: 2
+        AttackCooldown: 1
+        TargetLayer:
+          serializedVersion: 2
+          m_Bits: 0
+        AttackOffset: {x: 0, y: 0, z: 0}
+        UseAttackAnimation: 1
+    - rid: 4042312854814064846
+      type: {class: RandomNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: 704edb9a-b6c5-4276-8292-247adb64aaa7
+        GraphPosition: {x: 681.6, y: 175.20001}
+        NextNodeGuid: 
+        Transitions: []
+        Branches:
+        - Percent: 80
+          NextNodeGuid: d9b3700a-d916-4536-afbc-273cf5c4f1bd
+        - Percent: 20
+          NextNodeGuid: 6aded088-6c67-42f8-a5bc-9ceab0833dbb
+    - rid: 4042312854814064847
+      type: {class: AttackSkillNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: d9b3700a-d916-4536-afbc-273cf5c4f1bd
+        GraphPosition: {x: 956, y: 101.6}
+        NextNodeGuid: 70fd94dc-c9f2-4e32-924b-428e38761e7d
+        Transitions: []
+        Weight: 1
+        DelayBeforeExecute: 1
+        IsCollapsed: 1
+        AnimationName: 
+        UseCustomAnimation: 0
+        AnimationType: 0
+        AttackVariant: -1
+        DelayAnimation: 0
+        EntryConditions: []
+        Damage: 1
+        AttackRange: 2
+        AttackCooldown: 1
+        TargetLayer:
+          serializedVersion: 2
+          m_Bits: 0
+        AttackOffset: {x: 0, y: 0, z: 0}
+        UseAttackAnimation: 1
+    - rid: 4042312854814064848
+      type: {class: ShootSkillNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: 70fd94dc-c9f2-4e32-924b-428e38761e7d
+        GraphPosition: {x: 1177.6, y: 60}
+        NextNodeGuid: 29f3cd6b-e7a3-45a9-acd4-653b9de1fbb5
+        Transitions: []
+        Weight: 1
+        DelayBeforeExecute: 1
+        IsCollapsed: 1
+        AnimationName: 
+        UseCustomAnimation: 0
+        AnimationType: 0
+        AttackVariant: -1
+        DelayAnimation: 0
+        EntryConditions: []
+        BulletPrefab: {fileID: 0}
+        BulletSpeed: 10
+        BulletDamage: 5
+        FireRate: 2
+        BurstCount: 1
+        BurstDelay: 0.1
+        ShootOffset: {x: 0, y: 0, z: 1}
+        AimAtPlayer: 1
+    - rid: 4042312854814064849
+      type: {class: EndNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: 29f3cd6b-e7a3-45a9-acd4-653b9de1fbb5
+        GraphPosition: {x: 1346.4, y: 52.799995}
+        NextNodeGuid: 
+        Transitions: []
+        StartNodeGuid: 
+--- !u!4 &510658586
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 510658583}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -4.88, y: -0.44, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &529828312
 GameObject:
@@ -1058,6 +1541,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneName: TestScene1
   spawnKey: T0
+  fadeDirection: 0
+  transitionType: 0
 --- !u!1 &848376213
 GameObject:
   m_ObjectHideFlags: 0
@@ -2616,10 +3101,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1720971697}
-  - {fileID: 1915276834}
   - {fileID: 833416432}
   - {fileID: 1632548506}
-  - {fileID: 5735048}
   - {fileID: 1155465149}
   - {fileID: 1397397967}
   - {fileID: 1571898387}
@@ -2780,93 +3263,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 4.3179693, y: 1.115947}
   m_EdgeRadius: 0
---- !u!1 &1915276833
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1915276834}
-  - component: {fileID: 1915276835}
-  m_Layer: 0
-  m_Name: Square (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1915276834
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1915276833}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.2, y: -2, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1646548247}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &1915276835
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1915276833}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -451849085
-  m_SortingLayer: 3
-  m_SortingOrder: 100
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
 --- !u!1 &1986439475
 GameObject:
   m_ObjectHideFlags: 0
@@ -3465,3 +3861,5 @@ SceneRoots:
   - {fileID: 184250250}
   - {fileID: 848376219}
   - {fileID: 758186947}
+  - {fileID: 233820871}
+  - {fileID: 510658586}

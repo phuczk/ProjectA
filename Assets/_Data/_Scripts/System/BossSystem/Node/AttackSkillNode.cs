@@ -15,13 +15,14 @@ public class AttackSkillNode : SkillNode
     public override BossSkillType SkillType => BossSkillType.Attack;
     public override BossStateType StateType => BossStateType.Attack;
 
+    public override void Enter()
+    {
+        base.Enter();
+        Debug.Log("AttackSkillNode.Enter() - Entering attack state");
+    }
+
     public override void ExecuteLogic()
     {
-        // Perform attack logic here
-        //Debug.Log("AttackSkillNode.ExecuteLogic() - Performing attack");
-        
-        // For now, just mark as finished immediately
-        // You can add attack animation, damage, etc. later
         IsFinished = true;
     }
 }

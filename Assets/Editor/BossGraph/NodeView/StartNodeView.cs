@@ -44,5 +44,10 @@ public class StartNodeView : Node
         RefreshExpandedState();
         RefreshPorts();
     }
+    
+    public StartNode GetNode()
+    {
+        return _node;
+    }
 }
 #endif

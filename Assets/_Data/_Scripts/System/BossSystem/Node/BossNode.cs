@@ -17,12 +17,13 @@ public abstract class BossNode
     
     [Header("Transition Settings")]
     [SerializeReference, SR] public List<BossTransition> Transitions = new List<BossTransition>();
-
-    //public virtual void Initialize(BossController machine) => this.machine = machine;
+    
+    private bool hasExecuted = false;
 
     public virtual void Enter()
     {
         IsFinished = false;
+        hasExecuted = false;
     }
     
     public virtual void ExecuteLogic(){}
@@ -40,8 +41,13 @@ public abstract class BossNode
 
     public virtual BossNode Execute(BossController boss)
     {
-        ExecuteLogic();
-        return null; // Default implementation - override in derived classes
+        if (!hasExecuted)
+        {
+            ExecuteLogic();
+            hasExecuted = true;
+        }
+        
+        return null;
     }
 
     public bool CanEnter(BossController machine)

@@ -3611,7 +3611,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StateNodes:
   - rid: 4042312840820293749
-  - rid: 4042312840820293750
   - rid: 4042312840820293751
   _isRunning: 0
   DefaultStateType: 0
@@ -3624,36 +3623,25 @@ MonoBehaviour:
         Guid: eac13d94-5956-44da-93e9-77f4d2a06b1f
         GraphPosition: {x: 50, y: 200}
         NextNodeGuid: 
-    - rid: 4042312840820293750
-      type: {class: AttackSkillNode, ns: , asm: Assembly-CSharp}
-      data:
-        Guid: d8390434-c3bf-49cd-bdfc-d2d1da52a744
-        GraphPosition: {x: 150, y: 300}
-        NextNodeGuid: 
-        Weight: 1
-        DelayBeforeExecute: 1
-        AnimationName: 
-        UseCustomAnimation: 0
-        AnimationType: 0
-        AttackVariant: -1
-        DelayAnimation: 0
-        EntryConditions: []
-        Transitions: []
-        Damage: 1
-        AttackRange: 2
-        AttackCooldown: 1
-        TargetLayer:
-          serializedVersion: 2
-          m_Bits: 0
-        AttackOffset: {x: 0, y: 0, z: 0}
-        UseAttackAnimation: 1
+        Transitions:
+        - rid: 4042312840820293755
     - rid: 4042312840820293751
       type: {class: EndNode, ns: , asm: Assembly-CSharp}
       data:
         Guid: b36e0fa2-f89a-41de-88a7-f180f801ec9c
         GraphPosition: {x: 550, y: 200}
         NextNodeGuid: 
+        Transitions:
+        - rid: 4042312840820293757
         StartNodeGuid: 
+    - rid: 4042312840820293755
+      type: {class: BossTransition, ns: , asm: Assembly-CSharp}
+      data:
+        TargetStateType: 1
+    - rid: 4042312840820293757
+      type: {class: BossTransition, ns: , asm: Assembly-CSharp}
+      data:
+        TargetStateType: 0
 --- !u!1 &585768205
 GameObject:
   m_ObjectHideFlags: 0

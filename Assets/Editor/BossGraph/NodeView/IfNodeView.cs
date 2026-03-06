@@ -29,10 +29,6 @@ public class IfNodeView : Node
         style.left = node.GraphPosition.x;
         style.top = node.GraphPosition.y;
 
-        //--------------------------------
-        // INPUT
-        //--------------------------------
-
         Input = InstantiatePort(
             Orientation.Horizontal,
             Direction.Input,
@@ -41,10 +37,6 @@ public class IfNodeView : Node
 
         Input.portName = "In";
         inputContainer.Add(Input);
-
-        //--------------------------------
-        // ADD CONDITION BUTTON
-        //--------------------------------
 
         IMGUIContainer header = new IMGUIContainer(() =>
         {
@@ -67,18 +59,10 @@ public class IfNodeView : Node
         RefreshExpandedState();
     }
 
-    //--------------------------------
-    // SYNC PORTS
-    //--------------------------------
-
     private void SyncPorts()
     {
         outputContainer.Clear();
         ConditionPorts.Clear();
-
-        //--------------------------------
-        // CONDITION PORTS
-        //--------------------------------
 
         foreach (var branch in _node.Conditions)
         {
@@ -93,10 +77,6 @@ public class IfNodeView : Node
             VisualElement container = new VisualElement();
             container.style.flexDirection = FlexDirection.Row;
 
-            //--------------------------------
-            // CONDITION BUTTON
-            //--------------------------------
-
             Button conditionBtn = new Button(() =>
             {
                 ShowConditionMenu(branch);
@@ -105,10 +85,6 @@ public class IfNodeView : Node
             conditionBtn.text = branch.Condition == null
                 ? "Condition"
                 : branch.Condition.GetType().Name;
-
-            //--------------------------------
-            // REMOVE BUTTON
-            //--------------------------------
 
             Button removeBtn = new Button(() =>
             {
@@ -128,10 +104,6 @@ public class IfNodeView : Node
             ConditionPorts.Add(branch, port);
         }
 
-        //--------------------------------
-        // ELSE PORT
-        //--------------------------------
-
         ElsePort = InstantiatePort(
             Orientation.Horizontal,
             Direction.Output,
@@ -146,35 +118,25 @@ public class IfNodeView : Node
         RefreshExpandedState();
     }
 
-    //--------------------------------
-    // ADD CONDITION
-    //--------------------------------
-
     private void AddCondition()
     {
         _node.Conditions.Add(new ConditionBranch());
 
-        EditorUtility.SetDirty(_machine);
+        if (_machine != null)
+                EditorUtility.SetDirty(_machine);
 
         SyncPorts();
     }
-
-    //--------------------------------
-    // REMOVE CONDITION
-    //--------------------------------
 
     private void RemoveCondition(ConditionBranch branch)
     {
         _node.Conditions.Remove(branch);
 
-        EditorUtility.SetDirty(_machine);
+        if (_machine != null)
+                EditorUtility.SetDirty(_machine);
 
         SyncPorts();
     }
-
-    //--------------------------------
-    // CONDITION MENU
-    //--------------------------------
 
     private void ShowConditionMenu(ConditionBranch branch)
     {
@@ -194,13 +156,19 @@ public class IfNodeView : Node
                     branch.Condition =
                         (IBossCondition)Activator.CreateInstance(type);
 
-                    EditorUtility.SetDirty(_machine);
+                    if (_machine != null)
+                EditorUtility.SetDirty(_machine);
 
                     SyncPorts();
                 });
         }
 
         menu.ShowAsContext();
+    }
+    
+    public IfNode GetNode()
+    {
+        return _node;
     }
 }
 #endif

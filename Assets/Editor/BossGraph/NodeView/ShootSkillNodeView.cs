@@ -63,7 +63,8 @@ public class ShootSkillNodeView : SkillNodeView
             EditorGUILayout.LabelField($"Count: {_shootNode.Transitions.Count}", EditorStyles.helpBox);
             
             if (GUI.changed)
-                EditorUtility.SetDirty(_machine);
+                if (_machine != null)
+                    EditorUtility.SetDirty(_machine);
         });
         
         extensionContainer.Add(inspector);

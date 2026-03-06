@@ -10,9 +10,11 @@ public class BossController : MonoBehaviour
     [SerializeReference, SR] public List<BossNode> StateNodes = new List<BossNode>();
     
     [Header("Runtime State")]
-    [SerializeField] private BossNode _currentState;
     [SerializeField] private BossNode _previousState;
-    [SerializeField] private bool _isRunning = false;
+    private BossNode _currentState;
+    private bool _isRunning = false;
+    private bool _isTransitioning = false;
+    private bool _hasTriggeredAutoTransition = false;
     
     public BossNode CurrentState => _currentState;
     public BossNode PreviousState => _previousState;
@@ -57,53 +59,74 @@ public class BossController : MonoBehaviour
     {
         if (_isRunning && _currentState != null)
         {
-            // Execute current node and get next node
-            BossNode nextNode = _currentState.Execute(this);
-            
-            // If node returned a next node, transition to it
-            if (nextNode != null)
+            // Don't execute if node is already finished
+            if (_currentState.IsFinished)
             {
-                TransitionToState(nextNode.StateType);
+                return;
             }
+            
+            // Execute current node logic directly
+            _currentState.ExecuteLogic();
+            
             // If current node is finished, auto-transition to next in list
-            else if (_currentState.IsFinished)
+            if (_currentState.IsFinished && !_hasTriggeredAutoTransition)
             {
                 AutoTransitionToNextNode();
+                _hasTriggeredAutoTransition = true;
+            }
+            // If node is not finished, don't Execute again until it finishes
+            else
+            {
+                // Don't Execute again this frame - wait for next frame
+                return;
             }
         }
     }
     
     private void AutoTransitionToNextNode()
     {
-        int currentIndex = StateNodes.IndexOf(_currentState);
-        if (currentIndex >= 0 && currentIndex < StateNodes.Count - 1)
+        if (_isTransitioning) return; // Don't transition if already transitioning
+        
+        // Only use graph connection (NextNodeGuid) - no fallback to inspector order
+        if (_currentState != null && !string.IsNullOrEmpty(_currentState.NextNodeGuid))
         {
-            // Go to next node in list
-            BossNode nextNode = StateNodes[currentIndex + 1];
-            TransitionToState(nextNode.StateType);
+            // Find node by Guid
+            BossNode nextNode = StateNodes.Find(n => n.Guid == _currentState.NextNodeGuid);
+            
+            if (nextNode != null)
+            {
+                // Transition to specific node by Guid, not by StateType
+                StartCoroutine(DelayedTransition(nextNode));
+                return;
+            }
+            else
+            {
+                Debug.LogWarning($"BossController.AutoTransitionToNextNode() - Could not find node with Guid: {_currentState.NextNodeGuid}");
+            }
         }
-        else if (currentIndex == StateNodes.Count - 1)
+        
+        // Special handling for EndNode - restart from StartNode
+        if (_currentState is EndNode)
         {
-            // Last node, cycle back to first
-            BossNode firstNode = StateNodes[0];
-            TransitionToState(firstNode.StateType);
+            TransitionToState(BossStateType.Start);
+            return;
         }
+        
+        // No fallback to inspector order - just stop execution
+        StopAI();
     }
     
     public void TransitionToState(BossStateType type)
     {
-        Debug.Log($"BossController.TransitionToState() - Requested transition to: {type}");
         
         if (!_typeToNodes.ContainsKey(type)) 
         {
-            Debug.LogError($"BossController.TransitionToState() - No nodes found for state type: {type}");
             return;
         }
 
         var potentialNodes = _typeToNodes[type];
         if (potentialNodes.Count == 0) 
         {
-            Debug.LogError($"BossController.TransitionToState() - Empty node list for state type: {type}");
             return;
         }
 
@@ -113,7 +136,6 @@ public class BossController : MonoBehaviour
             if (node.CanEnter(this))
             {
                 selectedNode = node;
-                Debug.Log($"BossController.TransitionToState() - Selected node: {node.GetType().Name}");
                 break;
             }
         }
@@ -122,19 +144,16 @@ public class BossController : MonoBehaviour
 
         if (selectedNode == _currentState && !_currentState.IsFinished) 
         {
-            Debug.Log($"BossController.TransitionToState() - Already in state and not finished, skipping");
             return;
         }
 
-        Debug.Log($"BossController.TransitionToState() - Transitioning from {_currentState?.GetType().Name} to {selectedNode.GetType().Name}");
-        
         // Add delay between transitions
         StartCoroutine(DelayedTransition(selectedNode));
     }
     
     private IEnumerator DelayedTransition(BossNode newNode)
     {
-        Debug.Log($"BossController.DelayedTransition() - Waiting 1 second before transitioning to {newNode.GetType().Name}");
+        _isTransitioning = true; // Set transitioning flag
         
         yield return new WaitForSeconds(1f); // 1 second delay
         
@@ -149,7 +168,9 @@ public class BossController : MonoBehaviour
         _currentState.ResetFinished();
         _currentState.Enter();
         
-        Debug.Log($"BossController.DelayedTransition() - Transitioned to {_currentState.GetType().Name}");
+        _isTransitioning = false; // Clear transitioning flag
+        _hasTriggeredAutoTransition = false; // Reset auto-transition flag
+        
     }
     
     public void StartAI()
