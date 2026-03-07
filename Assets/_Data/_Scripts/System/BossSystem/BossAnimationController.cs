@@ -119,7 +119,7 @@ public class BossAnimationController : MonoBehaviour
         ResetAllBools();
         animator.Play(animationName);
         _currentAnimName = animationName;
-        _currentAnimHash = 0; // Custom animation doesn't use hash
+        _currentAnimHash = 0;
     }
 
     public string GetCurrentAnimationName()

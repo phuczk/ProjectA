@@ -19,8 +19,6 @@ public class IfNode : BossNode
 
     public override void ExecuteLogic()
     {
-        Debug.Log("IfNode.ExecuteLogic() - Evaluating conditions");
-        
         BossContext context = machine.Context;
 
         foreach (var branch in Conditions)

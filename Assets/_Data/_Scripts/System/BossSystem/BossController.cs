@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
 using SerializeReferenceEditor;
+using System;
 
 public class BossController : MonoBehaviour
 {
@@ -16,10 +17,34 @@ public class BossController : MonoBehaviour
     private bool _isTransitioning = false;
     private bool _hasTriggeredAutoTransition = false;
     
+    [Header("Phase Management")]
+    [SerializeField] private int _currentPhase = 0;
+    public int CurrentPhase => _currentPhase;
+    
+    [Header("Phase Tracking")]
+    [SerializeField] private HashSet<string> _executedPhaseNodes = new HashSet<string>();
+    
+    public bool IsPhaseNodeExecuted(string phaseNodeGuid)
+    {
+        return _executedPhaseNodes.Contains(phaseNodeGuid);
+    }
+    
+    public void MarkPhaseNodeExecuted(string phaseNodeGuid)
+    {
+        _executedPhaseNodes.Add(phaseNodeGuid);
+    }
+    
+    public void SetCurrentPhase(int phase)
+    {
+        _currentPhase = phase;
+    }
+    
     public BossNode CurrentState => _currentState;
     public BossNode PreviousState => _previousState;
     public BossContext Context { get; set; }
     public Animator Animator { get; set; }
+    public BossAnimationController AnimationController => _animationController;
+    public BossAnimationController _animationController;
     
     [Header("Default State")]
     public BossStateType DefaultStateType = BossStateType.Start;
@@ -36,10 +61,8 @@ public class BossController : MonoBehaviour
             hp = 100f
         };
         
-        // Initialize all nodes and build type dictionary
         foreach (var node in StateNodes)
         {
-            // Initialize all nodes (including BossNode base class)
             node.Initialize(this);
             
             if (!_typeToNodes.ContainsKey(node.StateType))
@@ -49,70 +72,202 @@ public class BossController : MonoBehaviour
             _typeToNodes[node.StateType].Add(node);
         }
         
-        // Set initial state
         TransitionToState(DefaultStateType);
-        
-        Debug.Log($"BossController initialized with state: {_currentState?.GetType().Name}");
     }
     
     void Update()
     {
         if (_isRunning && _currentState != null)
         {
-            // Don't execute if node is already finished
             if (_currentState.IsFinished)
             {
+                if (!_hasTriggeredAutoTransition)
+                {
+                    AutoTransitionToNextNode();
+                    _hasTriggeredAutoTransition = true;
+                }
                 return;
             }
             
-            // Execute current node logic directly
+            if (_currentState is AddNode addNode)
+            {
+                ExecuteAddNodeSync(addNode);
+                return;
+            }
+            
             _currentState.ExecuteLogic();
             
-            // If current node is finished, auto-transition to next in list
+            if (_currentState is MultiplyNode multiplyNode)
+            {
+                ExecuteMultiplyNodeParallel(multiplyNode);
+                return;
+            }
+            
             if (_currentState.IsFinished && !_hasTriggeredAutoTransition)
             {
                 AutoTransitionToNextNode();
                 _hasTriggeredAutoTransition = true;
             }
-            // If node is not finished, don't Execute again until it finishes
             else
             {
-                // Don't Execute again this frame - wait for next frame
                 return;
             }
         }
     }
     
+    private void ExecuteMultiplyNodeParallel(MultiplyNode multiplyNode)
+    {
+        AddNode coordinatorAddNode = null;
+        
+        foreach (var potentialAddNode in StateNodes.OfType<AddNode>())
+        {
+            bool hasParallelInputs = false;
+            foreach (var branch in potentialAddNode.InputBranches)
+            {
+                foreach (var multiplyBranch in multiplyNode.Branches)
+                {
+                    if (branch.NextNodeGuid == multiplyBranch.NextNodeGuid)
+                    {
+                        hasParallelInputs = true;
+                        break;
+                    }
+                }
+                
+                if (hasParallelInputs) break;
+            }
+            
+            if (hasParallelInputs)
+            {
+                coordinatorAddNode = potentialAddNode;
+                break;
+            }
+        }
+        
+        if (coordinatorAddNode != null)
+        {
+            coordinatorAddNode.Enter();
+        }
+        
+        List<BossNode> parallelNodes = new List<BossNode>();
+        foreach (var branch in multiplyNode.Branches)
+        {
+            if (!string.IsNullOrEmpty(branch.NextNodeGuid))
+            {
+                BossNode targetNode = StateNodes.Find(n => n.Guid == branch.NextNodeGuid);
+                if (targetNode != null)
+                {
+                    parallelNodes.Add(targetNode);
+                    StartCoroutine(ExecuteNodeParallel(targetNode));
+                }
+                else
+                {
+                    Debug.LogWarning($"Could not find target node with GUID: {branch.NextNodeGuid}");
+                }
+            }
+        }
+        
+        multiplyNode.Exit();
+        
+        if (coordinatorAddNode != null)
+        {
+            return;
+        }
+        else
+        {
+            Debug.LogWarning("No AddNode found that receives parallel inputs - coordination unavailable");
+        }
+    }
+    
+    private IEnumerator ExecuteNodeParallel(BossNode node)
+    {
+        float delay = Mathf.Max(node.Delay, 0.1f);
+        
+        yield return new WaitForSeconds(delay);
+        
+        node.Enter();
+        
+        node.ExecuteLogic();
+        
+        while (!node.IsFinished)
+        {
+            yield return null;
+        }
+        
+        node.Exit();
+        
+        NotifyAddNodeIfWaiting(node);
+    }
+    
+    private void NotifyAddNodeIfWaiting(BossNode completedNode)
+    {
+        foreach (var potentialAddNode in StateNodes.OfType<AddNode>())
+        {
+            for (int i = 0; i < potentialAddNode.InputBranches.Count; i++)
+            {
+                var branch = potentialAddNode.InputBranches[i];
+                
+                if (branch.NextNodeGuid == completedNode.Guid)
+                {
+                    if (i < potentialAddNode.InputCompleted.Count)
+                    {
+                        potentialAddNode.InputCompleted[i] = true;
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"AddNode InputCompleted index {i} out of range. Count: {potentialAddNode.InputCompleted.Count}");
+                    }
+                }
+            }
+        }
+    }
+    
+    private void ExecuteAddNodeSync(AddNode addNode)
+    {
+        bool allInputsCompleted = true;
+        for (int i = 0; i < addNode.InputBranches.Count; i++)
+        {
+            if (i < addNode.InputCompleted.Count)
+            {
+                if (!addNode.InputCompleted[i])
+                {
+                    allInputsCompleted = false;
+                    break;
+                }
+            }
+            else
+            {
+                allInputsCompleted = false;
+                break;
+            }
+        }
+        
+        if (allInputsCompleted)
+        {
+            addNode.ExecuteLogic();
+        }
+    }
+    
     private void AutoTransitionToNextNode()
     {
-        if (_isTransitioning) return; // Don't transition if already transitioning
+        if (_isTransitioning) return;
         
-        // Only use graph connection (NextNodeGuid) - no fallback to inspector order
         if (_currentState != null && !string.IsNullOrEmpty(_currentState.NextNodeGuid))
         {
-            // Find node by Guid
             BossNode nextNode = StateNodes.Find(n => n.Guid == _currentState.NextNodeGuid);
             
             if (nextNode != null)
             {
-                // Transition to specific node by Guid, not by StateType
                 StartCoroutine(DelayedTransition(nextNode));
                 return;
             }
-            else
-            {
-                Debug.LogWarning($"BossController.AutoTransitionToNextNode() - Could not find node with Guid: {_currentState.NextNodeGuid}");
-            }
         }
         
-        // Special handling for EndNode - restart from StartNode
         if (_currentState is EndNode)
         {
             TransitionToState(BossStateType.Start);
             return;
         }
         
-        // No fallback to inspector order - just stop execution
         StopAI();
     }
     
@@ -147,29 +302,27 @@ public class BossController : MonoBehaviour
             return;
         }
 
-        // Add delay between transitions
         StartCoroutine(DelayedTransition(selectedNode));
     }
     
     private IEnumerator DelayedTransition(BossNode newNode)
     {
-        _isTransitioning = true; // Set transitioning flag
+        _isTransitioning = true;
         
-        yield return new WaitForSeconds(1f); // 1 second delay
+        float delay = Mathf.Max(newNode.Delay, 0.1f);
         
-        // Exit current state
+        yield return new WaitForSeconds(delay);
+        
         _currentState?.Exit();
 
-        // Update state tracking
         _previousState = _currentState;
         _currentState = newNode;
 
-        // Reset and enter new state
         _currentState.ResetFinished();
         _currentState.Enter();
         
-        _isTransitioning = false; // Clear transitioning flag
-        _hasTriggeredAutoTransition = false; // Reset auto-transition flag
+        _isTransitioning = false;
+        _hasTriggeredAutoTransition = false;
         
     }
     
@@ -187,36 +340,30 @@ public class BossController : MonoBehaviour
     
     private BossStateType GetNextStateType(BossStateType currentStateType)
     {
-        // Define state transition flow like EnemyUniversalMachine
         switch (currentStateType)
         {
             case BossStateType.Start:
-                // After Start, go to Attack (default skill)
                 return BossStateType.Attack;
                 
             case BossStateType.Attack:
-                // After Attack, go to Shoot
                 return BossStateType.Shoot;
                 
             case BossStateType.Shoot:
-                // After Shoot, go to Special
                 return BossStateType.Special;
                 
             case BossStateType.Special:
-                // After Special, go to End
                 return BossStateType.End;
                 
             case BossStateType.End:
-                // After End, cycle back to Start
                 return BossStateType.Start;
                 
             case BossStateType.Phase:
-                // After Phase, go to Attack
                 return BossStateType.Attack;
                 
             case BossStateType.If:
             case BossStateType.Random:
-                // For logic nodes, default to Attack
+            case BossStateType.Multiply:
+            case BossStateType.Add:
                 return BossStateType.Attack;
                 
             default:
@@ -229,7 +376,6 @@ public class BossController : MonoBehaviour
         return StateNodes.Find(n => n.Guid == guid);
     }
     
-    // Helper methods for editor
     public string GetCurrentNodeName()
     {
         return _currentState?.GetType().Name ?? "None";
@@ -237,7 +383,6 @@ public class BossController : MonoBehaviour
     
     public bool IsRunning => _isRunning;
     
-    // For testing
     [ContextMenu("Start AI")]
     public void TestStartAI()
     {

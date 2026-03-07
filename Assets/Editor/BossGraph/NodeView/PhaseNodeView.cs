@@ -52,6 +52,10 @@ public class PhaseNodeView : Node
                 "Phase Name",
                 _node.PhaseName);
 
+            _node.TargetPhase = EditorGUILayout.IntField(
+                "Target Phase",
+                _node.TargetPhase);
+
             _node.AnimatorState = EditorGUILayout.TextField(
                 "Animator State",
                 _node.AnimatorState);

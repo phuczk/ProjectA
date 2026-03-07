@@ -15,7 +15,6 @@ public class EndNode : BossNode
     
     public override void ExecuteLogic()
     {
-        //Debug.Log("EndNode.ExecuteLogic() - Ending boss AI cycle");
         IsFinished = true;
     }
 }

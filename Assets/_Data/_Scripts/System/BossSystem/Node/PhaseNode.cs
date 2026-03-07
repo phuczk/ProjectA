@@ -7,17 +7,57 @@ public class PhaseNode : BossNode
     public string AnimatorState;
     public AudioClip PhaseAudio;
     public string PhaseName;
+    public int TargetPhase = 1;
     public override BossStateType StateType => BossStateType.Phase;
 
     public override void Enter()
     {
         base.Enter();
-        Debug.Log($"PhaseNode.Enter() - Entering phase: {PhaseName}");
+        
+        var bossController = machine as BossController;
+        if (bossController != null)
+        {
+            bool isCurrentPhase = (bossController.CurrentPhase == TargetPhase);
+            bool alreadyExecuted = bossController.IsPhaseNodeExecuted(Guid);
+            
+            if (isCurrentPhase && alreadyExecuted)
+            {
+                IsFinished = true;
+                return;
+            }
+            
+            bossController.MarkPhaseNodeExecuted(Guid);
+            
+            if (!isCurrentPhase)
+            {
+                if (machine.Animator != null && !string.IsNullOrEmpty(AnimatorState))
+                {
+                    machine.Animator.Play(AnimatorState);
+                }
+
+                if (PhaseAudio != null)
+                {
+                    AudioSource source = machine.GetComponent<AudioSource>();
+                    if (source != null)
+                    {
+                        source.PlayOneShot(PhaseAudio);
+                    }
+                }
+                
+                bossController.SetCurrentPhase(TargetPhase);
+                
+                IsFinished = true;
+                return;
+            }
+        }
+        
+        IsFinished = true;
     }
 
     public override void ExecuteLogic()
     {
-        IsFinished = true;
+        // All logic is handled in Enter()
+        // Phase node should finish immediately based on Enter() logic
     }
 
     public override BossNode Execute(BossController boss)
@@ -30,15 +70,15 @@ public class PhaseNode : BossNode
         if (PhaseAudio != null)
         {
             AudioSource source = boss.GetComponent<AudioSource>();
-
             if (source != null)
             {
                 source.PlayOneShot(PhaseAudio);
             }
         }
 
-        // Phase node finishes after playing animation/sound
-        IsFinished = true;
-        return null; // Let state machine handle transition
+        boss.SetCurrentPhase(TargetPhase);
+        boss.MarkPhaseNodeExecuted(Guid);
+
+        return base.Execute(boss);
     }
 }

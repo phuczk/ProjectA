@@ -20,6 +20,8 @@ public abstract class BossNode
     
     private bool hasExecuted = false;
 
+    public float Delay = 0f;
+
     public virtual void Enter()
     {
         IsFinished = false;

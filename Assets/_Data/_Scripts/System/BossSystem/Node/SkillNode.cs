@@ -9,8 +9,7 @@ public abstract class SkillNode : BossNode
 {
     [Header("Base Settings")]
     public float Weight = 1f;
-    public float DelayBeforeExecute = 1f;
-    public bool IsCollapsed = false; // Save collapse state
+    public bool IsCollapsed = false;
     
     [Header("Animation Settings")]
     public string AnimationName = "";
@@ -31,18 +30,20 @@ public abstract class SkillNode : BossNode
 
     public virtual bool CanEnter()
     {
-        // Always return true for testing
         return true;
     }
 
     public override void Enter()
     {
         IsFinished = false;
+        if (UseCustomAnimation && !string.IsNullOrEmpty(AnimationName))
+        {
+            machine.AnimationController.PlayCustomAnimation(AnimationName);
+        }
     }
 
     public override void ExecuteLogic()
     {
-        // Override in derived classes for specific skill logic
     }
 
     public override void Exit()
@@ -52,12 +53,10 @@ public abstract class SkillNode : BossNode
 
     public virtual void LogicUpdate()
     {
-        // Override in derived classes for update logic
     }
 
     public override BossNode Execute(BossController boss)
     {
-        // Call base Execute() to handle ExecuteLogic()
         return base.Execute(boss);
     }
 

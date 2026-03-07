@@ -1,13 +1,13 @@
-using System;
-
 public enum BossStateType
 {
     Start,
     End,
-    Phase,
     Attack,
     Shoot,
     Special,
+    Phase,
     If,
-    Random
+    Random,
+    Multiply,
+    Add
 }

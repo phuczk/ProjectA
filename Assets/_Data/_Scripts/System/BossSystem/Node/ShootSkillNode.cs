@@ -26,10 +26,6 @@ public class ShootSkillNode : SkillNode
 
     public override void ExecuteLogic()
     {
-        // Perform shoot logic here
-        
-        // For now, just mark as finished immediately
-        // You can add bullet spawning, etc. later
         IsFinished = true;
     }
 }

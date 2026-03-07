@@ -58,6 +58,20 @@ public class BossAIGraphWindow : EditorWindow
         addIfButton.text = "If";
         toolbar.Add(addIfButton);
         
+        var addMultiplyButton = new Button(() => {
+            var graphView = _graphView as BossAIGraphView;
+            graphView?.CreateMultiplyNode();
+        });
+        addMultiplyButton.text = "Multiply";
+        toolbar.Add(addMultiplyButton);
+        
+        var addAddButton = new Button(() => {
+            var graphView = _graphView as BossAIGraphView;
+            graphView?.CreateAddNode();
+        });
+        addAddButton.text = "Add";
+        toolbar.Add(addAddButton);
+        
         var addEndButton = new Button(() => {
             var graphView = _graphView as BossAIGraphView;
             graphView?.CreateEndNode();

@@ -612,6 +612,8 @@ GameObject:
   - component: {fileID: 233820871}
   - component: {fileID: 233820870}
   - component: {fileID: 233820869}
+  - component: {fileID: 233820873}
+  - component: {fileID: 233820872}
   m_Layer: 0
   m_Name: Boss
   m_TagString: Untagged
@@ -644,52 +646,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StateNodes:
-  - rid: 4042312854814064799
-  - rid: 4042312854814064800
-  - rid: 4042312854814064802
-  - rid: 4042312854814064803
-  - rid: 4042312854814064806
-  - rid: 4042312854814064807
-  - rid: 4042312854814064808
-  - rid: 4042312854814064838
-  - rid: 4042312854814064839
-  - rid: 4042312854814064846
-  - rid: 4042312854814064847
-  - rid: 4042312854814064848
-  - rid: 4042312854814064849
+  - rid: 4042312878577418347
+  - rid: 4042312878577418349
+  - rid: 4042312878577418350
+  - rid: 4042312878577418351
+  _currentPhase: 0
+  _animationController: {fileID: 233820873}
   DefaultStateType: 0
   references:
     version: 2
     RefIds:
-    - rid: 4042312854814064799
+    - rid: 4042312878577418347
       type: {class: StartNode, ns: , asm: Assembly-CSharp}
       data:
-        Guid: 4ac1546e-e7c8-4bbc-86d5-df194b3c0a06
-        GraphPosition: {x: -371.2, y: 101.6}
-        NextNodeGuid: 
+        Guid: cea457bb-8959-471f-a3c9-5bcbae7a235f
+        GraphPosition: {x: 50.4, y: 200}
+        NextNodeGuid: 4c6dcc29-b806-4845-8620-4603431b21ff
         Transitions: []
-    - rid: 4042312854814064800
-      type: {class: PhaseNode, ns: , asm: Assembly-CSharp}
-      data:
-        Guid: dce11273-6b91-4028-b7e7-1f5dba3ced31
-        GraphPosition: {x: -87.2, y: 101.6}
-        NextNodeGuid: 
-        Transitions: []
-        AnimatorState: 
-        PhaseAudio: {fileID: 0}
-        PhaseName: phase 1
-    - rid: 4042312854814064802
+        Delay: 0
+    - rid: 4042312878577418349
       type: {class: AttackSkillNode, ns: , asm: Assembly-CSharp}
       data:
-        Guid: c22aad93-1ddf-495d-9955-b9951dfc8ce8
-        GraphPosition: {x: 454.4, y: 52}
-        NextNodeGuid: 
+        Guid: 4c6dcc29-b806-4845-8620-4603431b21ff
+        GraphPosition: {x: 304.8, y: 161.6}
+        NextNodeGuid: ab9ba48c-0e5c-4a72-8a48-f807fe1b204c
         Transitions: []
+        Delay: 1
         Weight: 1
-        DelayBeforeExecute: 1
-        IsCollapsed: 1
-        AnimationName: 
-        UseCustomAnimation: 0
+        IsCollapsed: 0
+        AnimationName: attack
+        UseCustomAnimation: 1
         AnimationType: 0
         AttackVariant: -1
         DelayAnimation: 0
@@ -702,36 +688,18 @@ MonoBehaviour:
           m_Bits: 0
         AttackOffset: {x: 0, y: 0, z: 0}
         UseAttackAnimation: 1
-    - rid: 4042312854814064803
-      type: {class: EndNode, ns: , asm: Assembly-CSharp}
-      data:
-        Guid: ee48c7b6-6812-4589-9738-2878dfe6cc56
-        GraphPosition: {x: 639.2, y: 7.199999}
-        NextNodeGuid: 
-        Transitions: []
-        StartNodeGuid: 
-    - rid: 4042312854814064806
-      type: {class: IfNode, ns: , asm: Assembly-CSharp}
-      data:
-        Guid: 2bdcfe4d-e78d-46da-9302-65d8c7f7eac9
-        GraphPosition: {x: 172.8, y: 112.799995}
-        NextNodeGuid: 
-        Transitions: []
-        Conditions:
-        - NextNodeGuid: c22aad93-1ddf-495d-9955-b9951dfc8ce8
-        ElseNodeGuid: 525ccbad-d2af-417d-90b6-2ecd1a1c6db5
-    - rid: 4042312854814064807
+    - rid: 4042312878577418350
       type: {class: ShootSkillNode, ns: , asm: Assembly-CSharp}
       data:
-        Guid: 525ccbad-d2af-417d-90b6-2ecd1a1c6db5
-        GraphPosition: {x: 478.4, y: 214.40001}
-        NextNodeGuid: 
+        Guid: ab9ba48c-0e5c-4a72-8a48-f807fe1b204c
+        GraphPosition: {x: 533.6, y: 154.40001}
+        NextNodeGuid: 8393f943-4c07-4699-8dbe-c6b66c0ad59a
         Transitions: []
+        Delay: 1
         Weight: 1
-        DelayBeforeExecute: 1
-        IsCollapsed: 1
-        AnimationName: 
-        UseCustomAnimation: 0
+        IsCollapsed: 0
+        AnimationName: shoot
+        UseCustomAnimation: 1
         AnimationType: 0
         AttackVariant: -1
         DelayAnimation: 0
@@ -744,129 +712,14 @@ MonoBehaviour:
         BurstDelay: 0.1
         ShootOffset: {x: 0, y: 0, z: 1}
         AimAtPlayer: 1
-    - rid: 4042312854814064808
+    - rid: 4042312878577418351
       type: {class: EndNode, ns: , asm: Assembly-CSharp}
       data:
-        Guid: e9210436-3065-47f7-a966-c14e4cb33745
-        GraphPosition: {x: 1364, y: 245.6}
+        Guid: 8393f943-4c07-4699-8dbe-c6b66c0ad59a
+        GraphPosition: {x: 777.6, y: 159.20001}
         NextNodeGuid: 
         Transitions: []
-        StartNodeGuid: 
-    - rid: 4042312854814064838
-      type: {class: ShootSkillNode, ns: , asm: Assembly-CSharp}
-      data:
-        Guid: 6aded088-6c67-42f8-a5bc-9ceab0833dbb
-        GraphPosition: {x: 956.8, y: 248.80002}
-        NextNodeGuid: 
-        Transitions: []
-        Weight: 1
-        DelayBeforeExecute: 1
-        IsCollapsed: 1
-        AnimationName: 
-        UseCustomAnimation: 0
-        AnimationType: 0
-        AttackVariant: -1
-        DelayAnimation: 0
-        EntryConditions: []
-        BulletPrefab: {fileID: 0}
-        BulletSpeed: 10
-        BulletDamage: 5
-        FireRate: 2
-        BurstCount: 1
-        BurstDelay: 0.1
-        ShootOffset: {x: 0, y: 0, z: 1}
-        AimAtPlayer: 1
-    - rid: 4042312854814064839
-      type: {class: AttackSkillNode, ns: , asm: Assembly-CSharp}
-      data:
-        Guid: 67c51ab2-b889-49d2-a57e-a3ef66aa823b
-        GraphPosition: {x: 1152.8, y: 246.4}
-        NextNodeGuid: 
-        Transitions: []
-        Weight: 1
-        DelayBeforeExecute: 1
-        IsCollapsed: 1
-        AnimationName: 
-        UseCustomAnimation: 0
-        AnimationType: 0
-        AttackVariant: -1
-        DelayAnimation: 0
-        EntryConditions: []
-        Damage: 1
-        AttackRange: 2
-        AttackCooldown: 1
-        TargetLayer:
-          serializedVersion: 2
-          m_Bits: 0
-        AttackOffset: {x: 0, y: 0, z: 0}
-        UseAttackAnimation: 1
-    - rid: 4042312854814064846
-      type: {class: RandomNode, ns: , asm: Assembly-CSharp}
-      data:
-        Guid: 704edb9a-b6c5-4276-8292-247adb64aaa7
-        GraphPosition: {x: 681.6, y: 175.20001}
-        NextNodeGuid: 
-        Transitions: []
-        Branches:
-        - Percent: 80
-          NextNodeGuid: d9b3700a-d916-4536-afbc-273cf5c4f1bd
-        - Percent: 20
-          NextNodeGuid: 6aded088-6c67-42f8-a5bc-9ceab0833dbb
-    - rid: 4042312854814064847
-      type: {class: AttackSkillNode, ns: , asm: Assembly-CSharp}
-      data:
-        Guid: d9b3700a-d916-4536-afbc-273cf5c4f1bd
-        GraphPosition: {x: 956, y: 101.6}
-        NextNodeGuid: 
-        Transitions: []
-        Weight: 1
-        DelayBeforeExecute: 1
-        IsCollapsed: 1
-        AnimationName: 
-        UseCustomAnimation: 0
-        AnimationType: 0
-        AttackVariant: -1
-        DelayAnimation: 0
-        EntryConditions: []
-        Damage: 1
-        AttackRange: 2
-        AttackCooldown: 1
-        TargetLayer:
-          serializedVersion: 2
-          m_Bits: 0
-        AttackOffset: {x: 0, y: 0, z: 0}
-        UseAttackAnimation: 1
-    - rid: 4042312854814064848
-      type: {class: ShootSkillNode, ns: , asm: Assembly-CSharp}
-      data:
-        Guid: 70fd94dc-c9f2-4e32-924b-428e38761e7d
-        GraphPosition: {x: 1177.6, y: 60}
-        NextNodeGuid: 
-        Transitions: []
-        Weight: 1
-        DelayBeforeExecute: 1
-        IsCollapsed: 1
-        AnimationName: 
-        UseCustomAnimation: 0
-        AnimationType: 0
-        AttackVariant: -1
-        DelayAnimation: 0
-        EntryConditions: []
-        BulletPrefab: {fileID: 0}
-        BulletSpeed: 10
-        BulletDamage: 5
-        FireRate: 2
-        BurstCount: 1
-        BurstDelay: 0.1
-        ShootOffset: {x: 0, y: 0, z: 1}
-        AimAtPlayer: 1
-    - rid: 4042312854814064849
-      type: {class: EndNode, ns: , asm: Assembly-CSharp}
-      data:
-        Guid: 29f3cd6b-e7a3-45a9-acd4-653b9de1fbb5
-        GraphPosition: {x: 1346.4, y: 52.799995}
-        NextNodeGuid: 
-        Transitions: []
+        Delay: 0
         StartNodeGuid: 
 --- !u!4 &233820871
 Transform:
@@ -880,9 +733,365 @@ Transform:
   m_LocalPosition: {x: -4.88, y: -0.44, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 263094076}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &233820872
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 233820868}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b5037fe3c4dd8b842976d7684aa686d1, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &233820873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 233820868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8adb19c1066e2354fbf9f59a8fa2771d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 233820872}
+--- !u!1 &263094075
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 263094076}
+  - component: {fileID: 263094077}
+  m_Layer: 0
+  m_Name: Body
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &263094076
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 263094075}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 233820871}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &263094077
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 263094075}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!1 &294023213
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 294023215}
+  - component: {fileID: 294023214}
+  - component: {fileID: 294023217}
+  - component: {fileID: 294023216}
+  m_Layer: 0
+  m_Name: GameObject (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &294023214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 294023213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 151a3ccdcf9f4b44490d8d96869caabd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StateNodes:
+  - rid: 4042312878577418339
+  - rid: 4042312878577418340
+  - rid: 4042312878577418341
+  - rid: 4042312878577418342
+  - rid: 4042312878577418343
+  - rid: 4042312878577418344
+  - rid: 4042312878577418345
+  - rid: 4042312878577418346
+  _currentPhase: 0
+  _animationController: {fileID: 294023217}
+  DefaultStateType: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 4042312878577418339
+      type: {class: StartNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: da01c1b5-5cee-4709-af69-bb6959e1fafb
+        GraphPosition: {x: 50.4, y: 200}
+        NextNodeGuid: 58ea8a9b-d9ae-4977-b61e-7c8851593a84
+        Transitions: []
+        Delay: 0
+    - rid: 4042312878577418340
+      type: {class: MultiplyNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: 58ea8a9b-d9ae-4977-b61e-7c8851593a84
+        GraphPosition: {x: 300, y: 200}
+        NextNodeGuid: 
+        Transitions: []
+        Delay: 0
+        Branches:
+        - NextNodeGuid: f51813fc-74c4-4159-a255-bfbaff608843
+        - NextNodeGuid: a5da5cc5-3863-46c4-bc22-20cbc8dc33da
+    - rid: 4042312878577418341
+      type: {class: ShootSkillNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: f51813fc-74c4-4159-a255-bfbaff608843
+        GraphPosition: {x: 678.4, y: 187.20001}
+        NextNodeGuid: 61d8ba79-8246-4a68-aa95-7f854013f35d
+        Transitions: []
+        Delay: 1
+        Weight: 1
+        IsCollapsed: 1
+        AnimationName: 
+        UseCustomAnimation: 0
+        AnimationType: 0
+        AttackVariant: -1
+        DelayAnimation: 0
+        EntryConditions: []
+        BulletPrefab: {fileID: 0}
+        BulletSpeed: 10
+        BulletDamage: 5
+        FireRate: 2
+        BurstCount: 1
+        BurstDelay: 0.1
+        ShootOffset: {x: 0, y: 0, z: 1}
+        AimAtPlayer: 1
+    - rid: 4042312878577418342
+      type: {class: AttackSkillNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: a5da5cc5-3863-46c4-bc22-20cbc8dc33da
+        GraphPosition: {x: 628, y: 323.2}
+        NextNodeGuid: 61d8ba79-8246-4a68-aa95-7f854013f35d
+        Transitions: []
+        Delay: 1
+        Weight: 1
+        IsCollapsed: 1
+        AnimationName: attack
+        UseCustomAnimation: 1
+        AnimationType: 0
+        AttackVariant: -1
+        DelayAnimation: 0
+        EntryConditions: []
+        Damage: 1
+        AttackRange: 2
+        AttackCooldown: 1
+        TargetLayer:
+          serializedVersion: 2
+          m_Bits: 0
+        AttackOffset: {x: 0, y: 0, z: 0}
+        UseAttackAnimation: 1
+    - rid: 4042312878577418343
+      type: {class: AddNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: 61d8ba79-8246-4a68-aa95-7f854013f35d
+        GraphPosition: {x: 986.4, y: 136}
+        NextNodeGuid: 37e4b1c8-e4a0-4a67-8659-55372efd22cb
+        Transitions: []
+        Delay: 0
+        InputBranches:
+        - NextNodeGuid: f51813fc-74c4-4159-a255-bfbaff608843
+        - NextNodeGuid: a5da5cc5-3863-46c4-bc22-20cbc8dc33da
+        InputCompleted: 
+    - rid: 4042312878577418344
+      type: {class: EndNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: 30bee20f-57a2-4e06-b853-32ca79202cb8
+        GraphPosition: {x: 1803.2, y: 72.799995}
+        NextNodeGuid: 
+        Transitions: []
+        Delay: 0
+        StartNodeGuid: 
+    - rid: 4042312878577418345
+      type: {class: ShootSkillNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: 37e4b1c8-e4a0-4a67-8659-55372efd22cb
+        GraphPosition: {x: 1312.8, y: 114.4}
+        NextNodeGuid: a20d9fc1-ea15-495e-ac30-d838792bde7f
+        Transitions: []
+        Delay: 1
+        Weight: 1
+        IsCollapsed: 1
+        AnimationName: shoot
+        UseCustomAnimation: 1
+        AnimationType: 1
+        AttackVariant: -1
+        DelayAnimation: 0
+        EntryConditions: []
+        BulletPrefab: {fileID: 0}
+        BulletSpeed: 10
+        BulletDamage: 5
+        FireRate: 2
+        BurstCount: 1
+        BurstDelay: 0.1
+        ShootOffset: {x: 0, y: 0, z: 1}
+        AimAtPlayer: 1
+    - rid: 4042312878577418346
+      type: {class: ShootSkillNode, ns: , asm: Assembly-CSharp}
+      data:
+        Guid: a20d9fc1-ea15-495e-ac30-d838792bde7f
+        GraphPosition: {x: 1485.6, y: 101.6}
+        NextNodeGuid: 30bee20f-57a2-4e06-b853-32ca79202cb8
+        Transitions: []
+        Delay: 1
+        Weight: 1
+        IsCollapsed: 0
+        AnimationName: shoot
+        UseCustomAnimation: 1
+        AnimationType: 0
+        AttackVariant: -1
+        DelayAnimation: 0
+        EntryConditions: []
+        BulletPrefab: {fileID: 0}
+        BulletSpeed: 10
+        BulletDamage: 5
+        FireRate: 2
+        BurstCount: 1
+        BurstDelay: 0.1
+        ShootOffset: {x: 0, y: 0, z: 1}
+        AimAtPlayer: 1
+--- !u!4 &294023215
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 294023213}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6.28, y: -0.61, z: 0.04264548}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 634866037}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &294023216
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 294023213}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b5037fe3c4dd8b842976d7684aa686d1, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &294023217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 294023213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8adb19c1066e2354fbf9f59a8fa2771d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 294023216}
 --- !u!1 &371722981
 GameObject:
   m_ObjectHideFlags: 0
@@ -913,288 +1122,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 848376219}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &510658583
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 510658586}
-  - component: {fileID: 510658585}
-  - component: {fileID: 510658584}
-  m_Layer: 0
-  m_Name: Boss (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!210 &510658584
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 510658583}
-  m_Enabled: 1
-  m_SortingLayerID: -451849085
-  m_SortingLayer: 3
-  m_SortingOrder: 0
-  m_SortAtRoot: 0
---- !u!114 &510658585
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 510658583}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 151a3ccdcf9f4b44490d8d96869caabd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  StateNodes:
-  - rid: 4042312854814064799
-  - rid: 4042312854814064800
-  - rid: 4042312854814064802
-  - rid: 4042312854814064803
-  - rid: 4042312854814064806
-  - rid: 4042312854814064807
-  - rid: 4042312854814064808
-  - rid: 4042312854814064838
-  - rid: 4042312854814064839
-  - rid: 4042312854814064846
-  - rid: 4042312854814064847
-  - rid: 4042312854814064848
-  - rid: 4042312854814064849
-  DefaultStateType: 0
-  references:
-    version: 2
-    RefIds:
-    - rid: 4042312854814064799
-      type: {class: StartNode, ns: , asm: Assembly-CSharp}
-      data:
-        Guid: 4ac1546e-e7c8-4bbc-86d5-df194b3c0a06
-        GraphPosition: {x: -371.2, y: 101.6}
-        NextNodeGuid: dce11273-6b91-4028-b7e7-1f5dba3ced31
-        Transitions: []
-    - rid: 4042312854814064800
-      type: {class: PhaseNode, ns: , asm: Assembly-CSharp}
-      data:
-        Guid: dce11273-6b91-4028-b7e7-1f5dba3ced31
-        GraphPosition: {x: -87.2, y: 101.6}
-        NextNodeGuid: 2bdcfe4d-e78d-46da-9302-65d8c7f7eac9
-        Transitions: []
-        AnimatorState: 
-        PhaseAudio: {fileID: 0}
-        PhaseName: phase 1
-    - rid: 4042312854814064802
-      type: {class: AttackSkillNode, ns: , asm: Assembly-CSharp}
-      data:
-        Guid: c22aad93-1ddf-495d-9955-b9951dfc8ce8
-        GraphPosition: {x: 454.4, y: 52}
-        NextNodeGuid: ee48c7b6-6812-4589-9738-2878dfe6cc56
-        Transitions: []
-        Weight: 1
-        DelayBeforeExecute: 1
-        IsCollapsed: 1
-        AnimationName: 
-        UseCustomAnimation: 0
-        AnimationType: 0
-        AttackVariant: -1
-        DelayAnimation: 0
-        EntryConditions: []
-        Damage: 1
-        AttackRange: 2
-        AttackCooldown: 1
-        TargetLayer:
-          serializedVersion: 2
-          m_Bits: 0
-        AttackOffset: {x: 0, y: 0, z: 0}
-        UseAttackAnimation: 1
-    - rid: 4042312854814064803
-      type: {class: EndNode, ns: , asm: Assembly-CSharp}
-      data:
-        Guid: ee48c7b6-6812-4589-9738-2878dfe6cc56
-        GraphPosition: {x: 639.2, y: 7.199999}
-        NextNodeGuid: 
-        Transitions: []
-        StartNodeGuid: 
-    - rid: 4042312854814064806
-      type: {class: IfNode, ns: , asm: Assembly-CSharp}
-      data:
-        Guid: 2bdcfe4d-e78d-46da-9302-65d8c7f7eac9
-        GraphPosition: {x: 172.8, y: 112.799995}
-        NextNodeGuid: 
-        Transitions: []
-        Conditions:
-        - NextNodeGuid: c22aad93-1ddf-495d-9955-b9951dfc8ce8
-        ElseNodeGuid: 525ccbad-d2af-417d-90b6-2ecd1a1c6db5
-    - rid: 4042312854814064807
-      type: {class: ShootSkillNode, ns: , asm: Assembly-CSharp}
-      data:
-        Guid: 525ccbad-d2af-417d-90b6-2ecd1a1c6db5
-        GraphPosition: {x: 472, y: 204.8}
-        NextNodeGuid: 704edb9a-b6c5-4276-8292-247adb64aaa7
-        Transitions: []
-        Weight: 1
-        DelayBeforeExecute: 1
-        IsCollapsed: 1
-        AnimationName: 
-        UseCustomAnimation: 0
-        AnimationType: 0
-        AttackVariant: -1
-        DelayAnimation: 0
-        EntryConditions: []
-        BulletPrefab: {fileID: 0}
-        BulletSpeed: 10
-        BulletDamage: 5
-        FireRate: 2
-        BurstCount: 1
-        BurstDelay: 0.1
-        ShootOffset: {x: 0, y: 0, z: 1}
-        AimAtPlayer: 1
-    - rid: 4042312854814064808
-      type: {class: EndNode, ns: , asm: Assembly-CSharp}
-      data:
-        Guid: e9210436-3065-47f7-a966-c14e4cb33745
-        GraphPosition: {x: 1364, y: 245.6}
-        NextNodeGuid: 
-        Transitions: []
-        StartNodeGuid: 
-    - rid: 4042312854814064838
-      type: {class: ShootSkillNode, ns: , asm: Assembly-CSharp}
-      data:
-        Guid: 6aded088-6c67-42f8-a5bc-9ceab0833dbb
-        GraphPosition: {x: 956.8, y: 248.80002}
-        NextNodeGuid: 70fd94dc-c9f2-4e32-924b-428e38761e7d
-        Transitions: []
-        Weight: 1
-        DelayBeforeExecute: 1
-        IsCollapsed: 1
-        AnimationName: 
-        UseCustomAnimation: 0
-        AnimationType: 0
-        AttackVariant: -1
-        DelayAnimation: 0
-        EntryConditions: []
-        BulletPrefab: {fileID: 0}
-        BulletSpeed: 10
-        BulletDamage: 5
-        FireRate: 2
-        BurstCount: 1
-        BurstDelay: 0.1
-        ShootOffset: {x: 0, y: 0, z: 1}
-        AimAtPlayer: 1
-    - rid: 4042312854814064839
-      type: {class: AttackSkillNode, ns: , asm: Assembly-CSharp}
-      data:
-        Guid: 67c51ab2-b889-49d2-a57e-a3ef66aa823b
-        GraphPosition: {x: 1152.8, y: 246.4}
-        NextNodeGuid: 
-        Transitions: []
-        Weight: 1
-        DelayBeforeExecute: 1
-        IsCollapsed: 1
-        AnimationName: 
-        UseCustomAnimation: 0
-        AnimationType: 0
-        AttackVariant: -1
-        DelayAnimation: 0
-        EntryConditions: []
-        Damage: 1
-        AttackRange: 2
-        AttackCooldown: 1
-        TargetLayer:
-          serializedVersion: 2
-          m_Bits: 0
-        AttackOffset: {x: 0, y: 0, z: 0}
-        UseAttackAnimation: 1
-    - rid: 4042312854814064846
-      type: {class: RandomNode, ns: , asm: Assembly-CSharp}
-      data:
-        Guid: 704edb9a-b6c5-4276-8292-247adb64aaa7
-        GraphPosition: {x: 681.6, y: 175.20001}
-        NextNodeGuid: 
-        Transitions: []
-        Branches:
-        - Percent: 80
-          NextNodeGuid: d9b3700a-d916-4536-afbc-273cf5c4f1bd
-        - Percent: 20
-          NextNodeGuid: 6aded088-6c67-42f8-a5bc-9ceab0833dbb
-    - rid: 4042312854814064847
-      type: {class: AttackSkillNode, ns: , asm: Assembly-CSharp}
-      data:
-        Guid: d9b3700a-d916-4536-afbc-273cf5c4f1bd
-        GraphPosition: {x: 956, y: 101.6}
-        NextNodeGuid: 70fd94dc-c9f2-4e32-924b-428e38761e7d
-        Transitions: []
-        Weight: 1
-        DelayBeforeExecute: 1
-        IsCollapsed: 1
-        AnimationName: 
-        UseCustomAnimation: 0
-        AnimationType: 0
-        AttackVariant: -1
-        DelayAnimation: 0
-        EntryConditions: []
-        Damage: 1
-        AttackRange: 2
-        AttackCooldown: 1
-        TargetLayer:
-          serializedVersion: 2
-          m_Bits: 0
-        AttackOffset: {x: 0, y: 0, z: 0}
-        UseAttackAnimation: 1
-    - rid: 4042312854814064848
-      type: {class: ShootSkillNode, ns: , asm: Assembly-CSharp}
-      data:
-        Guid: 70fd94dc-c9f2-4e32-924b-428e38761e7d
-        GraphPosition: {x: 1177.6, y: 60}
-        NextNodeGuid: 29f3cd6b-e7a3-45a9-acd4-653b9de1fbb5
-        Transitions: []
-        Weight: 1
-        DelayBeforeExecute: 1
-        IsCollapsed: 1
-        AnimationName: 
-        UseCustomAnimation: 0
-        AnimationType: 0
-        AttackVariant: -1
-        DelayAnimation: 0
-        EntryConditions: []
-        BulletPrefab: {fileID: 0}
-        BulletSpeed: 10
-        BulletDamage: 5
-        FireRate: 2
-        BurstCount: 1
-        BurstDelay: 0.1
-        ShootOffset: {x: 0, y: 0, z: 1}
-        AimAtPlayer: 1
-    - rid: 4042312854814064849
-      type: {class: EndNode, ns: , asm: Assembly-CSharp}
-      data:
-        Guid: 29f3cd6b-e7a3-45a9-acd4-653b9de1fbb5
-        GraphPosition: {x: 1346.4, y: 52.799995}
-        NextNodeGuid: 
-        Transitions: []
-        StartNodeGuid: 
---- !u!4 &510658586
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 510658583}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.88, y: -0.44, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &529828312
 GameObject:
@@ -1272,6 +1199,93 @@ SpriteRenderer:
   m_SortingLayerID: -451849085
   m_SortingLayer: 3
   m_SortingOrder: 1000
+  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!1 &634866036
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 634866037}
+  - component: {fileID: 634866038}
+  m_Layer: 0
+  m_Name: Body
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &634866037
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 634866036}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.04264548}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 294023215}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &634866038
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 634866036}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -3862,4 +3876,4 @@ SceneRoots:
   - {fileID: 848376219}
   - {fileID: 758186947}
   - {fileID: 233820871}
-  - {fileID: 510658586}
+  - {fileID: 294023215}

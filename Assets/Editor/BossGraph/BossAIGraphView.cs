@@ -65,12 +65,155 @@ public class BossAIGraphView : GraphView
     
     private void CreateConnectionsFromGuids()
     {
+        Debug.Log($"CreateConnectionsFromGuids: Starting, NodeLookup.Count={_nodeLookup.Count}");
+        
         foreach (var kvp in _nodeLookup)
         {
             var node = kvp.Key;
             var nodeView = kvp.Value;
             
-            if (node is IfNode ifNode)
+            Debug.Log($"Processing node: {node.GetType().Name}, NextNodeGuid='{node.NextNodeGuid}'");
+            
+            if (node is MultiplyNode multiplyNode)
+            {
+                // Handle MultiplyNode outputs
+                for (int i = 0; i < multiplyNode.Branches.Count; i++)
+                {
+                    var branch = multiplyNode.Branches[i];
+                    if (!string.IsNullOrEmpty(branch.NextNodeGuid))
+                    {
+                        Node targetNodeView = null;
+                        foreach (var targetKvp in _nodeLookup)
+                        {
+                            if (targetKvp.Key.Guid == branch.NextNodeGuid)
+                            {
+                                targetNodeView = targetKvp.Value;
+                                break;
+                            }
+                        }
+                        
+                        if (targetNodeView != null && nodeView is MultiplyNodeView multiplyView)
+                        {
+                            Port outputPort = null;
+                            if (i < multiplyView.OutputPorts.Count)
+                            {
+                                outputPort = multiplyView.OutputPorts[i];
+                            }
+                            
+                            Port inputPort = GetInputPort(targetNodeView);
+                            
+                            if (outputPort != null && inputPort != null)
+                            {
+                                var edge = new Edge
+                                {
+                                    output = outputPort,
+                                    input = inputPort
+                                };
+                                
+                                outputPort.Connect(edge);
+                                inputPort.Connect(edge);
+                                AddElement(edge);
+                                Debug.Log($"MultiplyNode connection created: Output {i} -> {targetNodeView.GetType().Name}");
+                            }
+                        }
+                    }
+                }
+            }
+            else if (node is AddNode addNode)
+            {
+                // Handle AddNode inputs
+                for (int i = 0; i < addNode.InputBranches.Count; i++)
+                {
+                    var inputBranch = addNode.InputBranches[i];
+                    Debug.Log($"AddNode InputBranch[{i}]: NextNodeGuid='{inputBranch.NextNodeGuid}'");
+                    
+                    if (!string.IsNullOrEmpty(inputBranch.NextNodeGuid))
+                    {
+                        Node sourceNodeView = null;
+                        foreach (var sourceKvp in _nodeLookup)
+                        {
+                            if (sourceKvp.Key.Guid == inputBranch.NextNodeGuid)
+                            {
+                                sourceNodeView = sourceKvp.Value;
+                                break;
+                            }
+                        }
+                        
+                        if (sourceNodeView != null && nodeView is AddNodeView addView)
+                        {
+                            Port inputPort = null;
+                            if (i < addView.InputPorts.Count)
+                            {
+                                inputPort = addView.InputPorts[i];
+                                Debug.Log($"Found AddNode input port {i}: {inputPort.portName}");
+                            }
+                            else
+                            {
+                                Debug.LogWarning($"Input port {i} not found. InputPorts.Count={addView.InputPorts.Count}");
+                            }
+                            
+                            Port outputPort = GetOutputPort(sourceNodeView);
+                            
+                            if (outputPort != null && inputPort != null)
+                            {
+                                var edge = new Edge
+                                {
+                                    output = outputPort,
+                                    input = inputPort
+                                };
+                                
+                                outputPort.Connect(edge);
+                                inputPort.Connect(edge);
+                                AddElement(edge);
+                                Debug.Log($"AddNode input connection created: {sourceNodeView.GetType().Name} -> Input {i}");
+                            }
+                            else
+                            {
+                                Debug.LogWarning($"Could not create AddNode input connection. OutputPort: {outputPort != null}, InputPort: {inputPort != null}");
+                            }
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"Could not find source node or AddNode view. SourceNode: {sourceNodeView != null}, AddView: {nodeView is AddNodeView}");
+                        }
+                    }
+                }
+                
+                // Handle AddNode output
+                if (!string.IsNullOrEmpty(addNode.NextNodeGuid))
+                {
+                    Node targetNodeView = null;
+                    foreach (var targetKvp in _nodeLookup)
+                    {
+                        if (targetKvp.Key.Guid == addNode.NextNodeGuid)
+                        {
+                            targetNodeView = targetKvp.Value;
+                            break;
+                        }
+                    }
+                    
+                    if (targetNodeView != null && nodeView is AddNodeView addView)
+                    {
+                        Port outputPort = addView.OutputPort;
+                        Port inputPort = GetInputPort(targetNodeView);
+                        
+                        if (outputPort != null && inputPort != null)
+                        {
+                            var edge = new Edge
+                            {
+                                output = outputPort,
+                                input = inputPort
+                            };
+                            
+                            outputPort.Connect(edge);
+                            inputPort.Connect(edge);
+                            AddElement(edge);
+                            Debug.Log($"AddNode output connection created: Output -> {targetNodeView.GetType().Name}");
+                        }
+                    }
+                }
+            }
+            else if (node is IfNode ifNode)
             {
                 for (int i = 0; i < ifNode.Conditions.Count; i++)
                 {
@@ -295,7 +438,11 @@ public class BossAIGraphView : GraphView
         else if (nodeView is PhaseNodeView phaseView)
             return phaseView.Output;
         else if (nodeView is EndNodeView endView)
-            return null;
+            return null; // EndNode has no output port
+        else if (nodeView is MultiplyNodeView multiplyView)
+            return null; // MultiplyNode has multiple outputs, handled separately
+        else if (nodeView is AddNodeView addView)
+            return addView.OutputPort;
         
         Debug.LogWarning($"GetOutputPort: Unsupported node type {nodeView.GetType().Name}");
         return null;
@@ -313,8 +460,12 @@ public class BossAIGraphView : GraphView
             return randomView.Input;
         else if (nodeView is EndNodeView endView)
             return endView.Input;
+        else if (nodeView is MultiplyNodeView multiplyView)
+            return multiplyView.inputContainer.Children().FirstOrDefault() as Port;
+        else if (nodeView is AddNodeView addView)
+            return addView.InputPorts.FirstOrDefault();
         else if (nodeView is StartNodeView startView)
-            return null;
+            return null; // StartNode has no input port
         
         Debug.LogWarning($"GetInputPort: Unsupported node type {nodeView.GetType().Name}");
         return null;
@@ -346,6 +497,10 @@ public class BossAIGraphView : GraphView
                     outputBossNode = ifOutput.GetNode();
                 else if (outputNode is RandomNodeView randomOutput)
                     outputBossNode = randomOutput.GetNode();
+                else if (outputNode is MultiplyNodeView multiplyOutput)
+                    outputBossNode = multiplyOutput.GetNode();
+                else if (outputNode is AddNodeView addOutput)
+                    outputBossNode = addOutput.GetNode();
                     
                 if (inputNode is SkillNodeView skillInput)
                     inputBossNode = skillInput.GetNode();
@@ -359,6 +514,10 @@ public class BossAIGraphView : GraphView
                     inputBossNode = ifInput.GetNode();
                 else if (inputNode is RandomNodeView randomInput)
                     inputBossNode = randomInput.GetNode();
+                else if (inputNode is MultiplyNodeView multiplyInput)
+                    inputBossNode = multiplyInput.GetNode();
+                else if (inputNode is AddNodeView addInput)
+                    inputBossNode = addInput.GetNode();
                 
                 if (outputBossNode != null && inputBossNode != null)
                 {
@@ -390,9 +549,49 @@ public class BossAIGraphView : GraphView
                             randomNode.Branches[branchIndex].NextNodeGuid = inputBossNode.Guid;
                         }
                     }
+                    else if (outputBossNode is MultiplyNode multiplyNode && outputNode is MultiplyNodeView multiplyView)
+                    {
+                        var outputPort = edge.output as Port;
+                        var outputIndex = GetMultiplyPortIndex(outputPort, multiplyView);
+                        
+                        if (outputIndex >= 0)
+                        {
+                            // Ensure Branches list has enough elements
+                            while (multiplyNode.Branches.Count <= outputIndex)
+                            {
+                                multiplyNode.Branches.Add(new MultiplyBranch());
+                            }
+                            multiplyNode.Branches[outputIndex].NextNodeGuid = inputBossNode.Guid;
+                        }
+                    }
+                    else if (outputBossNode is AddNode addNode && outputNode is AddNodeView addView)
+                    {
+                        addNode.NextNodeGuid = inputBossNode.Guid;
+                    }
                     else
                     {
                         outputBossNode.NextNodeGuid = inputBossNode.Guid;
+                    }
+                    
+                    // Handle AddNode input connections - ONLY when AddNode is the input node
+                    if (inputBossNode is AddNode inputAddNode && inputNode is AddNodeView inputAddView)
+                    {
+                        var inputPort = edge.input as Port;
+                        var inputIndex = GetAddInputPortIndex(inputPort, inputAddView);
+                        
+                        Debug.Log($"AddNode input connection: PortIndex={inputIndex}, InputBranches.Count={inputAddNode.InputBranches.Count}");
+                        
+                        if (inputIndex >= 0)
+                        {
+                            // Ensure InputBranches list has enough elements
+                            while (inputAddNode.InputBranches.Count <= inputIndex)
+                            {
+                                inputAddNode.InputBranches.Add(new AddBranch());
+                                Debug.Log($"Added new InputBranch at index {inputIndex}");
+                            }
+                            inputAddNode.InputBranches[inputIndex].NextNodeGuid = outputBossNode.Guid;
+                            Debug.Log($"Saved GUID {outputBossNode.Guid} to InputBranches[{inputIndex}]");
+                        }
                     }
                     
                     if (_machine != null)
@@ -427,6 +626,12 @@ public class BossAIGraphView : GraphView
                         outputBossNode = phaseOutput.GetNode();
                     else if (outputNode is IfNodeView ifOutput)
                         outputBossNode = ifOutput.GetNode();
+                    else if (outputNode is RandomNodeView randomOutput)
+                        outputBossNode = randomOutput.GetNode();
+                    else if (outputNode is MultiplyNodeView multiplyOutput)
+                        outputBossNode = multiplyOutput.GetNode();
+                    else if (outputNode is AddNodeView addOutput)
+                        outputBossNode = addOutput.GetNode();
                     
                     if (outputBossNode != null)
                     {
@@ -459,6 +664,40 @@ public class BossAIGraphView : GraphView
         foreach (var kvp in ifView.ConditionPorts)
         {
             if (kvp.Value == port)
+            {
+                return index;
+            }
+            index++;
+        }
+        
+        return -1;
+    }
+    
+    private int GetAddInputPortIndex(Port port, AddNodeView addView)
+    {
+        if (port == null || addView == null) return -1;
+        
+        int index = 0;
+        foreach (var inputPort in addView.InputPorts)
+        {
+            if (inputPort == port)
+            {
+                return index;
+            }
+            index++;
+        }
+        
+        return -1;
+    }
+    
+    private int GetMultiplyPortIndex(Port port, MultiplyNodeView multiplyView)
+    {
+        if (port == null || multiplyView == null) return -1;
+        
+        int index = 0;
+        foreach (var outputPort in multiplyView.OutputPorts)
+        {
+            if (outputPort == port)
             {
                 return index;
             }
@@ -508,6 +747,10 @@ public class BossAIGraphView : GraphView
                 bossNode = ifView.GetNode();
             else if (nodeView is RandomNodeView randomView)
                 bossNode = randomView.GetNode();
+            else if (nodeView is MultiplyNodeView multiplyView)
+                bossNode = multiplyView.GetNode();
+            else if (nodeView is AddNodeView addView)
+                bossNode = addView.GetNode();
                 
             if (bossNode != null)
             {
@@ -596,6 +839,8 @@ public class BossAIGraphView : GraphView
         evt.menu.AppendAction("Add Random Node", (a) => CreateRandomNode());
         evt.menu.AppendAction("Add Phase Node", (a) => CreatePhaseNode());
         evt.menu.AppendAction("Add If Node", (a) => CreateIfNode());
+        evt.menu.AppendAction("Add Multiply Node", (a) => CreateMultiplyNode());
+        evt.menu.AppendAction("Add Add Node", (a) => CreateAddNode());
         evt.menu.AppendAction("Add Start Node", (a) => CreateStartNode());
         evt.menu.AppendAction("Add End Node", (a) => CreateEndNode());
         
@@ -680,6 +925,24 @@ public class BossAIGraphView : GraphView
         CreateNode(ifNode, position);
     }
     
+    public void CreateMultiplyNode()
+    {
+        if (_machine == null) return;
+        
+        var multiplyNode = new MultiplyNode();
+        var position = new Vector2(300, 200);
+        CreateNode(multiplyNode, position);
+    }
+    
+    public void CreateAddNode()
+    {
+        if (_machine == null) return;
+        
+        var addNode = new AddNode();
+        var position = new Vector2(500, 200);
+        CreateNode(addNode, position);
+    }
+    
     public void CreateStartNode()
     {
         if (_machine == null) return;
@@ -737,16 +1000,24 @@ public class BossAIGraphView : GraphView
         {
             nodeView = new EndNodeView(endNode, _machine);
         }
+        else if (node is MultiplyNode multiplyNode)
+        {
+            nodeView = new MultiplyNodeView(multiplyNode, _machine);
+        }
+        else if (node is AddNode addNode)
+        {
+            nodeView = new AddNodeView(addNode, _machine);
+        }
         else if (node is SkillNode skillNode)
         {
+            // All skill nodes use the same SkillNodeView
             nodeView = new SkillNodeView(skillNode, _machine);
         }
         
         if (nodeView != null)
         {
+            _nodeLookup.Add(node, nodeView);
             AddElement(nodeView);
-            _nodeLookup[node] = nodeView;
-            
             RegisterNodePositionCallbacks(nodeView);
         }
     }
