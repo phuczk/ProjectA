@@ -10,7 +10,7 @@ public enum MapViewState { World, Zone }
 public class MapUI : MonoBehaviour
 {
     [SerializeField] private MapViewState currentState = MapViewState.World;
-    [SerializeField] private RectTransform worldMapRoot; // Chứa các khối đơn giản
+    [SerializeField] private RectTransform worldMapRoot;
     [SerializeField] private RectTransform zoneMapRoot;
 
     [Header("Zoom Settings")]
@@ -42,14 +42,14 @@ public class MapUI : MonoBehaviour
     private void SwitchToZoneView(AreaData area)
     {
         currentState = MapViewState.Zone;
-        mapContainer.DOScale(zoneScale, zoomDuration).SetUpdate(true); // Thêm SetUpdate(true)
+        mapContainer.DOScale(zoneScale, zoomDuration).SetUpdate(true);
         RefreshMapVisibility(area);
     }
 
     private void SwitchToWorldView()
     {
         currentState = MapViewState.World;
-        mapContainer.DOScale(worldScale, zoomDuration).SetUpdate(true); // Thêm SetUpdate(true)
+        mapContainer.DOScale(worldScale, zoomDuration).SetUpdate(true);
         mapContainer.DOAnchorPos(Vector2.zero, zoomDuration).SetUpdate(true);
         RefreshMapVisibility(null);
     }
@@ -82,7 +82,6 @@ public class MapUI : MonoBehaviour
         UpdatePlayerPosition();
         if (Input.GetKeyDown(KeyCode.K))
         {
-            Debug.Log("Manual Refresh Triggered");
             RefreshMapDefault();
         }
         if (Input.GetKeyDown(KeyCode.Space))
@@ -97,113 +96,69 @@ public class MapUI : MonoBehaviour
         if (player != null) _playerTransform = player.transform;
     }
 
-    // public void RefreshMap()
-    // {
-    //     if (MapManager.Instance == null) return;
-    //     if (mapContainer == null || roomTemplatePrefab == null) return;
+    private void RefreshMapVisibility(AreaData activeArea)
+    {
+        if (MapManager.Instance == null) return;
 
-    //     if (MapManager.Instance.allRooms != null)
-    //     {
-    //         foreach (var roomData in MapManager.Instance.allRooms)
-    //         {
-    //             if (roomData == null) continue;
-
-    //             bool isVisited = MapManager.Instance.IsRoomVisited(roomData.roomName);
-                
-    //             if (_spawnedRooms.ContainsKey(roomData.roomName))
-    //             {
-    //                 _spawnedRooms[roomData.roomName].SetActive(isVisited);
-    //             }
-    //             else
-    //             {
-    //                 if (isVisited)
-    //                 {
-    //                     SpawnRoom(roomData);
-    //                 }
-    //             }
-    //         }
-    //     }
+        bool isWorldView = (currentState == MapViewState.World);
         
-    //     if (playerIcon != null)
-    //     {
-    //         playerIcon.SetAsLastSibling();
-    //     }
-    // }
-
-private void RefreshMapVisibility(AreaData activeArea)
-{
-    if (MapManager.Instance == null) return;
-
-    bool isWorldView = (currentState == MapViewState.World);
-    
-    // --- 1. XỬ LÝ AREA LỚN (WORLD MAP) ---
-    // Duyệt qua tất cả phòng để đảm bảo Area đã được Spawn
-    foreach (var roomData in MapManager.Instance.allRooms)
-    {
-        if (roomData == null) continue;
-        bool visited = MapManager.Instance.IsRoomVisited(roomData.roomName);
-
-        if (visited && roomData.areaData != null)
+        foreach (var roomData in MapManager.Instance.allRooms)
         {
-            // Nếu khu vực này đã từng có phòng được đi qua, hãy spawn khối Area
-            if (!_spawnedAreas.ContainsKey(roomData.areaData.areaType))
+            if (roomData == null) continue;
+            bool visited = MapManager.Instance.IsRoomVisited(roomData.roomName);
+
+            if (visited && roomData.areaData != null)
             {
-                SpawnArea(roomData.areaData);
-            }
-        }
-    }
-
-    // Bật/Tắt các khối Area dựa trên view
-    foreach (var area in _spawnedAreas)
-    {
-        area.Value.SetActive(isWorldView);
-    }
-
-    // --- 2. XỬ LÝ ROOM CHI TIẾT ---
-    foreach (var roomData in MapManager.Instance.allRooms)
-    {
-        if (roomData == null) continue;
-        bool visited = MapManager.Instance.IsRoomVisited(roomData.roomName);
-        
-        // Spawn phòng nếu đã đi qua mà chưa có object
-        if (visited && !_spawnedRooms.ContainsKey(roomData.roomName))
-        {
-            SpawnRoom(roomData);
-        }
-
-        if (_spawnedRooms.ContainsKey(roomData.roomName))
-        {
-            GameObject roomObj = _spawnedRooms[roomData.roomName];
-
-            if (isWorldView)
-            {
-                // WORLD VIEW: Ẩn phòng chi tiết để hiện khối Area (Hollow Knight style)
-                // Nếu bạn muốn hiện cả phòng trong World View, hãy đổi thành roomObj.SetActive(visited);
-                roomObj.SetActive(false); 
-            }
-            else
-            {
-                // ZONE VIEW: Hiện phòng đã đi qua VÀ phải thuộc Area đang xem
-                // Nếu activeArea null (lỗi truyền vào), ta lấy area của scene hiện tại làm mặc định
-                if (activeArea == null) 
+                if (!_spawnedAreas.ContainsKey(roomData.areaData.areaType))
                 {
-                    string currentScene = SceneManager.GetActiveScene().name;
-                    var currentData = MapManager.Instance.GetRoomData(currentScene);
-                    activeArea = currentData?.areaData;
+                    SpawnArea(roomData.areaData);
                 }
-                
-                roomObj.SetActive(visited && roomData.areaData == activeArea);
+            }
+        }
+
+        foreach (var area in _spawnedAreas)
+        {
+            area.Value.SetActive(isWorldView);
+        }
+
+        foreach (var roomData in MapManager.Instance.allRooms)
+        {
+            if (roomData == null) continue;
+            bool visited = MapManager.Instance.IsRoomVisited(roomData.roomName);
+            
+            if (visited && !_spawnedRooms.ContainsKey(roomData.roomName))
+            {
+                SpawnRoom(roomData);
+            }
+
+            if (_spawnedRooms.ContainsKey(roomData.roomName))
+            {
+                GameObject roomObj = _spawnedRooms[roomData.roomName];
+
+                if (isWorldView)
+                {
+                    roomObj.SetActive(false); 
+                }
+                else
+                {
+                    if (activeArea == null) 
+                    {
+                        string currentScene = SceneManager.GetActiveScene().name;
+                        var currentData = MapManager.Instance.GetRoomData(currentScene);
+                        activeArea = currentData?.areaData;
+                    }
+                    
+                    roomObj.SetActive(visited && roomData.areaData == activeArea);
+                }
             }
         }
     }
-}
 
     private void SpawnArea(AreaData data)
     {
         if (data.areaSimpleSprite == null) return;
 
-        // Dùng chung template hoặc tạo một cái riêng cho Area khối
-        GameObject obj = Instantiate(roomTemplatePrefab, worldMapRoot); // worldMapRoot là cha
+        GameObject obj = Instantiate(roomTemplatePrefab, worldMapRoot);
         obj.name = "Area_" + data.areaName;
         
         RectTransform rt = obj.GetComponent<RectTransform>();
@@ -258,14 +213,11 @@ private void RefreshMapVisibility(AreaData activeArea)
 
         if (currentState == MapViewState.World)
         {
-            // Icon bám theo Map Container hoặc WorldMapRoot
             playerIcon.SetParent(worldMapRoot);
-            // Tính toán vị trí Player trên World Map dựa trên tỉ lệ world map
             playerIcon.anchoredPosition = roomData.areaData.worldMapPosition; 
         }
         else
         {
-            // Icon bám theo Room chi tiết
             if (_spawnedRooms.ContainsKey(currentScene))
             {
                 GameObject currentRoomObj = _spawnedRooms[currentScene];
@@ -281,22 +233,5 @@ private void RefreshMapVisibility(AreaData activeArea)
                 playerIcon.anchoredPosition = new Vector2(normX * uiSize.x, normY * uiSize.y);
             }
         }
-
-        // GameObject currentRoomObj = _spawnedRooms[currentScene];
-        // if (playerIcon.parent != currentRoomObj.transform)
-        // {
-        //     playerIcon.SetParent(currentRoomObj.transform);
-        //     playerIcon.localScale = Vector3.one;
-        // }
-
-        // Vector2 relativeWorldPos = (Vector2)_playerTransform.position - roomData.worldCenter;
-        
-        // float normX = (roomData.worldSize.x != 0) ? relativeWorldPos.x / roomData.worldSize.x : 0;
-        // float normY = (roomData.worldSize.y != 0) ? relativeWorldPos.y / roomData.worldSize.y : 0;
-
-        // RectTransform roomRT = currentRoomObj.GetComponent<RectTransform>();
-        // Vector2 uiSize = roomRT.sizeDelta;
-
-        // playerIcon.anchoredPosition = new Vector2(normX * uiSize.x, normY * uiSize.y);
     }
 }

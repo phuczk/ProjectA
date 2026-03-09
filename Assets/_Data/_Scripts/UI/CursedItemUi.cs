@@ -49,6 +49,21 @@ public class CursedItemUI : MonoBehaviour, ISelectHandler, IDeselectHandler
 
     private void HandleClick()
     {
+        if (PlayerRestState.Instance != null && !PlayerRestState.Instance.IsResting)
+        {
+            ShowRestRequiredPanel();
+            return;
+        } 
+        
         OnItemClicked?.Invoke(data);
+    }
+
+    private void ShowRestRequiredPanel()
+    {
+        var restPanel = FindAnyObjectByType<RestRequiredPanel>();
+        if (restPanel != null)
+        {
+            restPanel.ShowPanel();
+        }
     }
 }

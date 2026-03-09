@@ -44,7 +44,8 @@
             "skill": "Kỹ năng",
             "ability": "Khả năng",
             "passive": "Bị động"
-        }
+        },
+        "rest_required": "Bạn cần nghỉ ngơi tại bench để thực hiện hành động này!"
     },
     "cursed":{
         "cunning_eyes":{

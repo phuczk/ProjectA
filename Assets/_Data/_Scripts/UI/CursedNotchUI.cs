@@ -45,6 +45,12 @@ public class CursedNotchUI : MonoBehaviour, ISelectHandler, IDeselectHandler
 
     private void HandleNotchClick()
     {
+        if (PlayerRestState.Instance != null && PlayerRestState.Instance.IsResting)
+        {
+            ShowRestRequiredPanel();
+            return;
+        }
+        
         if (_currentData != null && !string.IsNullOrEmpty(_currentData.id))
         {
             string itemId = _currentData.id;
@@ -66,5 +72,14 @@ public class CursedNotchUI : MonoBehaviour, ISelectHandler, IDeselectHandler
     public void OnDeselect(BaseEventData eventData)
     {
         icon.transform.localScale = _defaultScale;
+    }
+
+    private void ShowRestRequiredPanel()
+    {
+        var restPanel = FindAnyObjectByType<RestRequiredPanel>();
+        if (restPanel != null)
+        {
+            restPanel.ShowPanel();
+        }
     }
 }

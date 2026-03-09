@@ -26,6 +26,11 @@ public class Bench : Interactable
             data.player.currentMoney = money;
             SaveSystem.Save(data);
         }
+        
+        if (PlayerRestState.Instance != null)
+        {
+            PlayerRestState.Instance.StartRest();
+        }
     }
 
     protected override void OnInteract(Transform player)

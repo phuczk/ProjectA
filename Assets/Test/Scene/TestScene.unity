@@ -3612,7 +3612,8 @@ MonoBehaviour:
   StateNodes:
   - rid: 4042312840820293749
   - rid: 4042312840820293751
-  _isRunning: 0
+  _currentPhase: 0
+  _animationController: {fileID: 0}
   DefaultStateType: 0
   references:
     version: 2
@@ -3625,6 +3626,7 @@ MonoBehaviour:
         NextNodeGuid: 
         Transitions:
         - rid: 4042312840820293755
+        Delay: 0
     - rid: 4042312840820293751
       type: {class: EndNode, ns: , asm: Assembly-CSharp}
       data:
@@ -3633,6 +3635,7 @@ MonoBehaviour:
         NextNodeGuid: 
         Transitions:
         - rid: 4042312840820293757
+        Delay: 0
         StartNodeGuid: 
     - rid: 4042312840820293755
       type: {class: BossTransition, ns: , asm: Assembly-CSharp}
@@ -15782,7 +15785,7 @@ PrefabInstance:
     - target: {fileID: 4762235424183468052, guid: c6cab51adfe6094498f6aca1862b0c32, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: -876546973899608171, guid: fe39dd7358c86014687a8d1c010a84b6, type: 3}
+      objectReference: {fileID: 2100000, guid: b6b7727cf2573514b89c84029abfc0be, type: 2}
     - target: {fileID: 4762235424251524903, guid: c6cab51adfe6094498f6aca1862b0c32, type: 3}
       propertyPath: m_SortingLayer
       value: 3
@@ -15794,7 +15797,7 @@ PrefabInstance:
     - target: {fileID: 4762235424251524903, guid: c6cab51adfe6094498f6aca1862b0c32, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: -876546973899608171, guid: fe39dd7358c86014687a8d1c010a84b6, type: 3}
+      objectReference: {fileID: 2100000, guid: b6b7727cf2573514b89c84029abfc0be, type: 2}
     - target: {fileID: 4762235425215752772, guid: c6cab51adfe6094498f6aca1862b0c32, type: 3}
       propertyPath: m_Name
       value: Character (71)
@@ -15858,7 +15861,7 @@ PrefabInstance:
     - target: {fileID: 4762235425229026459, guid: c6cab51adfe6094498f6aca1862b0c32, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: -876546973899608171, guid: fe39dd7358c86014687a8d1c010a84b6, type: 3}
+      objectReference: {fileID: 2100000, guid: b6b7727cf2573514b89c84029abfc0be, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -29235,7 +29238,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5323087539016608165, guid: ec2c0061b14ef1141b1792d1f314f76f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.5
+      value: -4.691
       objectReference: {fileID: 0}
     - target: {fileID: 5323087539016608165, guid: ec2c0061b14ef1141b1792d1f314f76f, type: 3}
       propertyPath: m_LocalPosition.z

@@ -41,7 +41,7 @@ public class GunSelectionUI : MonoBehaviour, IBackHandler
         
         RefreshCurrentGunDisplay();
         
-        if (currentGunButton != null)
+        if (currentGunButton != null && PlayerRestState.Instance != null && PlayerRestState.Instance.IsResting)
         {
             currentGunButton.onClick.AddListener(ToggleGunList);
         }
@@ -49,6 +49,12 @@ public class GunSelectionUI : MonoBehaviour, IBackHandler
     
     private void ToggleGunList()
     {
+        if (PlayerRestState.Instance != null && !PlayerRestState.Instance.IsResting)
+        {
+            ShowRestRequiredPanel();
+            return;
+        }
+        
         _isGunListVisible = !_isGunListVisible;
         gunListPanel.SetActive(_isGunListVisible);
 
@@ -204,6 +210,12 @@ public class GunSelectionUI : MonoBehaviour, IBackHandler
     
     public void FocusOnGunSelection()
     {
+        if (PlayerRestState.Instance != null && !PlayerRestState.Instance.IsResting)
+        {
+            ShowRestRequiredPanel();
+            return;
+        }
+        
         if (!_isGunListVisible)
         {
             ToggleGunList();
@@ -226,5 +238,14 @@ public class GunSelectionUI : MonoBehaviour, IBackHandler
         }
         
         return false;
+    }
+
+    private void ShowRestRequiredPanel()
+    {
+        var restPanel = FindAnyObjectByType<RestRequiredPanel>();
+        if (restPanel != null)
+        {
+            restPanel.ShowPanel();
+        }
     }
 }

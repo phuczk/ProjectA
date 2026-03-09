@@ -44,7 +44,8 @@
             "skill": "Skill",
             "ability": "Ability",
             "passive": "Passive"
-        }
+        },
+        "rest_required": "You need to rest at the bench to perform this action!"
     },
     "cursed": {
         "cunning_eyes": {
