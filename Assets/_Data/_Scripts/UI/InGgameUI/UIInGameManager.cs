@@ -107,7 +107,7 @@ public class UIInGameManager : Singleton<UIInGameManager>
         if (!IsInputAllowed()) return;
         if (GameStateManager.Instance.GetCurrentState() != GameState.Pause) return;
 
-        var allBackHandlers = FindObjectsOfType<MonoBehaviour>()
+        var allBackHandlers = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
             .OfType<IBackHandler>()
             .Where(h => h as MonoBehaviour != null)
             .ToList();

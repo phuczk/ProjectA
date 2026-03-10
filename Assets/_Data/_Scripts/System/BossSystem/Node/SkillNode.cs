@@ -55,11 +55,6 @@ public abstract class SkillNode : BossNode
     {
     }
 
-    public override BossNode Execute(BossController boss)
-    {
-        return base.Execute(boss);
-    }
-
     protected virtual string GetAnimationName()
     {
         return AnimationType switch

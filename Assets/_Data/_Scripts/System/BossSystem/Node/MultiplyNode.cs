@@ -22,21 +22,5 @@ public class MultiplyNode : BossNode
             NextNodeGuid = Branches[0].NextNodeGuid;
             IsFinished = true;
         }
-        else
-        {
-            Debug.LogWarning("MultiplyNode.ExecuteLogic() - No valid output nodes available");
-        }
     }
-    
-    // public override void Enter(BossController controller)
-    // {
-    //     base.Enter(controller);
-    //     IsFinished = false;
-    // }
-    
-    // public override void Exit(BossController controller)
-    // {
-    //     base.Exit(controller);
-    //     IsFinished = false;
-    // }
 }

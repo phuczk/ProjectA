@@ -19,8 +19,6 @@ public static class PlayerSpawnService
 
         if (dontDestroy)
             Object.DontDestroyOnLoad(_player);
-        
-        Debug.Log($"PlayerSpawnService: Created player at {pos}");
 
         return _player;
     }

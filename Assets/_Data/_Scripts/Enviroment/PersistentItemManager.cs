@@ -10,7 +10,7 @@ public class PersistentItemManager : Singleton<PersistentItemManager>
     private HashSet<string> _collectedCursedItems = new HashSet<string>();
     private HashSet<string> _collectedGunItems = new HashSet<string>();
 
-    private void Awake()
+    protected override void Awake()
     {
         base.Awake();
         LoadCollectedItems();

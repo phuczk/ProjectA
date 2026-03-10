@@ -15,7 +15,6 @@ public class AddNode : BossNode
 
     public override void ExecuteLogic()
     {
-        // Check if all inputs are completed
         bool allInputsCompleted = true;
         for (int i = 0; i < InputCompleted.Count; i++)
         {
@@ -28,10 +27,8 @@ public class AddNode : BossNode
         
         if (allInputsCompleted && InputCompleted.Count > 0)
         {
-            Debug.Log("AddNode: All inputs completed, finishing AddNode");
             IsFinished = true;
         }
-        // Don't set IsFinished if not all inputs are completed
     }
     
     public override void Enter()
@@ -48,8 +45,6 @@ public class AddNode : BossNode
         {
             InputCompleted.RemoveAt(InputCompleted.Count - 1);
         }
-        
-        Debug.Log($"AddNode Enter: {InputCompleted.Count} inputs, {InputBranches.Count} branches");
     }
     
     public override void Exit()
@@ -57,7 +52,6 @@ public class AddNode : BossNode
         base.Exit();
         IsFinished = false;
         
-        // Reset completion states
         for (int i = 0; i < InputCompleted.Count; i++)
         {
             InputCompleted[i] = false;

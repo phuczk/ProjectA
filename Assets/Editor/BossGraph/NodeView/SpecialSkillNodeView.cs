@@ -58,7 +58,7 @@ public class SpecialSkillNodeView : SkillNodeView
             // Transitions
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Transitions", EditorStyles.boldLabel);
-            EditorGUILayout.LabelField($"Count: {_specialNode.Transitions.Count}", EditorStyles.helpBox);
+            EditorGUILayout.LabelField($"Next Node: {(string.IsNullOrEmpty(_specialNode.NextNodeGuid) ? "None" : _specialNode.NextNodeGuid)}", EditorStyles.helpBox);
             
             if (GUI.changed)
                 if (_machine != null)

@@ -138,7 +138,7 @@ public class SkillNodeView : Node
             // Transitions
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Transitions", EditorStyles.boldLabel);
-            EditorGUILayout.LabelField($"Count: {_node.Transitions.Count}", EditorStyles.helpBox);
+            EditorGUILayout.LabelField($"Next Node: {(string.IsNullOrEmpty(_node.NextNodeGuid) ? "None" : _node.NextNodeGuid)}", EditorStyles.helpBox);
             
             if (GUI.changed)
                 if (_machine != null)
@@ -176,7 +176,7 @@ public class SkillNodeView : Node
     {
         string[] baseFields = { "Weight", "NextNodeGuid", "AnimationName", "UseCustomAnimation", 
                                "AnimationType", "AttackVariant", "DelayAnimation", "EntryConditions", 
-                               "Transitions", "Guid", "GraphPosition", "IsFinished", "StateType", "IsCollapsed" };
+                               "Guid", "GraphPosition", "IsFinished", "StateType", "IsCollapsed" };
         return System.Array.IndexOf(baseFields, fieldName) >= 0;
     }
     

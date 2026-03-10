@@ -59,26 +59,4 @@ public class PhaseNode : BossNode
         // All logic is handled in Enter()
         // Phase node should finish immediately based on Enter() logic
     }
-
-    public override BossNode Execute(BossController boss)
-    {
-        if (boss.Animator != null && !string.IsNullOrEmpty(AnimatorState))
-        {
-            boss.Animator.Play(AnimatorState);
-        }
-
-        if (PhaseAudio != null)
-        {
-            AudioSource source = boss.GetComponent<AudioSource>();
-            if (source != null)
-            {
-                source.PlayOneShot(PhaseAudio);
-            }
-        }
-
-        boss.SetCurrentPhase(TargetPhase);
-        boss.MarkPhaseNodeExecuted(Guid);
-
-        return base.Execute(boss);
-    }
 }

@@ -72,16 +72,16 @@ public class SceneTransitionManager : MonoBehaviour
         }
     }
 
-    public void TransitionToScene(string sceneName, TransitionType transitionType, FadeDirection direction)
+    public void TransitionToScene(string sceneName, TransitionType transitionType, FadeDirection direction, bool isChangeScene = true)
     {
-        StartCoroutine(LoadSceneRoutine(sceneName, transitionType, direction));
+        StartCoroutine(LoadSceneRoutine(sceneName, transitionType, direction, isChangeScene));
     }
 
-    private IEnumerator LoadSceneRoutine(string sceneName, TransitionType transitionType, FadeDirection direction)
+    private IEnumerator LoadSceneRoutine(string sceneName, TransitionType transitionType, FadeDirection direction, bool isChangeScene = true)
     {
         if (transitionType == TransitionType.Death)
         {
-            yield return StartCoroutine(DeathTransitionRoutine(sceneName));
+            yield return StartCoroutine(DeathTransitionRoutine(sceneName, isChangeScene));
         }
         else
         {
@@ -134,7 +134,7 @@ public class SceneTransitionManager : MonoBehaviour
         _horizontalFadePanel.gameObject.SetActive(false);
     }
     
-    private IEnumerator DeathTransitionRoutine(string sceneName)
+    private IEnumerator DeathTransitionRoutine(string sceneName, bool isChangeScene)
     {
         _deathTransition.gameObject.SetActive(true);
         
@@ -147,10 +147,13 @@ public class SceneTransitionManager : MonoBehaviour
         
         yield return canvasGroup.DOFade(1f, _transitionTime).SetEase(_easeType).WaitForCompletion();
 
-        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
-        while (!operation.isDone)
+        if (isChangeScene)
         {
-            yield return null;
+            AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
+            while (!operation.isDone)
+            {
+                yield return null;
+            }
         }
 
         yield return canvasGroup.DOFade(0f, _transitionTime).SetEase(_easeType).WaitForCompletion();

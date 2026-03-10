@@ -60,7 +60,7 @@ public class ShootSkillNodeView : SkillNodeView
             // Transitions
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Transitions", EditorStyles.boldLabel);
-            EditorGUILayout.LabelField($"Count: {_shootNode.Transitions.Count}", EditorStyles.helpBox);
+            EditorGUILayout.LabelField($"Next Node: {(string.IsNullOrEmpty(_shootNode.NextNodeGuid) ? "None" : _shootNode.NextNodeGuid)}", EditorStyles.helpBox);
             
             if (GUI.changed)
                 if (_machine != null)

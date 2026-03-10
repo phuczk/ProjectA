@@ -41,7 +41,6 @@ public class PlayerHealth : MonoBehaviour, ISaveable, ISoundEmitter
     [SerializeField] private float deathFloatDuration = 2f;
     [SerializeField] private float deathFloatAmplitude = 0.5f;
     [SerializeField] private float deathFloatFrequency = 2f;
-    [SerializeField] private float deathTargetRotation = 45f;
 
     private SpriteRenderer _spriteRenderer;
     private WaitForSeconds _blinkWait;
