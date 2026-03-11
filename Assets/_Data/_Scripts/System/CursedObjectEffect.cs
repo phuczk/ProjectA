@@ -14,7 +14,7 @@ public abstract class Effect
 
     // Các sự kiện hành động cụ thể
     public virtual void OnJump(PlayerController player) { }
-    public virtual void OnDash(PlayerController player) { }
+    public virtual void OnDash(PlayerController player, Vector2 direction) { }
     public virtual void OnHeal(PlayerController player) { }
     public virtual void OnAttack(PlayerController player) { }
     public virtual void OnFlipGravity(PlayerController player) { }

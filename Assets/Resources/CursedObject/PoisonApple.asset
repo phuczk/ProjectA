@@ -10,17 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbc6289423deb334aa04a54311d16020, type: 3}
-  m_Name: CursedObject Data 1
+  m_Name: PoisonApple
   m_EditorClassIdentifier: 
-  id: blood_cloak
+  id: poison_apple
   type: 3
   icon: {fileID: -7503982551761734889, guid: b1572a0621facd841892cda77b9351d4, type: 3}
   <Effects>k__BackingField:
-  - rid: 8716254537954099258
+  - rid: 4042312967951220801
   references:
     version: 2
     RefIds:
-    - rid: 8716254537954099258
-      type: {class: AddDamageEffect, ns: , asm: Assembly-CSharp}
+    - rid: 4042312967951220801
+      type: {class: ThrowSkill, ns: , asm: Assembly-CSharp}
       data:
-        bonus: 0
+        damage: 10
+        projectilePrefab: {fileID: 3235624966012856367, guid: 1fb7b24d05cbf694981c6c638be42b81, type: 3}
+        throwSpeed: 25
+        skillDuration: 0.2
+        projectileCount: 1
+        throwInterval: 0.2
+        throwType: 1
+        spawnOffset: {x: 0.5, y: 1}

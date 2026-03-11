@@ -36,6 +36,9 @@ public class PlayerEffectRunner : MonoBehaviour
 
         bus.OnGunFire += HandleGunFire;
         bus.OnHeal += HandleHeal;
+        bus.OnSkillUsed += HandleSpecialSkill;
+        bus.OnDash += HandleDash;
+        bus.OnJump += HandleJump;
     }
 
     private void OnDisable()
@@ -45,6 +48,9 @@ public class PlayerEffectRunner : MonoBehaviour
 
         bus.OnGunFire -= HandleGunFire;
         bus.OnHeal -= HandleHeal;
+        bus.OnSkillUsed -= HandleSpecialSkill;
+        bus.OnDash -= HandleDash;
+        bus.OnJump -= HandleJump;
     }
 
     public void AddEffect(Effect e)
@@ -81,5 +87,29 @@ public class PlayerEffectRunner : MonoBehaviour
 
         foreach (var e in _effects)
             e.OnHeal(player);
+    }
+
+    private void HandleSpecialSkill(PlayerController player, Vector2 dir)
+    {
+        if (player != _player) return;
+
+        foreach (var e in _effects)
+            e.OnSkillUsed(player, dir);
+    }
+
+    private void HandleDash(PlayerController player, Vector2 dir)
+    {
+        if (player != _player) return;
+
+        foreach (var e in _effects)
+            e.OnDash(player, dir);
+    }
+
+    private void HandleJump(PlayerController player)
+    {
+        if (player != _player) return;
+
+        foreach (var e in _effects)
+            e.OnJump(player);
     }
 }

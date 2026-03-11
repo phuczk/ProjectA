@@ -33,6 +33,10 @@ public class PlayerHealth : MonoBehaviour, ISaveable, ISoundEmitter
     [SerializeField] private float invincibleDuration = 0.5f;
     private float _invincibleTimer;
     
+    [Header("No Damage Time")]
+    public bool isNoTakeDamageTime = false;
+    private int _phantomDashCounter = 0;
+    
     [Header("Death Animation Settings")]
     [SerializeField] private float deathSlowMoDuration = 0.5f;
     [SerializeField] private float deathSlowMoTimeScale = 0.3f;
@@ -108,6 +112,7 @@ public class PlayerHealth : MonoBehaviour, ISaveable, ISoundEmitter
     public void TakeDamage(int damage)
     {
         if (Time.time < _invincibleTimer) return;
+        if (isNoTakeDamageTime) return; // Skip damage if no damage time
 
         CurrentHealth -= damage;
         if (CurrentHealth <= 0)

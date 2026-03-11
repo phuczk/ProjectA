@@ -35,10 +35,8 @@ public class PlayerCursedObject: MonoBehaviour, ISaveable
         SaveSystem.Save(data);
     }
 
-    // 🔥 NEW: Unlock cursed object by ID
     public void UnlockCursedObject(string cursedId)
     {
-        // Tạo CursedObjectData tạm thời
         var tempData = new CursedObjectData { id = cursedId };
         OnUnlocked(tempData);
     }
@@ -62,14 +60,12 @@ public class PlayerCursedObject: MonoBehaviour, ISaveable
 
     public void SaveData(SaveData data)
     {
-        // 🔥 FIXED: Không clear unlockedCursedObjects, chỉ sync missing items
         if (data.items?.unlockedCursedObjects == null)
         {
             if (data.items == null) data.items = new ItemData();
             data.items.unlockedCursedObjects = new List<string>();
         }
 
-        // Chỉ add items từ _unlocked set mà chưa có trong list
         foreach (var id in _unlocked)
         {
             if (!data.items.unlockedCursedObjects.Contains(id))

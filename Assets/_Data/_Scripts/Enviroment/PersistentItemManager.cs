@@ -19,7 +19,11 @@ public class PersistentItemManager : Singleton<PersistentItemManager>
     private void LoadCollectedItems()
     {
         var save = SaveManager.Instance != null ? SaveManager.Instance.CurrentData : SaveSystem.Load();
-        if (save?.world == null) return;
+        
+        if (save?.world == null) 
+        {
+            return;
+        }
 
         if (save.world.collectedAbilityItems != null)
         {
@@ -115,7 +119,17 @@ public class PersistentItemManager : Singleton<PersistentItemManager>
     public bool PlayerHasAbility(AbilityType abilityType)
     {
         var save = SaveManager.Instance != null ? SaveManager.Instance.CurrentData : SaveSystem.Load();
-        return save?.player?.unlockedAbilities?.Contains(abilityType) ?? false;
+        bool hasAbility = save?.player?.unlockedAbilities?.Contains(abilityType) ?? false;
+        
+        Debug.Log($"PersistentItemManager: Checking ability {abilityType}");
+        Debug.Log($"SaveManager exists: {SaveManager.Instance != null}");
+        if (save?.player?.unlockedAbilities != null)
+        {
+            Debug.Log($"Unlocked abilities: [{string.Join(", ", save.player.unlockedAbilities)}]");
+        }
+        Debug.Log($"Has ability {abilityType}: {hasAbility}");
+        
+        return hasAbility;
     }
 
     public bool PlayerHasCursedItem(string cursedId)

@@ -288,14 +288,18 @@ public class PlayerController : MonoBehaviour, IPlayerController
         _motor.SetJumpInput(_frameInput.JumpDown, _frameInput.JumpHeld, _time);
 
         if (_frameInput.FireHeld) TryFire(_inputHandler.AimInput);
-        if (_frameInput.SpecialDown) TrySpecialSkill(_frameInput.Move);
+        if (_frameInput.SpecialDown) TrySpecialSkill(_inputHandler.AimInput);
         
         if (_frameInput.HealDown) HealPlayer();
 
         HandleScaling();
         
-        if (_frameInput.DashDown) 
+        if (_frameInput.DashDown)
+        {
+            Vector2 dir = GetSkillDirection(_inputHandler.AimInput);
+            GameEventBus.Instance?.RaiseDash(this, dir);
             _motor.TryStartDash(_time, _dashSpeed, _dashDuration, _dashCooldownTime);
+        }
 
         _weaponSystem?.HandleIdleArm();
 
@@ -411,6 +415,19 @@ public class PlayerController : MonoBehaviour, IPlayerController
     private void TrySpecialSkill(Vector2 inputDir)
     {
         _playerSkill?.TrySpecialSkill(inputDir);
+    }
+    
+    public Vector2 GetSkillDirection(Vector2 inputDir)
+    {
+        Vector2 up = GetUpDir();
+        Vector2 right = GetRightDir(up);
+        inputDir = inputDir.normalized;
+        
+        Vector2 dir = inputDir.sqrMagnitude > 0.1f ? 
+            (inputDir.x * right + inputDir.y * up) : 
+            (_visuals.transform.localScale.x < 0 ? -right : right);
+        
+        return dir.normalized;
     }
 
     private void HealPlayer()

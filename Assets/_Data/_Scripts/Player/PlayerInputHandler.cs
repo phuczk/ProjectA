@@ -46,7 +46,7 @@ public class PlayerInputHandler : MonoBehaviour
     public bool FireHeld => _fireAction?.IsPressed() ?? false;
     public bool GravityInput => _gravityAction?.IsPressed() ?? false;
     public bool ScaleInput => _scaleAction?.IsPressed() ?? false;
-    public bool SkillInput => _skillAction?.IsPressed() ?? false;
+    public bool SkillInput => _skillAction?.WasPressedThisFrame() ?? false;
 
     public bool IsFireHeld() => FireHeld;
 

@@ -13,6 +13,7 @@ public class PlayerData
     public int currentManaFragment;
     public int currentNotch = 4;
     public int currentDamage = 0;
+    public int currentSkillDamage = 0;
     public GunType currentGun = GunType.Normal;
 
     public bool hasHunterNote = false;

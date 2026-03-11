@@ -67,7 +67,13 @@ public class EnemyProjectile : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            other.GetComponent<PlayerHealth>()?.TakeDamage(damage);
+            PlayerHealth health = other.GetComponent<PlayerHealth>();
+            if (health != null && health.isNoTakeDamageTime)
+            {
+                return;
+            }
+            
+            health?.TakeDamage(damage);
             ReturnToPool();
         }
         else if (other.CompareTag("Ground"))

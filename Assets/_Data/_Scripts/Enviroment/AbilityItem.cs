@@ -10,15 +10,10 @@ public class AbilityItem : Interactable
 
     private void Awake()
     {
-        if (PersistentItemManager.Instance != null && PersistentItemManager.Instance.IsAbilityItemCollected(itemId))
-        {
-            Destroy(gameObject);
-            return;
-        }
-        
         if (PersistentItemManager.Instance != null && PersistentItemManager.Instance.PlayerHasAbility(_abilityType))
         {
             Destroy(gameObject);
+            return;
         }
     }
 

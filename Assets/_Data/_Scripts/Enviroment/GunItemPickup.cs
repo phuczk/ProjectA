@@ -10,7 +10,7 @@ public class GunItemPickup : Interactable
 
     private void Awake()
     {
-        if (PersistentItemManager.Instance != null && PersistentItemManager.Instance.IsGunItemCollected(itemId))
+        if (PersistentItemManager.Instance != null)
         {
             Destroy(gameObject);
             return;
