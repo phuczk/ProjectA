@@ -121,14 +121,6 @@ public class PersistentItemManager : Singleton<PersistentItemManager>
         var save = SaveManager.Instance != null ? SaveManager.Instance.CurrentData : SaveSystem.Load();
         bool hasAbility = save?.player?.unlockedAbilities?.Contains(abilityType) ?? false;
         
-        Debug.Log($"PersistentItemManager: Checking ability {abilityType}");
-        Debug.Log($"SaveManager exists: {SaveManager.Instance != null}");
-        if (save?.player?.unlockedAbilities != null)
-        {
-            Debug.Log($"Unlocked abilities: [{string.Join(", ", save.player.unlockedAbilities)}]");
-        }
-        Debug.Log($"Has ability {abilityType}: {hasAbility}");
-        
         return hasAbility;
     }
 

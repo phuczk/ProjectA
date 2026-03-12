@@ -19,7 +19,6 @@ public class NPC : Interactable, ITalkable
     {
         if (DialougeController.Instance == null)
         {
-            Debug.LogWarning("DialougeController Instance is NULL");
             return;
         }
 
