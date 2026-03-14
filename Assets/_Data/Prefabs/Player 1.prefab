@@ -381,7 +381,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: -451849085
   m_SortingLayer: 3
-  m_SortingOrder: 1
+  m_SortingOrder: 100
   m_SortAtRoot: 0
 --- !u!114 &7534900906290976017
 MonoBehaviour:
@@ -453,6 +453,7 @@ MonoBehaviour:
   MaxHealth: 5
   MaxMana: 6
   invincibleDuration: 1
+  isNoTakeDamageTime: 0
   deathSlowMoDuration: 0.5
   deathSlowMoTimeScale: 0.3
   deathFlyUpDuration: 2
@@ -460,7 +461,6 @@ MonoBehaviour:
   deathFloatDuration: 3
   deathFloatAmplitude: 0.1
   deathFloatFrequency: 1
-  deathTargetRotation: -30
   _rb2d: {fileID: 1544650614272011793}
 --- !u!114 &1594969903124630946
 MonoBehaviour:
@@ -474,6 +474,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b3dca91bcaf8a94b9def971d050959c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skillCooldown: 0.5
 --- !u!114 &8651743111479576025
 MonoBehaviour:
   m_ObjectHideFlags: 0

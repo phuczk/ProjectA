@@ -26,7 +26,7 @@ public class GunSlotUI : MonoBehaviour, ISelectHandler, IDeselectHandler
         _button = GetComponent<Button>();
         _rect = GetComponent<RectTransform>();
 
-        if (_button != null && PlayerRestState.Instance != null && PlayerRestState.Instance.IsResting)
+        if (_button != null && PlayerRestState.Instance != null && PlayerRestState.Instance.IsResting && !isCurrentButton)
             _button.onClick.AddListener(() => OnGunClicked?.Invoke(_gunType));
         OriginalScale = gunIcon.transform.localScale;
         if (!isCurrentButton)

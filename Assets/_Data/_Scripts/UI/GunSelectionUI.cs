@@ -41,7 +41,7 @@ public class GunSelectionUI : MonoBehaviour, IBackHandler
         
         RefreshCurrentGunDisplay();
         
-        if (currentGunButton != null && PlayerRestState.Instance != null && PlayerRestState.Instance.IsResting)
+        if (currentGunButton != null)
         {
             currentGunButton.onClick.AddListener(ToggleGunList);
         }
