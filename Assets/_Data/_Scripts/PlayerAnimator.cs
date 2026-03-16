@@ -34,6 +34,7 @@ public class PlayerAnimator : MonoBehaviour, ISoundEmitter
     private void OnEnable()
     {
         _player.Jumped += OnJumped;
+        _player.Dashed += OnDash;
         _player.GroundedChanged += OnGroundedChanged;
 
         _moveParticles.Play();
@@ -42,6 +43,7 @@ public class PlayerAnimator : MonoBehaviour, ISoundEmitter
     private void OnDisable()
     {
         _player.Jumped -= OnJumped;
+        _player.Dashed -= OnDash;
         _player.GroundedChanged -= OnGroundedChanged;
 
         _moveParticles.Stop();
@@ -90,6 +92,16 @@ public class PlayerAnimator : MonoBehaviour, ISoundEmitter
         }
     }
 
+    private void OnDash()
+    {
+        _anim.SetTrigger(DashKey);
+    }
+
+    public void PlaySkillAnimation()
+    {
+        _anim.SetTrigger(SkillKey);
+    }
+
     private void OnGroundedChanged(bool grounded, float impact)
     {
         _grounded = grounded;
@@ -121,6 +133,31 @@ public class PlayerAnimator : MonoBehaviour, ISoundEmitter
         SetColor(_moveParticles);
     }
 
+    private void HandleRunAnimation()
+    {
+        bool isMoving = Mathf.Abs(_player.FrameInput.x) > 0.1f && _grounded;
+
+        _anim.SetBool(RunKey, isMoving);
+
+        if (isMoving && !_moveParticles.isPlaying)
+            _moveParticles.Play();
+
+        if (!isMoving && _moveParticles.isPlaying)
+            _moveParticles.Stop();
+    }
+
+    private void HandleFallAnimation()
+    {
+        if (!_grounded && _player.FrameInput.y < -0.1f)
+        {
+            _anim.SetBool(FallKey, true);
+        }
+        else
+        {
+            _anim.SetBool(FallKey, false);
+        }
+    }
+
     private void SetColor(ParticleSystem ps)
     {
         var main = ps.main;
@@ -130,4 +167,8 @@ public class PlayerAnimator : MonoBehaviour, ISoundEmitter
     private static readonly int GroundedKey = Animator.StringToHash("Grounded");
     private static readonly int IdleSpeedKey = Animator.StringToHash("IdleSpeed");
     private static readonly int JumpKey = Animator.StringToHash("Jump");
+    private static readonly int FallKey = Animator.StringToHash("Fall");
+    private static readonly int RunKey = Animator.StringToHash("Run");
+    private static readonly int SkillKey = Animator.StringToHash("Skill");
+    private static readonly int DashKey = Animator.StringToHash("Dash");
 }

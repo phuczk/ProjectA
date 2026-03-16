@@ -6,6 +6,7 @@ public class PlayerMotor : MonoBehaviour
 {
     public Action<bool, float> OnGroundedChanged;
     public Action OnJumped;
+    public Action OnDashed;
 
     private Rigidbody2D _rb;
     private Collider2D _col;
@@ -139,6 +140,7 @@ public class PlayerMotor : MonoBehaviour
         if (!_ability.Has(AbilityType.Dash)) return false;
         if (_isDashing || time < _dashCooldownUntil) return false;
 
+        OnDashed?.Invoke();
         _isDashing = true;
         _dashEndTime = time + dashDuration;
         _dashCooldownUntil = time + dashCooldownTime;

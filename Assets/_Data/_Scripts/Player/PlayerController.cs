@@ -52,6 +52,7 @@ public class PlayerController : MonoBehaviour, IPlayerController
     public Vector2 FrameInput => _frameInput.Move;
     public event Action<bool, float> GroundedChanged;
     public event Action Jumped;
+    public event Action Dashed;
 
     [SerializeField] private float _armIdleDelay = 0.5f;
 
@@ -167,6 +168,7 @@ public class PlayerController : MonoBehaviour, IPlayerController
         _motor.Configure(_rb, _col, _stats, _visuals, _ability);
         _motor.OnGroundedChanged = (g, v) => { GroundedChanged?.Invoke(g, v); if (g) _canFlipGravity = true; };
         _motor.OnJumped = () => Jumped?.Invoke();
+        _motor.OnDashed = () => Dashed?.Invoke();
 
         if (_weaponSystem != null)
         {
@@ -791,5 +793,6 @@ public interface IPlayerController
 {
     public event Action<bool, float> GroundedChanged;
     public event Action Jumped;
+    public event Action Dashed;
     public Vector2 FrameInput { get; }
 }
