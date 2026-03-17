@@ -18391,9 +18391,11 @@ MonoBehaviour:
   interactText: {fileID: 841631747}
   interactObject: {fileID: 841631746}
   _interactKey: game.take
+  interactIcon: {fileID: 0}
   delayShowMessage: 0.5
   gunType: 1
   itemId: 
+  gunIcon: {fileID: 0}
 --- !u!1 &852797720
 GameObject:
   m_ObjectHideFlags: 0
@@ -26274,11 +26276,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7625707739032337209, guid: 1f5de68b0b83ea745baa980e38b972b2, type: 3}
       propertyPath: itemId
-      value: test
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7625707739032337209, guid: 1f5de68b0b83ea745baa980e38b972b2, type: 3}
       propertyPath: _abilityType
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7625707739032337209, guid: 1f5de68b0b83ea745baa980e38b972b2, type: 3}
       propertyPath: delayShowMessage
@@ -26546,6 +26548,7 @@ MonoBehaviour:
   interactText: {fileID: 2106458618}
   interactObject: {fileID: 2106458617}
   _interactKey: game.talk
+  interactIcon: {fileID: 0}
   delayShowMessage: 0
   NPCKey: Player
   dialougeText: {fileID: 11400000, guid: b4dfa07fcd3654243bf13e7d7b889f6d, type: 2}
@@ -27745,6 +27748,7 @@ MonoBehaviour:
   interactText: {fileID: 247709983}
   interactObject: {fileID: 247709982}
   _interactKey: game.talk
+  interactIcon: {fileID: 0}
   delayShowMessage: 0.3
   NPCKey: Joker
   dialougeText: {fileID: 11400000, guid: c83500368e9c8f84aba71442bf3d0f3f, type: 2}
@@ -35085,7 +35089,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 880015109325193010, guid: d52740a2515ff7b438c0ff1b1dff8c8c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.41
+      value: -8.15
       objectReference: {fileID: 0}
     - target: {fileID: 880015109325193010, guid: d52740a2515ff7b438c0ff1b1dff8c8c, type: 3}
       propertyPath: m_LocalPosition.z
@@ -35178,6 +35182,7 @@ MonoBehaviour:
   interactText: {fileID: 0}
   interactObject: {fileID: 2013474169647783071}
   _interactKey: game.take
+  interactIcon: {fileID: 0}
   delayShowMessage: 0.5
   cursedId: cunning_eyes
   itemId: 
@@ -35304,9 +35309,11 @@ MonoBehaviour:
   interactText: {fileID: 4553717351623294745}
   interactObject: {fileID: 4553717351623294744}
   _interactKey: game.take
+  interactIcon: {fileID: 0}
   delayShowMessage: 0.5
   gunType: 2
   itemId: 
+  gunIcon: {fileID: 0}
 --- !u!1001 &5643591671619200820
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -5,6 +5,7 @@ public class CursedItemPickup : Interactable
 {
     [SerializeField] private string cursedId;
     [SerializeField] private string itemId;
+    [SerializeField] private Sprite cursedIcon;
     
     public string CursedId => cursedId;
 
@@ -35,6 +36,12 @@ public class CursedItemPickup : Interactable
             }
             
             Destroy(gameObject);
+            ShowInfoUi();
         }
+    }
+
+    private void ShowInfoUi()
+    {
+        InteractableUI.Instance.ShowInteractableInfo(InteractableType.CursedItem, cursedIcon, Localization.Get($"item.cursed.{itemId}.name"), Localization.Get($"item.cursed.{itemId}.desc"));
     }
 }

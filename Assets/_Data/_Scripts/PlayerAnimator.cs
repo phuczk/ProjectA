@@ -59,6 +59,9 @@ public class PlayerAnimator : MonoBehaviour, ISoundEmitter
 
         HandleIdleSpeed();
 
+        HandleRunAnimation();
+
+        HandleFallAnimation();
     }
 
     private void HandleSpriteFlip()
@@ -135,15 +138,23 @@ public class PlayerAnimator : MonoBehaviour, ISoundEmitter
 
     private void HandleRunAnimation()
     {
-        bool isMoving = Mathf.Abs(_player.FrameInput.x) > 0.1f && _grounded;
+        float inputX = _player.FrameInput.x;
+        bool isMoving = Mathf.Abs(inputX) > 0.1f && _grounded;
+        
+        if (isMoving)
+        {
+            _anim.SetBool(RunKey, true);
+        }
+        else
+        {
+            _anim.SetBool(RunKey, false);
+        }
 
-        _anim.SetBool(RunKey, isMoving);
+        // if (isMoving && !_moveParticles.isPlaying)
+        //     _moveParticles.Play();
 
-        if (isMoving && !_moveParticles.isPlaying)
-            _moveParticles.Play();
-
-        if (!isMoving && _moveParticles.isPlaying)
-            _moveParticles.Stop();
+        // if (!isMoving && _moveParticles.isPlaying)
+        //     _moveParticles.Stop();
     }
 
     private void HandleFallAnimation()

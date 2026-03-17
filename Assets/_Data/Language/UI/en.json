@@ -39,6 +39,46 @@
         },
         "exit" : "EXIT"
     },
+    "item": {
+        "gun": {
+            "normal": {
+                "name": "Basic Gun",
+                "desc": "Basic Gun"
+            },
+            "shotgun": {
+                "name": "Shotgun",
+                "desc": "Shotgun"
+            },
+            "rapid": {
+                "name": "Rapid Gun",
+                "desc": "Rapid Gun"
+            }
+        },
+        "ability": {
+            "attack": {
+                "name": "Attack",
+                "desc": "Attack"
+            },
+            "dash": {
+                "name": "Dash",
+                "desc": "Dash"
+            },
+            "gravity": {
+                "name": "Gravity",
+                "desc": "Gravity"
+            },
+            "scale": {
+                "name": "Scale",
+                "desc": "Scale"
+            }
+        },
+        "item": {
+            "health": {
+                "name": "Health",
+                "desc": "Health"
+            }
+        }
+    },
     "ui": {
         "cursed": {
             "skill": "Skill",

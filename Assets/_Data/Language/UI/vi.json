@@ -39,6 +39,46 @@
         },
         "exit" : "THOÁT"
     },
+    "item": {
+        "gun": {
+            "normal": {
+                "name": "Súng cơ bản",
+                "desc": "Súng cơ bản"
+            },
+            "shotgun": {
+                "name": "Súng súng hơi",
+                "desc": "Súng súng hơi"
+            },
+            "rapid": {
+                "name": "Súng nhanh",
+                "desc": "Súng nhanh"
+            }
+        },
+        "ability": {
+            "attack": {
+                "name": "Tấn công",
+                "desc": "Tấn công"
+            },
+            "dash": {
+                "name": "Lướt",
+                "desc": "Lướt"
+            },
+            "gravity": {
+                "name": "Lực hút",
+                "desc": "Lực hút"
+            },
+            "scale": {
+                "name": "Kích thước",
+                "desc": "Kích thước"
+            }
+        },
+        "item": {
+            "health": {
+                "name": "Máu",
+                "desc": "Máu"
+            }
+        }
+    },
     "ui": {
         "cursed": {
             "skill": "Kỹ năng",

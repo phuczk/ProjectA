@@ -5,6 +5,7 @@ public class AbilityItem : Interactable
 {
     [SerializeField] private AbilityType _abilityType;
     [SerializeField] private string itemId;
+    [SerializeField] private Sprite abilityIcon;
     
     public AbilityType AbilityType => _abilityType;
 
@@ -30,6 +31,12 @@ public class AbilityItem : Interactable
             }
             
             Destroy(gameObject);
+            ShowInfoUi();
         }
+    }
+
+    private void ShowInfoUi()
+    {
+        InteractableUI.Instance.ShowInteractableInfo(InteractableType.Ability, abilityIcon, Localization.Get($"item.ability.{itemId}.name"), Localization.Get($"item.ability.{itemId}.desc"));
     }
 }
